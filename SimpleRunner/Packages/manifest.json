@@ -3,6 +3,7 @@
     "com.tdw.better.attributes": "0.0.4",
     "com.tdw.better.commons": "0.0.61",
     "com.tdw.better.contexts": "0.0.4",
+    "com.tdw.better.locators": "0.1.14",
     "com.tdw.better.services": "0.1.4",
     "com.tdw.better.statemachine": "0.1.18",
     "com.unity.collab-proxy": "2.6.0",

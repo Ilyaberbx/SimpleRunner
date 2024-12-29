@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638710920740400073
-    m_Hash: 2108778841
+      ticks: 638710926925641492
+    m_Hash: 4211531025
   m_LockFileStatus:
     m_FilePath: D:/SimpleRunner/SimpleRunner/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638710920740430090
-    m_Hash: 3788561856
+      ticks: 638710926925681811
+    m_Hash: 1105238905
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -365,6 +365,102 @@ m_ResolvedPackages:
   isDeprecated: 0
   deprecationMessage: 
   fingerprint: 
+- packageId: com.tdw.better.locators@0.1.14
+  testable: 0
+  isDirectDependency: 1
+  version: 0.1.14
+  source: 1
+  resolvedPath: D:\SimpleRunner\SimpleRunner\Library\PackageCache\com.tdw.better.locators@0.1.14
+  assetPath: Packages/com.tdw.better.locators
+  name: com.tdw.better.locators
+  displayName: Better Locators
+  author:
+    name: Better Plugins
+    email: 
+    url: https://github.com/techno-dwarf-works
+  category: 
+  type: 
+  description: ' '
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.1.0
+    - 0.1.1
+    - 0.1.2
+    - 0.1.3
+    - 0.1.4
+    - 0.1.5
+    - 0.1.6
+    - 0.1.7
+    - 0.1.8
+    - 0.1.9
+    - 0.1.10
+    - 0.1.11
+    - 0.1.12
+    - 0.1.13
+    - 0.1.14
+    compatible:
+    - 0.1.0
+    - 0.1.1
+    - 0.1.2
+    - 0.1.3
+    - 0.1.4
+    - 0.1.5
+    - 0.1.6
+    - 0.1.7
+    - 0.1.8
+    - 0.1.9
+    - 0.1.10
+    - 0.1.11
+    - 0.1.12
+    - 0.1.13
+    - 0.1.14
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.tdw.better.internal.core
+    version: 0.0.2
+  - name: com.tdw.better.commons
+    version: 0.0.57
+  resolvedDependencies:
+  - name: com.tdw.better.internal.core
+    version: 0.0.2
+  - name: com.tdw.better.commons
+    version: 0.0.61
+  keywords:
+  - locators
+  - reference management
+  - reference distribution
+  registry:
+    id: scoped:project:Better Plugins
+    name: Better Plugins
+    url: https://package.openupm.com
+    scopes:
+    - com.uurha
+    - com.tdw
+    isDefault: 0
+    capabilities: 0
+    configSource: 4
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638638677372140000
+  documentationUrl: https://github.com/techno-dwarf-works/better-locators/tree/main#readme
+  hasRepository: 0
+  repository:
+    type: 
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+  fingerprint: 
 - packageId: com.tdw.better.services@0.1.4
   testable: 0
   isDirectDependency: 1
@@ -526,7 +622,7 @@ m_ResolvedPackages:
   - name: com.tdw.better.commons
     version: 0.0.61
   - name: com.tdw.better.locators
-    version: 0.1.13
+    version: 0.1.14
   - name: com.tdw.better.conditions
     version: 0.0.5
   - name: com.tdw.better.attributes
@@ -3984,102 +4080,6 @@ m_ResolvedPackages:
   isAssetStorePackage: 0
   datePublishedTicks: 638443634441240000
   documentationUrl: https://github.com/techno-dwarf-works/better-essentials/tree/main#readme
-  hasRepository: 0
-  repository:
-    type: 
-    url: 
-    revision: 
-    path: 
-  unityLifecycle:
-    version: 
-    nextVersion: 
-    recommendedVersion: 
-    isDeprecated: 0
-    deprecationMessage: 
-  isDeprecated: 0
-  deprecationMessage: 
-  fingerprint: 
-- packageId: com.tdw.better.locators@0.1.13
-  testable: 0
-  isDirectDependency: 0
-  version: 0.1.13
-  source: 1
-  resolvedPath: D:\SimpleRunner\SimpleRunner\Library\PackageCache\com.tdw.better.locators@0.1.13
-  assetPath: Packages/com.tdw.better.locators
-  name: com.tdw.better.locators
-  displayName: Better Locators
-  author:
-    name: Better Plugins
-    email: 
-    url: https://github.com/techno-dwarf-works
-  category: 
-  type: 
-  description: ' '
-  status: 0
-  errors: []
-  versions:
-    all:
-    - 0.1.0
-    - 0.1.1
-    - 0.1.2
-    - 0.1.3
-    - 0.1.4
-    - 0.1.5
-    - 0.1.6
-    - 0.1.7
-    - 0.1.8
-    - 0.1.9
-    - 0.1.10
-    - 0.1.11
-    - 0.1.12
-    - 0.1.13
-    - 0.1.14
-    compatible:
-    - 0.1.0
-    - 0.1.1
-    - 0.1.2
-    - 0.1.3
-    - 0.1.4
-    - 0.1.5
-    - 0.1.6
-    - 0.1.7
-    - 0.1.8
-    - 0.1.9
-    - 0.1.10
-    - 0.1.11
-    - 0.1.12
-    - 0.1.13
-    - 0.1.14
-    recommended: 
-    deprecated: []
-  dependencies:
-  - name: com.tdw.better.internal.core
-    version: 0.0.2
-  - name: com.tdw.better.commons
-    version: 0.0.57
-  resolvedDependencies:
-  - name: com.tdw.better.internal.core
-    version: 0.0.2
-  - name: com.tdw.better.commons
-    version: 0.0.61
-  keywords:
-  - locators
-  - reference management
-  - reference distribution
-  registry:
-    id: scoped:project:Better Plugins
-    name: Better Plugins
-    url: https://package.openupm.com
-    scopes:
-    - com.uurha
-    - com.tdw
-    isDefault: 0
-    capabilities: 0
-    configSource: 4
-  hideInEditor: 1
-  isAssetStorePackage: 0
-  datePublishedTicks: 638638557140010000
-  documentationUrl: https://github.com/techno-dwarf-works/better-locators/tree/main#readme
   hasRepository: 0
   repository:
     type: 
