@@ -1,0 +1,23 @@
+{
+  "name": "com.tdw.better.internal.core",
+  "displayName": "Better Internal Core",
+  "version": "0.0.2",
+  "unity": "2021.3",
+  "description": "Base package for Better Plugins",
+  "author": {
+    "name": "Better Plugins",
+    "url": "https://github.com/techno-dwarf-works"
+  },
+  "changelogUrl": "https://github.com/techno-dwarf-works/better-essentials",
+  "documentationUrl": "https://github.com/techno-dwarf-works/better-essentials/tree/main#readme",
+  "license": "MIT",
+  "licensesUrl": "https://github.com/techno-dwarf-works/better-essentials/blob/main/LICENSE",
+  "keywords": [
+    "essentials",
+    "internal",
+    "core"
+  ],
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  }
+}

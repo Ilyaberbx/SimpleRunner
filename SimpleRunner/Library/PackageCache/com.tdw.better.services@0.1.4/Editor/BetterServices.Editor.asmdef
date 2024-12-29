@@ -1,0 +1,18 @@
+{
+    "name": "BetterServices.Editor",
+    "rootNamespace": "Better.Services.EditorAddons",
+    "references": [
+        "GUID:1c5574afb40e5fe4ca9e9c156009297b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

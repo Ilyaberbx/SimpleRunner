@@ -1,0 +1,20 @@
+{
+    "name": "BetterInternalCore.Editor",
+    "rootNamespace": "Better.Internal.Core.EditorAddons",
+    "references": [
+        "GUID:01df13aca8d01e24a911bcc3e8277031",
+        "GUID:19891d5296046644cbc12fcf3702cca3",
+        "GUID:a59e3daedde9ca94bba45364d4ead25f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

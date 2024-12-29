@@ -1,0 +1,34 @@
+{
+  "name": "com.tdw.better.locators",
+  "displayName": "Better Locators",
+  "version": "0.1.13",
+  "unity": "2021.3",
+  "description": " ",
+  "dependencies": {
+    "com.tdw.better.internal.core": "0.0.2",
+    "com.tdw.better.commons": "0.0.57"
+  },
+  "author": {
+    "name": "Better Plugins",
+    "url": "https://github.com/techno-dwarf-works"
+  },
+  "changelogUrl": "https://github.com/techno-dwarf-works/better-locators",
+  "documentationUrl": "https://github.com/techno-dwarf-works/better-locators/tree/main#readme",
+  "license": "MIT",
+  "licensesUrl": "https://github.com/techno-dwarf-works/better-locators/blob/main/LICENSE",
+  "keywords": [
+    "locators",
+    "reference management",
+    "reference distribution"
+  ],
+  "samples": [
+    {
+      "displayName": "Default samples",
+      "description": "Contains test samples",
+      "path": "Samples~/TestSamples"
+    }
+  ],
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  }
+}
