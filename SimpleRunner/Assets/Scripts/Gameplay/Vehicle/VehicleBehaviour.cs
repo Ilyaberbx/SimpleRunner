@@ -1,8 +1,10 @@
 using System;
-using System.Linq;
+using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
 using Gameplay.Services;
+using Gameplay.Services.Level;
+using Gameplay.Services.Waypoints;
 using Gameplay.Vehicle.Modules;
 using Gameplay.Vehicle.Modules.Locator;
 using Gameplay.Vehicle.States;
@@ -14,9 +16,13 @@ namespace Gameplay.Vehicle
     {
         [SerializeField] private MovementConfiguration _movementConfiguration;
         [SerializeField] private ModuleAttachmentConfiguration[] _attachmentData;
+
         private ModulesLocator _locator;
-        private LevelService _levelService;
         private StateMachine<BaseVehicleState> _stateMachine;
+
+        private LevelService _levelService;
+        private WaypointsService _waypointsService;
+
 
         private void Awake()
         {
@@ -27,28 +33,27 @@ namespace Gameplay.Vehicle
         private void Start()
         {
             _levelService = ServiceLocator.Get<LevelService>();
-            _levelService.OnLevelStarted += OnLevelStarted;
+            _waypointsService = ServiceLocator.Get<WaypointsService>();
+            _levelService.OnLevelStart += OnLevelStarted;
         }
 
         private void OnDestroy()
         {
-            _levelService.OnLevelStarted -= OnLevelStarted;
+            _levelService.OnLevelStart -= OnLevelStarted;
         }
 
-        private async void OnLevelStarted()
+        private void OnLevelStarted()
         {
             _stateMachine.Run();
-            var moveToDestinationState = CreateMoveToDestinationState();
-            await _stateMachine.ChangeStateAsync(moveToDestinationState, destroyCancellationToken);
-        }
 
-        private MoveToDestinationState CreateMoveToDestinationState()
-        {
-            var waypoints = _levelService.GetWaypoints(transform.position);
+            var waypoints = _waypointsService.GetWaypoints(transform.position);
             var destinationSettings = new MoveToDestinationData(transform, _movementConfiguration, waypoints);
             var moveToDestinationState = new MoveToDestinationState(destinationSettings);
-            return moveToDestinationState;
+            _stateMachine
+                .ChangeStateAsync(moveToDestinationState, destroyCancellationToken)
+                .Forget();
         }
+
 
         private void InitializeLocator()
         {

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919a3649150f467fa657d7ca1c013bf2, type: 3}
   m_Name: LevelConfiguration
   m_EditorClassIdentifier: 
-  _levelLength: 100
+  _levelLength: 200
   _turnChance: 20
-  _turnRange: 2
-  _resolution: 10
+  _turnRange: 1
+  _resolution: 5

@@ -1,5 +1,6 @@
 using Better.Locators.Runtime;
 using Gameplay.Services;
+using Gameplay.Services.Level;
 using Gameplay.Services.Modules;
 using Gameplay.Vehicle;
 using Gameplay.Vehicle.Modules;
@@ -22,7 +23,7 @@ namespace Gameplay
 
             _vehicleBehaviour.Attach(_bulletsPackBehaviour);
             _vehicleBehaviour.Attach(_turretBehaviour);
-            gameplayService.FireStartLevel();
+            gameplayService.FireLevelStart();
         }
 
         private void OnDestroy()

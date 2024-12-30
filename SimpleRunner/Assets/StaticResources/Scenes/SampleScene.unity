@@ -663,10 +663,15 @@ MonoBehaviour:
       data:
         _services:
         - rid: 1409578998483910660
+        - rid: 1409579005376462848
     - rid: 1409578998483910660
       type: {class: ModuleService, ns: Gameplay.Services.Modules, asm: Assembly-CSharp}
       data:
         _settings: {fileID: 11400000, guid: 7eb7b6cf905c8714ea1ae31674bc6e6b, type: 2}
+    - rid: 1409579005376462848
+      type: {class: WaypointsService, ns: Gameplay.Services.Waypoints, asm: Assembly-CSharp}
+      data:
+        _settings: {fileID: 11400000, guid: 7a0ade2a12b598f4785698ba002372b6, type: 2}
 --- !u!1001 &8803875493387498502
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -675,30 +680,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1765315993668806635, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -7.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1765315993668806635, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9914449
-      objectReference: {fileID: 0}
-    - target: {fileID: 1765315993668806635, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.13052616
-      objectReference: {fileID: 0}
-    - target: {fileID: 1765315993668806635, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1765315993668806635, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1765315993668806635, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8451537384182138926, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
       propertyPath: m_Name
       value: Vehicle
