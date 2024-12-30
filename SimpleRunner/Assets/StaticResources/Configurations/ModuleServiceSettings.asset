@@ -15,3 +15,4 @@ MonoBehaviour:
   _factoryConfiguration:
     _creationData:
     - _prefab: {fileID: 780516178070371506, guid: e1514377766c2404eb6141de42e93571, type: 3}
+    - _prefab: {fileID: 5862986723644514056, guid: 26c9b5eb3e4659a40a873311995eb6cc, type: 3}
