@@ -7,10 +7,10 @@ namespace Gameplay.Vehicle.Modules.Locator
     public sealed class ModulesLocatorSettings
     {
         public ILocator<Type, BaseModuleBehaviour> Source { get; }
-        public IReadOnlyCollection<ModuleAttachmentData> AttachmentData { get; }
+        public IReadOnlyCollection<ModuleAttachmentConfiguration> AttachmentData { get; }
 
         public ModulesLocatorSettings(ILocator<Type, BaseModuleBehaviour> source,
-            IReadOnlyCollection<ModuleAttachmentData> attachmentData)
+            IReadOnlyCollection<ModuleAttachmentConfiguration> attachmentData)
         {
             Source = source;
             AttachmentData = attachmentData;

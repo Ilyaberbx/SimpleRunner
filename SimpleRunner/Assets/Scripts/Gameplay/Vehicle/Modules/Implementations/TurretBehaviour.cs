@@ -1,4 +1,3 @@
-using System;
 using Better.Conditions.Runtime;
 using Gameplay.Vehicle.Modules.Attachment;
 using Gameplay.Vehicle.Modules.Conditions;

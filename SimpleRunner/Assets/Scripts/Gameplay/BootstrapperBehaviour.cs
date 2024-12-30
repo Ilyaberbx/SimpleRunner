@@ -1,4 +1,5 @@
 using Better.Locators.Runtime;
+using Gameplay.Services;
 using Gameplay.Services.Modules;
 using Gameplay.Vehicle;
 using Gameplay.Vehicle.Modules;
@@ -15,11 +16,13 @@ namespace Gameplay
         private void Start()
         {
             var moduleService = ServiceLocator.Get<ModuleService>();
+            var gameplayService = ServiceLocator.Get<LevelService>();
             _turretBehaviour = moduleService.Create<TurretBehaviour>();
             _bulletsPackBehaviour = moduleService.Create<BulletsPackBehaviour>();
 
             _vehicleBehaviour.Attach(_bulletsPackBehaviour);
             _vehicleBehaviour.Attach(_turretBehaviour);
+            gameplayService.FireStartLevel();
         }
 
         private void OnDestroy()

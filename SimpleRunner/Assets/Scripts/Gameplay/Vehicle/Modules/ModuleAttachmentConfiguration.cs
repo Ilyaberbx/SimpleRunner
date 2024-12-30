@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Gameplay.Vehicle.Modules
 {
     [Serializable]
-    public sealed class ModuleAttachmentData
+    public sealed class ModuleAttachmentConfiguration
     {
         [SerializeReference, Select(typeof(BaseModuleBehaviour))]
         private SerializedType _serializedType;
