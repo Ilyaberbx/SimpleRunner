@@ -30,13 +30,13 @@ namespace Gameplay.Vehicle.Modules.Locator
 
         public bool TryGetAttachmentPoint(Type type, out Transform point)
         {
-            if (_settings?.AttachmentData == null)
+            if (_settings?.AttachmentConfigurations == null)
             {
                 point = null;
                 return false;
             }
 
-            var data = _settings.AttachmentData.FirstOrDefault(temp => temp.ModuleType == type);
+            var data = _settings.AttachmentConfigurations.FirstOrDefault(temp => temp.ModuleType == type);
             if (data == null)
             {
                 point = null;
