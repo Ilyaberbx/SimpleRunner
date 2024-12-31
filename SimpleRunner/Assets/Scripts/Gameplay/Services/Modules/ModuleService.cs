@@ -10,8 +10,6 @@ namespace Factura.Gameplay.Services.Modules
     [Serializable]
     public sealed class ModuleService : PocoService<ModuleServiceSettings>
     {
-        [SerializeField] private Transform _root;
-
         private IModuleFactory _moduleFactory;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
