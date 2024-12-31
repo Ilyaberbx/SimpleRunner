@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: TilesServiceSettings
   m_EditorClassIdentifier: 
   _factoryConfiguration:
-    _prefab: {fileID: 0}
+    _prefab: {fileID: 889000986386174965, guid: d134c9f68586f0c4d9109bc45d83870e, type: 3}

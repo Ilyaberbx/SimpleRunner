@@ -1,12 +1,11 @@
 using Better.Locators.Runtime;
-using Gameplay.Services;
-using Gameplay.Services.Level;
-using Gameplay.Services.Modules;
-using Gameplay.Vehicle;
-using Gameplay.Vehicle.Modules;
+using Factura.Gameplay.Modules;
+using Factura.Gameplay.Services.Level;
+using Factura.Gameplay.Services.Modules;
+using Factura.Gameplay.Vehicle;
 using UnityEngine;
 
-namespace Gameplay
+namespace Factura.Gameplay
 {
     public class BootstrapperBehaviour : MonoBehaviour
     {
@@ -18,18 +17,13 @@ namespace Gameplay
         {
             var moduleService = ServiceLocator.Get<ModuleService>();
             var gameplayService = ServiceLocator.Get<LevelService>();
+
             _turretBehaviour = moduleService.Create<TurretBehaviour>();
             _bulletsPackBehaviour = moduleService.Create<BulletsPackBehaviour>();
 
             _vehicleBehaviour.Attach(_bulletsPackBehaviour);
             _vehicleBehaviour.Attach(_turretBehaviour);
             gameplayService.FireLevelStart();
-        }
-
-        private void OnDestroy()
-        {
-            _vehicleBehaviour.Detach(_turretBehaviour);
-            _vehicleBehaviour.Detach(_bulletsPackBehaviour);
         }
     }
 }

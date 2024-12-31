@@ -1,6 +1,6 @@
 using Better.StateMachine.Runtime.States;
 
-namespace Gameplay.Vehicle.States
+namespace Factura.Gameplay.Vehicle.States
 {
     public abstract class BaseVehicleState : BaseState
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Services.Level
+namespace Factura.Gameplay.Services.Level
 {
     [CreateAssetMenu(menuName = "Configs/Level", fileName = "LevelConfiguration", order = 0)]
     public class LevelConfiguration : ScriptableObject

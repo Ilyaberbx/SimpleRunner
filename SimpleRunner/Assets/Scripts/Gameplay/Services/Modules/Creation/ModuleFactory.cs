@@ -1,9 +1,9 @@
 using System.Linq;
-using Gameplay.Vehicle.Modules;
+using Factura.Gameplay.Modules;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Gameplay.Services.Modules
+namespace Factura.Gameplay.Services.Modules
 {
     public sealed class ModuleFactory : IModuleFactory
     {

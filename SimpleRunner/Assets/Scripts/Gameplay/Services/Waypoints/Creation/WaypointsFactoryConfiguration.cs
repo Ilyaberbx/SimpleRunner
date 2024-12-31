@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Gameplay.Services.Waypoints
+namespace Factura.Gameplay.Services.Waypoints
 {
     [Serializable]
     public sealed class WaypointsFactoryConfiguration

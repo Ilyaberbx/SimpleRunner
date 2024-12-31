@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Services.Waypoints
+namespace Factura.Gameplay.Services.Waypoints
 {
     [CreateAssetMenu(menuName = "Configs/Waypoints", fileName = "WaypointsServiceSettings", order = 0)]
     public class WaypointsServiceSettings : ScriptableObject

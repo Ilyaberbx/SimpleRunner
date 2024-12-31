@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Extensions
+namespace Factura.Gameplay.Extensions
 {
     public static class VectorExtensions
     {

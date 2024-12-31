@@ -1,11 +1,11 @@
-using Gameplay.Tiles;
+using Factura.Gameplay.Tiles;
 using UnityEngine;
 
-namespace Gameplay.Services.Tiles.Creation
+namespace Factura.Gameplay.Services.Tiles.Creation
 {
     public sealed class TilesFactory : ITilesFactory
     {
-        private const string ConfigurationNullMessage = "Can not create tile due to configuration null message";
+        private const string ConfigurationNullMessage = "Can not create tile due to configuration null reference";
         private readonly TilesFactoryConfiguration _configuration;
 
         public TilesFactory(TilesFactoryConfiguration configuration)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Services.Waypoints
+namespace Factura.Gameplay.Services.Waypoints
 {
     public interface IWaypointsFactory
     {

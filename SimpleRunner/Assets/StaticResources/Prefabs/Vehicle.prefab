@@ -363,27 +363,26 @@ MonoBehaviour:
     _pathType: 1
     _pathMode: 1
     _resolution: 10
-    _rotateSpeed: 20000
-  _attachmentData:
+  _attachmentConfigurations:
   - _serializedType:
-      rid: 1409578978839887874
-    _point: {fileID: 7050715307775999521}
-  - _serializedType:
-      rid: 1409578998483910656
+      rid: 1409579020730236928
     _point: {fileID: 8318399268043724007}
+  - _serializedType:
+      rid: 1409579020730236929
+    _point: {fileID: 7050715307775999521}
   references:
     version: 2
     RefIds:
-    - rid: 1409578978839887874
+    - rid: 1409579020730236928
       type: {class: SerializedType, ns: Better.Commons.Runtime.DataStructures.SerializedTypes, asm: BetterCommons.Runtime}
       data:
-        _fullQualifiedName: Gameplay.Vehicle.Modules.TurretBehaviour, Assembly-CSharp,
+        _fullQualifiedName: Gameplay.Modules.BulletsPackBehaviour, Assembly-CSharp,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    - rid: 1409578998483910656
+    - rid: 1409579020730236929
       type: {class: SerializedType, ns: Better.Commons.Runtime.DataStructures.SerializedTypes, asm: BetterCommons.Runtime}
       data:
-        _fullQualifiedName: Gameplay.Vehicle.Modules.BulletsPackBehaviour, Assembly-CSharp,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _fullQualifiedName: Gameplay.Modules.TurretBehaviour, Assembly-CSharp, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
 --- !u!4 &9079877890793542292 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bc5d7d0f00f08ec47be6a7805ca9ef5e, type: 3}

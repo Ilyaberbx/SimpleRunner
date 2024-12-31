@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Better.Locators.Runtime;
 using Better.Services.Runtime;
-using Gameplay.Services.Level;
+using Factura.Gameplay.Services.Level;
 using UnityEngine;
 
-namespace Gameplay.Services.Waypoints
+namespace Factura.Gameplay.Services.Waypoints
 {
     [Serializable]
     public sealed class WaypointsService : PocoService<WaypointsServiceSettings>

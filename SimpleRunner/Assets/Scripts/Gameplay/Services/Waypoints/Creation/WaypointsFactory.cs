@@ -1,10 +1,9 @@
 using System;
-using Better.Locators.Runtime;
-using Gameplay.Extensions;
+using Factura.Gameplay.Extensions;
 using UnityEngine;
 using Random = System.Random;
 
-namespace Gameplay.Services.Waypoints
+namespace Factura.Gameplay.Services.Waypoints
 {
     public sealed class WaypointsFactory : IWaypointsFactory, IDisposable
     {

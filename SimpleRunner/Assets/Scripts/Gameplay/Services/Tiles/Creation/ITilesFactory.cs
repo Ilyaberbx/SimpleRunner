@@ -1,7 +1,7 @@
-using Gameplay.Tiles;
+using Factura.Gameplay.Tiles;
 using UnityEngine;
 
-namespace Gameplay.Services.Tiles.Creation
+namespace Factura.Gameplay.Services.Tiles.Creation
 {
     public interface ITilesFactory
     {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Better.Services.Runtime;
 using UnityEngine;
 
-namespace Gameplay.Services.Level
+namespace Factura.Gameplay.Services.Level
 {
     public sealed class LevelService : MonoService
     {

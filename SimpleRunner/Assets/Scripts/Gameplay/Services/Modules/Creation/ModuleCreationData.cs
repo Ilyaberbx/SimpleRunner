@@ -1,8 +1,8 @@
 using System;
-using Gameplay.Vehicle.Modules;
+using Factura.Gameplay.Modules;
 using UnityEngine;
 
-namespace Gameplay.Services.Modules
+namespace Factura.Gameplay.Services.Modules
 {
     [Serializable]
     public sealed class ModuleCreationData

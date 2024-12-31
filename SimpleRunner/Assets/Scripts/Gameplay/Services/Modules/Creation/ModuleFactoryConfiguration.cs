@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Gameplay.Services.Modules
+namespace Factura.Gameplay.Services.Modules
 {
     [Serializable]
     public sealed class ModuleFactoryConfiguration

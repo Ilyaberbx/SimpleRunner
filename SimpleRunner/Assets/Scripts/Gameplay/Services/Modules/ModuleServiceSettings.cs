@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Services.Modules
+namespace Factura.Gameplay.Services.Modules
 {
     [CreateAssetMenu(menuName = "Configs/Modules", fileName = "ModuleServiceSettings", order = 0)]
     public sealed class ModuleServiceSettings : ScriptableObject

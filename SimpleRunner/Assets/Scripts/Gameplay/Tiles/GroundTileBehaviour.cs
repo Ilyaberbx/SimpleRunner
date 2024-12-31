@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Tiles
+namespace Factura.Gameplay.Tiles
 {
     public sealed class GroundTileBehaviour : MonoBehaviour
     {

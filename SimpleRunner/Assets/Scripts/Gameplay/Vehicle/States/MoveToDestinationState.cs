@@ -2,52 +2,39 @@ using System.Threading;
 using System.Threading.Tasks;
 using Better.Commons.Runtime.Extensions;
 using DG.Tweening;
-using Gameplay.Extensions;
+using Factura.Gameplay.Extensions;
+using Factura.Gameplay.Movement;
 using UnityEngine;
 
-namespace Gameplay.Vehicle.States
+namespace Factura.Gameplay.Vehicle.States
 {
     public sealed class MoveToDestinationState : BaseVehicleState
     {
-        private readonly MoveToDestinationData _data;
-        private Tween _tween;
+        private readonly IMovable _movable;
+        private readonly Vector3[] _waypoints;
+        private Tween _moveTween;
 
-        private Transform Source => _data.Source;
-        private Vector3[] Waypoints => _data.Waypoints;
-        private MovementConfiguration MovementConfiguration => _data.MovementConfiguration;
-
-        public MoveToDestinationState(MoveToDestinationData data)
+        public MoveToDestinationState(IMovable movable, Vector3[] waypoints)
         {
-            _data = data;
+            _movable = movable;
+            _waypoints = waypoints;
         }
 
         public override async Task EnterAsync(CancellationToken token)
         {
-            if (Waypoints.IsNullOrEmpty())
+            if (_waypoints.IsNullOrEmpty())
             {
                 return;
             }
 
-            _tween = BuildMoveTween();
-            await _tween.AsTask(token);
+            _moveTween = _movable.MoveTween(_waypoints);
+            await _moveTween.AsTask(token);
         }
 
         public override Task ExitAsync(CancellationToken token)
         {
-            _tween.Kill();
+            _moveTween.Kill();
             return Task.CompletedTask;
-        }
-
-        private Tween BuildMoveTween()
-        {
-            var speed = MovementConfiguration.MoveSpeed;
-            var pathType = MovementConfiguration.PathType;
-            var pathMode = MovementConfiguration.PathMode;
-            var resolution = MovementConfiguration.Resolution;
-
-            return Source.DOPath(Waypoints, speed, pathType, pathMode, resolution)
-                .SetSpeedBased()
-                .SetLookAt(0.01f);
         }
     }
 }

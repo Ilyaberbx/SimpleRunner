@@ -2,30 +2,34 @@ using System;
 using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
-using Gameplay.Services.Level;
-using Gameplay.Services.Waypoints;
-using Gameplay.Vehicle.Modules;
-using Gameplay.Vehicle.Modules.Locator;
-using Gameplay.Vehicle.States;
+using DG.Tweening;
+using Factura.Gameplay.Modules;
+using Factura.Gameplay.Modules.Locator;
+using Factura.Gameplay.Movement;
+using Factura.Gameplay.Services.Level;
+using Factura.Gameplay.Services.Waypoints;
+using Factura.Gameplay.Vehicle.States;
 using UnityEngine;
 
-namespace Gameplay.Vehicle
+namespace Factura.Gameplay.Vehicle
 {
-    public sealed class VehicleBehaviour : MonoBehaviour
+    public sealed class VehicleBehaviour : MonoBehaviour, IMovable
     {
-        [SerializeField] private MovementConfiguration _movementConfiguration;
-        [SerializeField] private ModuleAttachmentConfiguration[] _attachmentConfiguration;
+        [SerializeField] private WaypointsMovementConfiguration _waypointsMovementConfiguration;
+        [SerializeField] private LocatorAttachmentConfiguration[] _attachmentConfigurations;
 
         private ModulesLocator _locator;
         private StateMachine<BaseVehicleState> _stateMachine;
 
         private LevelService _levelService;
         private WaypointsService _waypointsService;
+        private IMovable _movable;
 
         private void Awake()
         {
             InitializeLocator();
-            _stateMachine = new StateMachine<BaseVehicleState>();
+            InitializeStateMachine();
+            InitializeHandlers();
         }
 
         private void Start()
@@ -35,39 +39,45 @@ namespace Gameplay.Vehicle
             _levelService.OnLevelStart += OnLevelStarted;
         }
 
-        public void Attach(BaseModuleBehaviour moduleBehaviour)
-        {
-            _locator.Attach(moduleBehaviour);
-        }
-
-        public void Detach(BaseModuleBehaviour moduleBehaviour)
-        {
-            _locator.Detach(moduleBehaviour);
-        }
-
         private void OnDestroy()
         {
             _levelService.OnLevelStart -= OnLevelStarted;
         }
 
+        public void Attach(BaseModuleBehaviour moduleBehaviour)
+        {
+            _locator.Attach(moduleBehaviour);
+        }
+
+        public Tween MoveTween(Vector3[] waypoints)
+        {
+            return _movable.MoveTween(waypoints);
+        }
+
         private void OnLevelStarted()
         {
-            _stateMachine.Run();
-
             var waypoints = _waypointsService.GetWaypoints(transform.position);
-            var destinationSettings = new MoveToDestinationData(transform, _movementConfiguration, waypoints);
-            var moveToDestinationState = new MoveToDestinationState(destinationSettings);
-            _stateMachine
-                .ChangeStateAsync(moveToDestinationState, destroyCancellationToken)
+            var moveToDestinationState = new MoveToDestinationState(_movable, waypoints);
+
+            _stateMachine.ChangeStateAsync(moveToDestinationState, destroyCancellationToken)
                 .Forget();
         }
 
+        private void InitializeHandlers()
+        {
+            _movable = new WaypointsMovementHandler(transform, _waypointsMovementConfiguration);
+        }
+
+        private void InitializeStateMachine()
+        {
+            _stateMachine = new StateMachine<BaseVehicleState>();
+            _stateMachine.Run();
+        }
 
         private void InitializeLocator()
         {
             var source = new Locator<Type, BaseModuleBehaviour>();
-            var settings = new ModulesLocatorSettings(source, _attachmentConfiguration);
-            _locator = new ModulesLocator(settings);
+            _locator = new ModulesLocator(source, _attachmentConfigurations);
         }
     }
 }

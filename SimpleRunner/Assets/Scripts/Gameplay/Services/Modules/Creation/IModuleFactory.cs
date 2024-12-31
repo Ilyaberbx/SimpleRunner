@@ -1,6 +1,6 @@
-using Gameplay.Vehicle.Modules;
+using Factura.Gameplay.Modules;
 
-namespace Gameplay.Services.Modules
+namespace Factura.Gameplay.Services.Modules
 {
     public interface IModuleFactory
     {
