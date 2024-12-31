@@ -46,11 +46,14 @@ namespace Factura.Gameplay.Tiles
 
         private void Spawn()
         {
-            var tileBehaviour = _tilesService.Create(GetTilePosition);
+            var tileBehaviour = _tilesService.Create(GetTilePosition());
             _tilesQueue.Enqueue(tileBehaviour);
         }
 
-        public Vector3 GetTilePosition { get; set; }
+        private Vector3 GetTilePosition()
+        {
+            return default;
+        }
 
         private void StopSpawning()
         {

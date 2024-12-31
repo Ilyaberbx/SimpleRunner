@@ -5,7 +5,7 @@ using Random = System.Random;
 
 namespace Factura.Gameplay.Services.Waypoints
 {
-    public sealed class WaypointsFactory : IWaypointsFactory, IDisposable
+    public sealed class WaypointsFactory : IDisposable
     {
         private const string ConfigurationNullReferenceMessage =
             "Can not create waypoints due to configuration null reference";
@@ -29,24 +29,20 @@ namespace Factura.Gameplay.Services.Waypoints
             }
 
             var waypoints = new Vector3[_configuration.Resolution];
-            var pointStep = (float)levelLength / _configuration.Resolution;
+            var resolution = _configuration.Resolution;
+            var forwardStep = (float)levelLength / resolution;
             var random = new Random();
+            var previousForwardStep = 0f;
 
-            for (int i = 0; i < _configuration.Resolution; i++)
+            for (var i = 0; i < resolution; i++)
             {
-                var randomValue = random.Next(MinValue, MaxValue);
-                var turnChance = _configuration.TurnRate;
-                var turnRange = 0;
-
-                if (randomValue > turnChance)
-                {
-                    turnRange = random.Next(-_configuration.TurnRange, _configuration.TurnRange);
-                }
+                var turnStep = GetTurnStep(random, i);
+                var actualForwardStep = previousForwardStep += forwardStep;
 
                 var waypoint = startPosition
-                    .AddZ(pointStep * i)
-                    .AddX(turnRange);
-
+                    .AddZ(actualForwardStep)
+                    .AddX(turnStep);
+                ;
                 waypoints[i] = waypoint;
             }
 
@@ -56,6 +52,28 @@ namespace Factura.Gameplay.Services.Waypoints
         public void Dispose()
         {
             _configuration = null;
+        }
+
+        private int GetTurnStep(Random random, int i)
+        {
+            var turnStep = 0;
+
+            if (CanTurn(random, i))
+            {
+                turnStep = random.Next(-_configuration.TurnRange, _configuration.TurnRange);
+            }
+
+            return turnStep;
+        }
+
+        private bool CanTurn(Random random, int index)
+        {
+            var isLastWaypoint = index == _configuration.Resolution - 1;
+            var isFirstWaypoint = index == 0;
+            var randomValue = random.Next(MinValue, MaxValue);
+            var turnRate = _configuration.TurnRate;
+
+            return randomValue > turnRate && !isFirstWaypoint && !isLastWaypoint;
         }
     }
 }
