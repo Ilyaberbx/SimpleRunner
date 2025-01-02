@@ -8,12 +8,13 @@ using Factura.Gameplay.Modules.Locator;
 using Factura.Gameplay.Movement;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Waypoints;
+using Factura.Gameplay.Target;
 using Factura.Gameplay.Vehicle.States;
 using UnityEngine;
 
 namespace Factura.Gameplay.Vehicle
 {
-    public sealed class VehicleBehaviour : MonoBehaviour
+    public sealed class VehicleBehaviour : MonoBehaviour, ITarget
     {
         [SerializeField] private WaypointsMovementConfiguration _waypointsMovementConfiguration;
         [SerializeField] private LocatorAttachmentConfiguration[] _attachmentConfigurations;
@@ -24,6 +25,9 @@ namespace Factura.Gameplay.Vehicle
         private LevelService _levelService;
         private WaypointsService _waypointsService;
         private IMovable _movable;
+        private ITarget _target;
+
+        public Vector3 Position => _target.Position;
 
         private void Awake()
         {
@@ -60,7 +64,9 @@ namespace Factura.Gameplay.Vehicle
 
         private void InitializeHandlers()
         {
-            _movable = new WaypointsMovementHandler(transform, _waypointsMovementConfiguration);
+            var cachedTransform = transform;
+            _movable = new WaypointsMovementHandler(cachedTransform, _waypointsMovementConfiguration);
+            _target = new TargetHandler(cachedTransform);
         }
 
         private void InitializeStateMachine()

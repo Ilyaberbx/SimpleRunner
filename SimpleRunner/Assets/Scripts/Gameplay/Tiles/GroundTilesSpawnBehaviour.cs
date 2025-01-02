@@ -5,7 +5,7 @@ using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Tiles;
-using Factura.Gameplay.Vehicle;
+using Factura.Gameplay.Target;
 using UnityEngine;
 
 namespace Factura.Gameplay.Tiles
@@ -16,7 +16,7 @@ namespace Factura.Gameplay.Tiles
 
         private TilesService _tilesService;
         private LevelService _levelService;
-        private VehicleBehaviour _target;
+        private ITarget _target;
 
         private readonly List<GroundTileBehaviour> _tiles = new();
         private Task _spawningTask;
@@ -32,7 +32,7 @@ namespace Factura.Gameplay.Tiles
             UnregisterLevelEvents();
         }
 
-        public void SetTarget(VehicleBehaviour target)
+        public void SetTarget(ITarget target)
         {
             _target = target;
         }
@@ -45,23 +45,23 @@ namespace Factura.Gameplay.Tiles
 
         private void RegisterLevelEvents()
         {
-            _levelService.OnLevelPreStart += SpawnInitialTiles;
-            _levelService.OnLevelStart += StartSpawningLoop;
-            _levelService.OnLevelFinish += StopSpawningLoop;
+            _levelService.OnLevelPreStart += OnLevelPreStarted;
+            _levelService.OnLevelStart += OnLevelStarted;
+            _levelService.OnLevelFinish += OnLevelFinished;
         }
 
         private void UnregisterLevelEvents()
         {
-            _levelService.OnLevelPreStart -= SpawnInitialTiles;
-            _levelService.OnLevelStart -= StartSpawningLoop;
-            _levelService.OnLevelFinish -= StopSpawningLoop;
+            _levelService.OnLevelPreStart -= OnLevelPreStarted;
+            _levelService.OnLevelStart -= OnLevelStarted;
+            _levelService.OnLevelFinish -= OnLevelFinished;
         }
 
-        private void SpawnInitialTiles()
+        private void OnLevelPreStarted()
         {
             if (_target == null) return;
 
-            var targetPosition = _target.transform.position;
+            var targetPosition = _target.Position;
             var tileSize = _tilesService.TileSize;
 
             for (var i = 0; i < TilesRangeCount; i++)
@@ -71,13 +71,13 @@ namespace Factura.Gameplay.Tiles
             }
         }
 
-        private void StartSpawningLoop()
+        private void OnLevelStarted()
         {
             _spawningTask = SpawnTilesAsync(destroyCancellationToken);
             _spawningTask.Forget();
         }
 
-        private void StopSpawningLoop()
+        private void OnLevelFinished()
         {
             _spawningTask?.Dispose();
             _spawningTask = null;
@@ -113,9 +113,9 @@ namespace Factura.Gameplay.Tiles
 
             var halfTileSize = _tilesService.TileSize / 2;
             var nextTileTriggerPosition = sourceTilePosition + Vector3.forward * halfTileSize;
-            var targetPositionZ = _target.transform.position.z;
+            var targetPositionZ = _target.Position.z;
             var triggered = Mathf.Abs(targetPositionZ) < Mathf.Abs(nextTileTriggerPosition.z);
-            
+
             if (!triggered)
                 return false;
 
