@@ -22,7 +22,7 @@ namespace Factura.Gameplay.Tiles
         private Task _spawningTask;
         private CancellationTokenSource _tokenSource;
 
-        private void Start()
+        public void Initialize()
         {
             InitializeServices();
             RegisterLevelEvents();

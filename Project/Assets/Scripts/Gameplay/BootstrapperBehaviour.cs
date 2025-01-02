@@ -1,4 +1,3 @@
-using System;
 using Better.Locators.Runtime;
 using Factura.Gameplay.Enemies;
 using Factura.Gameplay.Modules;
@@ -28,8 +27,12 @@ namespace Factura.Gameplay
             _turretBehaviour = moduleService.Create<TurretBehaviour>();
             _bulletsPackBehaviour = moduleService.Create<BulletsPackBehaviour>();
 
+            _vehicleBehaviour.Initialize();
             _vehicleBehaviour.Attach(_bulletsPackBehaviour);
             _vehicleBehaviour.Attach(_turretBehaviour);
+
+            _tilesSpawnBehaviour.Initialize();
+            _enemiesSpawnBehaviour.Initialize();
 
             _tilesSpawnBehaviour.SetTarget(_vehicleBehaviour);
             _enemiesSpawnBehaviour.SetTarget(_vehicleBehaviour);

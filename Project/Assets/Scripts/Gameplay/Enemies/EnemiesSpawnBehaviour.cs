@@ -1,3 +1,4 @@
+using System;
 using Better.Locators.Runtime;
 using Factura.Gameplay.Extensions;
 using Factura.Gameplay.Services.Enemies;
@@ -5,6 +6,7 @@ using Factura.Gameplay.Services.Tiles;
 using Factura.Gameplay.Target;
 using Factura.Gameplay.Tiles;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Factura.Gameplay.Enemies
 {
@@ -19,7 +21,7 @@ namespace Factura.Gameplay.Enemies
 
         private Bounds TileBounds => _tileService.TileBounds;
 
-        private void Start()
+        public void Initialize()
         {
             _tileService = ServiceLocator.Get<TileService>();
             _enemyService = ServiceLocator.Get<EnemyService>();

@@ -37,21 +37,21 @@ namespace Factura.Gameplay.Vehicle
 
         public Vector3 Position => _target.Position;
 
-        private void Awake()
-        {
-            InitializeLocator();
-            InitializeStateMachine();
-        }
-
-        private void Start()
+        public void Initialize()
         {
             _levelService = ServiceLocator.Get<LevelService>();
             _waypointsService = ServiceLocator.Get<WaypointsService>();
 
+            InitializeLocator();
+            InitializeStateMachine();
             InitializeHandlers();
 
             _damageable.OnDie += OnDied;
             _levelService.OnLevelStart += OnLevelStarted;
+        }
+
+        private void Start()
+        {
         }
 
         private void OnDestroy()
