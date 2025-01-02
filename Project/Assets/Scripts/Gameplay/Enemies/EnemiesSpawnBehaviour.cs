@@ -1,4 +1,3 @@
-using System;
 using Better.Locators.Runtime;
 using Factura.Gameplay.Extensions;
 using Factura.Gameplay.Services.Enemies;

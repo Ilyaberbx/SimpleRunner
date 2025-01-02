@@ -50,10 +50,6 @@ namespace Factura.Gameplay.Vehicle
             _levelService.OnLevelStart += OnLevelStarted;
         }
 
-        private void Start()
-        {
-        }
-
         private void OnDestroy()
         {
             _damageable.OnDie -= OnDied;

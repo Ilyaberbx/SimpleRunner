@@ -6,8 +6,8 @@ namespace Factura.Gameplay.Modules
     public abstract class BaseModuleBehaviour : MonoBehaviour
     {
         protected IModulesLocatorReadonly Locator { get; private set; }
-
         private bool IsInitialized => Locator != null;
+        protected bool IsAttached { get; private set; }
 
         public virtual void Setup(IModulesLocatorReadonly locator)
         {
@@ -22,7 +22,8 @@ namespace Factura.Gameplay.Modules
             }
 
             var canAttach = Locator.TryGetAttachmentPoint(GetType(), out var attachmentPoint);
-            return canAttach && TryAttachInternal(attachmentPoint);
+            IsAttached = canAttach && TryAttachInternal(attachmentPoint);
+            return IsAttached;
         }
 
         protected abstract bool TryAttachInternal(Transform attachmentPoint);
