@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 67127208}
   - component: {fileID: 67127209}
+  - component: {fileID: 67127210}
   m_Layer: 0
   m_Name: Services
   m_TagString: Untagged
@@ -167,6 +168,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelConfiguration: {fileID: 11400000, guid: 84e10f5ef887ba5428962ed89f2220d1, type: 2}
+--- !u!114 &67127210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67127207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1c23004bfc46dfaf93296a7869ed88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &128433823
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,6 +588,7 @@ MonoBehaviour:
       data:
         _services:
         - {fileID: 67127209}
+        - {fileID: 67127210}
     - rid: 1409578998483910659
       type: {class: PocoServicesInstaller, ns: Better.Contexts.Runtime.Installers, asm: Better.Contexts.Runtime}
       data:
@@ -583,6 +597,7 @@ MonoBehaviour:
         - rid: 6450054128750559232
         - rid: 1409579020730236932
         - rid: 6450054128750559233
+        - rid: 6450054131854606336
     - rid: 1409579020730236930
       type: {class: WaypointsService, ns: Factura.Gameplay.Services.Waypoints, asm: Assembly-CSharp}
       data:
@@ -601,6 +616,9 @@ MonoBehaviour:
       data:
         _settings: {fileID: 11400000, guid: 00fba9cb2fddab84c992c43d94b5625d, type: 2}
         _root: {fileID: 841533867}
+    - rid: 6450054131854606336
+      type: {class: InputService, ns: Factura.Global.Services, asm: Assembly-CSharp}
+      data: 
 --- !u!1 &2141167720
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,6 +671,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3107787886816866075, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
+      propertyPath: _moveByWaypointsConfiguration._moveSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8451537384182138926, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
       propertyPath: m_Name
       value: Vehicle

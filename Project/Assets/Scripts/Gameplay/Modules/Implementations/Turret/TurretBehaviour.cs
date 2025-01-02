@@ -1,9 +1,12 @@
-using System;
+using Better.Commons.Runtime.Extensions;
 using Better.Conditions.Runtime;
 using Better.Locators.Runtime;
+using Better.StateMachine.Runtime;
 using Factura.Gameplay.Attachment;
 using Factura.Gameplay.Conditions;
+using Factura.Gameplay.Launcher;
 using Factura.Gameplay.Modules.Locator;
+using Factura.Gameplay.Modules.States;
 using Factura.Gameplay.Services.Level;
 using UnityEngine;
 
@@ -11,14 +14,23 @@ namespace Factura.Gameplay.Modules
 {
     public sealed class TurretBehaviour : BaseModuleBehaviour
     {
-        private IAttachable _attachable;
+        [SerializeField] private TurretLauncherConfiguration _launcherConfiguration;
+
         private LevelService _levelService;
+
+        private IAttachable _attachable;
+        private ILauncher _launcher;
+        private IStateMachine<BaseTurretState> _stateMachine;
 
         public override void Setup(IModulesLocatorReadonly locator)
         {
             base.Setup(locator);
 
-            _attachable = new AttachmentHandler(transform, CanAttach());
+            var cachedTransform = transform;
+            _stateMachine = new StateMachine<BaseTurretState>();
+            _stateMachine.Run();
+            _launcher = new TurretLauncher(cachedTransform, Camera.main, _launcherConfiguration);
+            _attachable = new AttachmentHandler(cachedTransform, CanAttach());
             _levelService = ServiceLocator.Get<LevelService>();
             _levelService.OnLevelStart += OnLevelStarted;
         }
@@ -34,6 +46,9 @@ namespace Factura.Gameplay.Modules
             {
                 return;
             }
+
+            var activeState = new TurretActiveState(_launcher);
+            _stateMachine.ChangeStateAsync(activeState, destroyCancellationToken).Forget();
         }
 
         private AllComplexCondition CanAttach()

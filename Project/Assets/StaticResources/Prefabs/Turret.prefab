@@ -77,3 +77,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17499f65779246ec90e9bfe91d5921ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _launcherConfiguration:
+    _fireCooldown: 0.1
+    _projectilePrefab: {fileID: 0}

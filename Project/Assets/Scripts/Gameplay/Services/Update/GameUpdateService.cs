@@ -33,7 +33,7 @@ namespace Factura.Gameplay.Services.Update
 
             foreach (var element in _elements)
             {
-                element.Update(Time.deltaTime);
+                element.HandleUpdate(Time.deltaTime);
             }
         }
 
