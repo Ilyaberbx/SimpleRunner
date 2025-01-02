@@ -21,10 +21,10 @@ namespace Factura.Gameplay.Launcher
 
         public void Launch(float deltaTime, Vector3 mousePosition)
         {
-            RotateTurretToMousePosition(mousePosition);
+            RotateToMousePosition(mousePosition);
         }
 
-        private void RotateTurretToMousePosition(Vector3 mousePosition)
+        private void RotateToMousePosition(Vector3 mousePosition)
         {
             var mouseWorldPosition = _camera.ScreenToWorldPoint(mousePosition.AddZ(ForwardCompensateValue));
             var direction = mouseWorldPosition - _source.position;

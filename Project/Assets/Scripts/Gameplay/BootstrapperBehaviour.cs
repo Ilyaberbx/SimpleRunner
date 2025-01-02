@@ -5,6 +5,8 @@ using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Modules;
 using Factura.Gameplay.Tiles;
 using Factura.Gameplay.Vehicle;
+using Factura.UI.Popups.LevelStart;
+using Factura.UI.Services;
 using UnityEngine;
 
 namespace Factura.Gameplay
@@ -18,11 +20,13 @@ namespace Factura.Gameplay
         private TurretBehaviour _turretBehaviour;
         private BulletsPackBehaviour _bulletsPackBehaviour;
         private LevelService _levelService;
+        private PopupService _popupService;
 
         private void Start()
         {
             var moduleService = ServiceLocator.Get<ModuleService>();
             _levelService = ServiceLocator.Get<LevelService>();
+            _popupService = ServiceLocator.Get<PopupService>();
 
             _turretBehaviour = moduleService.Create<TurretBehaviour>();
             _bulletsPackBehaviour = moduleService.Create<BulletsPackBehaviour>();
@@ -38,14 +42,8 @@ namespace Factura.Gameplay
             _enemiesSpawnBehaviour.SetTarget(_vehicleBehaviour);
 
             _levelService.FireLevelPreStart();
-        }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _levelService.FireLevelStart();
-            }
+            _popupService.Show<LevelStartPopupController, LevelStartModel>(new LevelStartModel());
         }
     }
 }
