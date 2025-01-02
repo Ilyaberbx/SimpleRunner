@@ -85,10 +85,11 @@ namespace Factura.Gameplay.Tiles
 
         private async Task SpawnTilesAsync(CancellationToken token)
         {
-            while (!token.IsCancellationRequested)
+            while (true)
             {
                 await Task.Yield();
 
+                if (token.IsCancellationRequested) return;
                 if (_target == null) return;
 
                 if (ShouldSpawnNewTile(out var newTilePosition))
@@ -108,13 +109,14 @@ namespace Factura.Gameplay.Tiles
         {
             newTilePosition = default;
 
-            if (!TryGetTilePosition(_tiles.Count - TilesRangeCount, out var sourceTilePosition))
+            var sourceTileIndex = _tiles.Count - TilesRangeCount;
+            if (!TryGetTilePosition(sourceTileIndex, out var sourceTilePosition))
                 return false;
 
             var halfTileSize = _tilesService.TileSize / 2;
             var nextTileTriggerPosition = sourceTilePosition + Vector3.forward * halfTileSize;
-            var targetPositionZ = _target.Position.z;
-            var triggered = Mathf.Abs(targetPositionZ) < Mathf.Abs(nextTileTriggerPosition.z);
+            var targetPosition = _target.Position;
+            var triggered = Mathf.Abs(targetPosition.z) < Mathf.Abs(nextTileTriggerPosition.z);
 
             if (!triggered)
                 return false;

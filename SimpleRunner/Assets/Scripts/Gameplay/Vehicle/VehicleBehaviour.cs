@@ -2,7 +2,6 @@ using System;
 using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
-using DG.Tweening;
 using Factura.Gameplay.Modules;
 using Factura.Gameplay.Modules.Locator;
 using Factura.Gameplay.Movement;
@@ -16,11 +15,11 @@ namespace Factura.Gameplay.Vehicle
 {
     public sealed class VehicleBehaviour : MonoBehaviour, ITarget
     {
-        [SerializeField] private WaypointsMovementConfiguration _waypointsMovementConfiguration;
+        [SerializeField] private MoveByWaypointsConfiguration _moveByWaypointsConfiguration;
         [SerializeField] private LocatorAttachmentConfiguration[] _attachmentConfigurations;
 
         private ModulesLocator _locator;
-        private StateMachine<BaseVehicleState> _stateMachine;
+        private IStateMachine<BaseVehicleState> _stateMachine;
 
         private LevelService _levelService;
         private WaypointsService _waypointsService;
@@ -33,13 +32,15 @@ namespace Factura.Gameplay.Vehicle
         {
             InitializeLocator();
             InitializeStateMachine();
-            InitializeHandlers();
         }
 
         private void Start()
         {
             _levelService = ServiceLocator.Get<LevelService>();
             _waypointsService = ServiceLocator.Get<WaypointsService>();
+
+            InitializeHandlers();
+
             _levelService.OnLevelStart += OnLevelStarted;
         }
 
@@ -55,18 +56,16 @@ namespace Factura.Gameplay.Vehicle
 
         private void OnLevelStarted()
         {
-            var waypoints = _waypointsService.GetWaypoints(transform.position);
-            var moveToDestinationState = new MoveToDestinationState(_movable, waypoints);
-
-            _stateMachine.ChangeStateAsync(moveToDestinationState, destroyCancellationToken)
-                .Forget();
+            var moveState = new VehicleMoveState(_movable);
+            _stateMachine.ChangeStateAsync(moveState, destroyCancellationToken).Forget();
         }
 
         private void InitializeHandlers()
         {
             var cachedTransform = transform;
-            _movable = new WaypointsMovementHandler(cachedTransform, _waypointsMovementConfiguration);
-            _target = new TargetHandler(cachedTransform);
+            var waypoints = _waypointsService.GetWaypoints(cachedTransform.position);
+            _movable = new MoveByWaypointsHandler(cachedTransform, waypoints, _moveByWaypointsConfiguration);
+            _target = new DynamicTargetHandler(cachedTransform);
         }
 
         private void InitializeStateMachine()

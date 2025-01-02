@@ -1,4 +1,5 @@
 using Better.Locators.Runtime;
+using Factura.Gameplay.Enemies;
 using Factura.Gameplay.Modules;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Modules;
@@ -10,6 +11,7 @@ namespace Factura.Gameplay
 {
     public class BootstrapperBehaviour : MonoBehaviour
     {
+        [SerializeField] private EnemyBehaviour _enemyBehaviour;
         [SerializeField] private GroundTilesSpawnBehaviour _tilesSpawnBehaviour;
         [SerializeField] private VehicleBehaviour _vehicleBehaviour;
 
@@ -28,6 +30,7 @@ namespace Factura.Gameplay
             _vehicleBehaviour.Attach(_turretBehaviour);
 
             _tilesSpawnBehaviour.SetTarget(_vehicleBehaviour);
+            _enemyBehaviour.SetTarget(_vehicleBehaviour);
 
             levelService.FireLevelPreStart();
             levelService.FireLevelStart();
