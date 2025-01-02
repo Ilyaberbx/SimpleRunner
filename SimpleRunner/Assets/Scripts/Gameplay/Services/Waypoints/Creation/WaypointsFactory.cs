@@ -42,7 +42,7 @@ namespace Factura.Gameplay.Services.Waypoints
                 var waypoint = startPosition
                     .AddZ(actualForwardStep)
                     .AddX(turnStep);
-                ;
+                
                 waypoints[i] = waypoint;
             }
 

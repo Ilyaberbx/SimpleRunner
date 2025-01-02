@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Vehicle
 {
-    public sealed class VehicleBehaviour : MonoBehaviour, IMovable
+    public sealed class VehicleBehaviour : MonoBehaviour
     {
         [SerializeField] private WaypointsMovementConfiguration _waypointsMovementConfiguration;
         [SerializeField] private LocatorAttachmentConfiguration[] _attachmentConfigurations;
@@ -47,11 +47,6 @@ namespace Factura.Gameplay.Vehicle
         public void Attach(BaseModuleBehaviour moduleBehaviour)
         {
             _locator.Attach(moduleBehaviour);
-        }
-
-        public Tween MoveTween(Vector3[] waypoints)
-        {
-            return _movable.MoveTween(waypoints);
         }
 
         private void OnLevelStarted()

@@ -7,7 +7,9 @@ namespace Factura.Gameplay.Services.Tiles
     public class TilesServiceSettings : ScriptableObject
     {
         [SerializeField] private TilesFactoryConfiguration _factoryConfiguration;
-
+        [SerializeField] private float _tileSize;
+        
         public TilesFactoryConfiguration FactoryConfiguration => _factoryConfiguration;
+        public float TileSize => _tileSize;
     }
 }

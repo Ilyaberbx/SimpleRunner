@@ -11,6 +11,7 @@ namespace Factura.Gameplay.Services.Level
         [SerializeField] private LevelConfiguration _levelConfiguration;
 
         public event Action OnLevelStart;
+        public event Action OnLevelPreStart;
         public event Action OnLevelFinish;
         
         public int LevelLength => _levelConfiguration.LevelLength;
@@ -28,6 +29,11 @@ namespace Factura.Gameplay.Services.Level
         public void FireLevelStart()
         {
             OnLevelStart?.Invoke();
+        }
+
+        public void FireLevelPreStart()
+        {
+            OnLevelPreStart?.Invoke();
         }
 
         public void FireLevelFinish()
