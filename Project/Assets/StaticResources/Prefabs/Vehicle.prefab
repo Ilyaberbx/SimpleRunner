@@ -271,7 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 5
   _moveByWaypointsConfiguration:
-    _moveSpeed: 1
+    _moveSpeed: 15
     _curve:
       serializedVersion: 2
       m_Curve:

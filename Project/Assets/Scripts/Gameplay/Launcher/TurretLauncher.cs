@@ -26,18 +26,24 @@ namespace Factura.Gameplay.Launcher
 
         public void Launch(float deltaTime, Vector3 mousePosition)
         {
-            var mouseWorldPosition = _camera.ScreenToWorldPoint(mousePosition.AddZ(ForwardCompensateValue));
+            var compensatedMousePosition = mousePosition.AddZ(ForwardCompensateValue);
+            var mouseWorldPosition = _camera.ScreenToWorldPoint(compensatedMousePosition);
+
             _rotator.RotateTo(mouseWorldPosition);
 
-            _timeSinceLastFire += deltaTime;
-
-            if (_timeSinceLastFire < _fireCoolDown)
+            if (!TickCooldown(deltaTime))
             {
                 return;
             }
 
             _shooter.Fire(mouseWorldPosition);
             _timeSinceLastFire = 0f;
+        }
+
+        private bool TickCooldown(float deltaTime)
+        {
+            _timeSinceLastFire += deltaTime;
+            return _timeSinceLastFire >= _fireCoolDown;
         }
     }
 }

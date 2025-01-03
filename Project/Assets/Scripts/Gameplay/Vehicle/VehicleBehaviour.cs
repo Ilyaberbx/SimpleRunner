@@ -26,8 +26,8 @@ namespace Factura.Gameplay.Vehicle
         private IModulesLocator _locator;
         private IStateMachine<BaseVehicleState> _stateMachine;
         private MoveByWaypointsHandler _movementHandler;
-        private DynamicTargetHandler _target;
         private DamageHandler _damageHandler;
+        private DynamicTargetHandler _target;
 
         public Vector3 Position => _target.Position;
 
@@ -41,6 +41,7 @@ namespace Factura.Gameplay.Vehicle
             InitializeHandlers();
 
             _damageHandler.OnDie += OnDied;
+            _movementHandler.OnReachDestination += OnDestinationReached;
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
         }
@@ -48,6 +49,7 @@ namespace Factura.Gameplay.Vehicle
         private void OnDestroy()
         {
             _damageHandler.OnDie -= OnDied;
+            _movementHandler.OnReachDestination -= OnDestinationReached;
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
         }
@@ -64,9 +66,14 @@ namespace Factura.Gameplay.Vehicle
 
         private void OnDied()
         {
-            _levelService.FireLevelFinish();
             var deadState = new VehicleDeadState(gameObject);
             _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken).Forget();
+            _levelService.FireLevelLose();
+        }
+
+        private void OnDestinationReached()
+        {
+            _levelService.FireLevelWin();
         }
 
         private void OnLevelFinished()

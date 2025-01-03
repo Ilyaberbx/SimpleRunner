@@ -13,8 +13,11 @@ namespace Factura.Gameplay.Services.Level
         public event Action OnLevelStart;
         public event Action OnLevelPreStart;
         public event Action OnLevelFinish;
-        
+        public event Action OnLevelLose;
+        public event Action OnLevelWin;
+
         public int LevelLength => _levelConfiguration.LevelLength;
+        public bool IsLevelFinished { get; private set; }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -25,7 +28,7 @@ namespace Factura.Gameplay.Services.Level
         {
             return Task.CompletedTask;
         }
-        
+
         public void FireLevelStart()
         {
             OnLevelStart?.Invoke();
@@ -36,9 +39,32 @@ namespace Factura.Gameplay.Services.Level
             OnLevelPreStart?.Invoke();
         }
 
-        public void FireLevelFinish()
+        private void FireLevelFinish()
         {
+            IsLevelFinished = true;
             OnLevelFinish?.Invoke();
+        }
+
+        public void FireLevelWin()
+        {
+            if (IsLevelFinished)
+            {
+                return;
+            }
+
+            FireLevelFinish();
+            OnLevelWin?.Invoke();
+        }
+
+        public void FireLevelLose()
+        {
+            if (IsLevelFinished)
+            {
+                return;
+            }
+
+            FireLevelFinish();
+            OnLevelLose?.Invoke();
         }
     }
 }

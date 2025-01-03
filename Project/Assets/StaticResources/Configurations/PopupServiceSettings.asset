@@ -19,6 +19,9 @@ MonoBehaviour:
   - _type:
       rid: 6450054146183397387
     viewPrefab: {fileID: 1391437737558300292, guid: 93892b7ea3d7e9c4384532eff3bf86c1, type: 3}
+  - _type:
+      rid: 6450054152123056128
+    viewPrefab: {fileID: -5717181090681664137, guid: 1ffc63a9a2b9f364483bc8873d2dec52, type: 3}
   references:
     version: 2
     RefIds:
@@ -32,3 +35,8 @@ MonoBehaviour:
       data:
         _fullQualifiedName: Factura.UI.Popups.LevelWin.LevelWinPopupController, Assembly-CSharp,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 6450054152123056128
+      type: {class: SerializedType, ns: Better.Commons.Runtime.DataStructures.SerializedTypes, asm: BetterCommons.Runtime}
+      data:
+        _fullQualifiedName: Factura.UI.Popups.LevelLose.LevelLosePopupController,
+          Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

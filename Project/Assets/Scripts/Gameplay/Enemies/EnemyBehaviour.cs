@@ -7,12 +7,14 @@ using Factura.Gameplay.Movement;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Target;
 using Factura.Gameplay.Triggers;
+using Factura.Gameplay.Visitors;
 using UnityEngine;
 
 namespace Factura.Gameplay.Enemies
 {
-    public sealed class EnemyBehaviour : MonoBehaviour
+    public sealed class EnemyBehaviour : MonoBehaviour, IDamageable, IProjectileVisitable
     {
+        [SerializeField] private int _health;
         [SerializeField] private int _damage;
         [SerializeField] private float _patrolRadius;
         [SerializeField] private TargetTriggerObserver _targetTriggerObserver;
@@ -20,9 +22,9 @@ namespace Factura.Gameplay.Enemies
         [SerializeField] private MoveToTargetConfiguration moveToTargetConfiguration;
 
         private LevelService _levelService;
-
         private ITarget _target;
         private IStateMachine<BaseEnemyState> _stateMachine;
+        private DamageHandler _damageHandler;
         private MoveToTargetHandler _movementHandler;
 
         private void Start()
@@ -34,6 +36,7 @@ namespace Factura.Gameplay.Enemies
             _levelService.OnLevelFinish += OnLevelFinished;
             _targetTriggerObserver.OnEnter += OnTargetEntered;
             _damageableTriggerObserver.OnEnter += OnDamageableEntered;
+            _damageHandler.OnDie += OnDied;
         }
 
         private void OnDestroy()
@@ -44,6 +47,16 @@ namespace Factura.Gameplay.Enemies
             _damageableTriggerObserver.OnEnter -= OnDamageableEntered;
         }
 
+        public void TakeDamage(int amount)
+        {
+            _damageHandler.TakeDamage(amount);
+        }
+
+        public void Accept(IProjectileVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+
         public void SetTarget(ITarget target)
         {
             _target = target;
@@ -51,7 +64,17 @@ namespace Factura.Gameplay.Enemies
 
         private void OnDamageableEntered(IDamageable damageable)
         {
+            SetDeadState();
             damageable.TakeDamage(_damage);
+        }
+
+        private void OnDied()
+        {
+            SetDeadState();
+        }
+
+        private void SetDeadState()
+        {
             var deadState = new EnemyDeadState(gameObject);
             _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken);
         }
@@ -70,7 +93,7 @@ namespace Factura.Gameplay.Enemies
 
         private void OnLevelFinished()
         {
-            if (!_stateMachine.IsRunning)
+            if (!_stateMachine.IsRunning || _stateMachine.CurrentState is EnemyDeadState)
             {
                 return;
             }
@@ -85,7 +108,6 @@ namespace Factura.Gameplay.Enemies
             _stateMachine.ChangeStateAsync(chaseState, destroyCancellationToken);
         }
 
-
         private void InitializeStateMachine()
         {
             _stateMachine = new StateMachine<BaseEnemyState>();
@@ -95,6 +117,7 @@ namespace Factura.Gameplay.Enemies
         private void InitializeHandlers()
         {
             _movementHandler = new MoveToTargetHandler(transform, moveToTargetConfiguration);
+            _damageHandler = new DamageHandler(_health);
         }
     }
 }

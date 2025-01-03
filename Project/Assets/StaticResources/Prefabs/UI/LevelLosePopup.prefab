@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 950356367479863192}
   - component: {fileID: 727093287351567337}
   - component: {fileID: 1753670333252664133}
-  - component: {fileID: 1391437737558300292}
+  - component: {fileID: -5717181090681664137}
   m_Layer: 5
-  m_Name: LevelWinPopup
+  m_Name: LevelLosePopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &1391437737558300292
+--- !u!114 &-5717181090681664137
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2477750681618075139}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ed0fc7f8c3e44179c2045dce67e8b03, type: 3}
+  m_Script: {fileID: 11500000, guid: e459205378e54ac49806068e5d7e3302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _continueButton: {fileID: 482929649094202675}
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.40403423, g: 0.8113208, b: 0.32912067, a: 1}
+  m_Color: {r: 0.94716984, g: 0.6272766, b: 0.6272766, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

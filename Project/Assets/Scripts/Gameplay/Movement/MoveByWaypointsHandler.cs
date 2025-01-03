@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -5,6 +6,8 @@ namespace Factura.Gameplay.Movement
 {
     public sealed class MoveByWaypointsHandler : IMovable
     {
+        public event Action OnReachDestination;
+
         private readonly Transform _source;
         private readonly MoveByWaypointsConfiguration _configuration;
         private readonly Vector3[] _waypoints;
@@ -28,7 +31,13 @@ namespace Factura.Gameplay.Movement
             return _source.DOPath(_waypoints, speed, pathType, pathMode, resolution)
                 .SetSpeedBased()
                 .SetEase(curve)
-                .SetLookAt(lookAt);
+                .SetLookAt(lookAt)
+                .OnComplete(OnCompleted);
+        }
+
+        private void OnCompleted()
+        {
+            OnReachDestination?.Invoke();
         }
     }
 }
