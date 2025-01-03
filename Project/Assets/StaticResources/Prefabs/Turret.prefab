@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _projectilePrefab: {fileID: 2754551075977915949, guid: 0724925bd475e124d87e9666a085714b, type: 3}
-  _fireCooldown: 0.1
+  _fireCooldown: 0.3
   _shootPoint: {fileID: 1276508065709099639}
 --- !u!4 &8858537372039763480 stripped
 Transform:

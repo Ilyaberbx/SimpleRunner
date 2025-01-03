@@ -6,6 +6,7 @@ using Factura.Gameplay.Damage;
 using Factura.Gameplay.Modules;
 using Factura.Gameplay.Modules.Locator;
 using Factura.Gameplay.Movement;
+using Factura.Gameplay.Services.Camera;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Waypoints;
 using Factura.Gameplay.Target;
@@ -14,11 +15,16 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Vehicle
 {
-    public sealed class VehicleBehaviour : MonoBehaviour, ITarget, IDamageable
+    public sealed class VehicleBehaviour : MonoBehaviour, ITarget, IDamageable, ICameraTarget
     {
+        [SerializeField] private Transform _cameraFollowPoint;
+        [SerializeField] private Transform _cameraLookAtPoint;
         [SerializeField] private int _health;
         [SerializeField] private MoveByWaypointsConfiguration _moveByWaypointsConfiguration;
         [SerializeField] private LocatorAttachmentConfiguration[] _attachmentConfigurations;
+
+        public Transform CameraFollow => _cameraFollowPoint;
+        public Transform CameraLookAt => _cameraLookAtPoint;
 
         private LevelService _levelService;
         private WaypointsService _waypointsService;

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: WaypointsServiceSettings
   m_EditorClassIdentifier: 
   _factoryConfiguration:
-    _resolution: 5
+    _resolution: 10
     _turnRange: 2
     _turnRate: 8

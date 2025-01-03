@@ -1,6 +1,7 @@
 using Better.Locators.Runtime;
 using Factura.Gameplay.Enemies;
 using Factura.Gameplay.Modules;
+using Factura.Gameplay.Services.Camera;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Modules;
 using Factura.Gameplay.Tiles;
@@ -10,6 +11,7 @@ using Factura.UI.Popups.LevelStart;
 using Factura.UI.Popups.LevelWin;
 using Factura.UI.Services;
 using UnityEngine;
+using CameraType = Factura.Gameplay.Services.Camera.CameraType;
 
 namespace Factura.Gameplay
 {
@@ -19,18 +21,23 @@ namespace Factura.Gameplay
         [SerializeField] private GroundTilesSpawnBehaviour _tilesSpawnBehaviour;
         [SerializeField] private VehicleBehaviour _vehicleBehaviour;
 
-        private TurretBehaviour _turretBehaviour;
-        private BulletsPackBehaviour _bulletsPackBehaviour;
         private LevelService _levelService;
         private PopupService _popupService;
         private ModuleService _moduleService;
+        private CameraService _cameraService;
+
+        private TurretBehaviour _turretBehaviour;
+        private BulletsPackBehaviour _bulletsPackBehaviour;
+
 
         private void Start()
         {
             _moduleService = ServiceLocator.Get<ModuleService>();
             _levelService = ServiceLocator.Get<LevelService>();
             _popupService = ServiceLocator.Get<PopupService>();
+            _cameraService = ServiceLocator.Get<CameraService>();
 
+            _cameraService.SetActive(CameraType.PreStartCamera);
             CreateModules();
             InitializeVehicle();
             InitializeSpawners();
@@ -52,6 +59,8 @@ namespace Factura.Gameplay
         {
             _tilesSpawnBehaviour.SetTarget(_vehicleBehaviour);
             _enemiesSpawnBehaviour.SetTarget(_vehicleBehaviour);
+            _cameraService.SetTarget(_vehicleBehaviour, CameraType.PreStartCamera, false);
+            _cameraService.SetTarget(_vehicleBehaviour, CameraType.FollowCamera, true);
         }
 
         private void InitializeVehicle()

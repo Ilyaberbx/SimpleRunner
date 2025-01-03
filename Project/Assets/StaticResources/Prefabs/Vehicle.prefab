@@ -269,6 +269,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f96686052b467eb55f2bddb485b8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraFollowPoint: {fileID: 9079877890793542292}
+  _cameraLookAtPoint: {fileID: 9079877890793542292}
   _health: 5
   _moveByWaypointsConfiguration:
     _moveSpeed: 15
