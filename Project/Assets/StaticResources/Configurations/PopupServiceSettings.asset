@@ -14,13 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
   - _type:
-      rid: 6450054133185249280
+      rid: 6450054146183397384
     viewPrefab: {fileID: 4734847508954397549, guid: 6a2482fd9d794eb47b5cc5c6be368c0a, type: 3}
+  - _type:
+      rid: 6450054146183397387
+    viewPrefab: {fileID: 1391437737558300292, guid: 93892b7ea3d7e9c4384532eff3bf86c1, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 6450054133185249280
+    - rid: 6450054146183397384
       type: {class: SerializedType, ns: Better.Commons.Runtime.DataStructures.SerializedTypes, asm: BetterCommons.Runtime}
       data:
         _fullQualifiedName: Factura.UI.Popups.LevelStart.LevelStartPopupController,
           Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 6450054146183397387
+      type: {class: SerializedType, ns: Better.Commons.Runtime.DataStructures.SerializedTypes, asm: BetterCommons.Runtime}
+      data:
+        _fullQualifiedName: Factura.UI.Popups.LevelWin.LevelWinPopupController, Assembly-CSharp,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

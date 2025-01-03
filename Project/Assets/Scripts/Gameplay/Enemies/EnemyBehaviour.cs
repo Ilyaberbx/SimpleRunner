@@ -22,8 +22,8 @@ namespace Factura.Gameplay.Enemies
         private LevelService _levelService;
 
         private ITarget _target;
-        private IDynamicMovable _dynamicMovable;
         private IStateMachine<BaseEnemyState> _stateMachine;
+        private MoveToTargetHandler _movementHandler;
 
         private void Start()
         {
@@ -31,6 +31,7 @@ namespace Factura.Gameplay.Enemies
             InitializeHandlers();
             _levelService = ServiceLocator.Get<LevelService>();
             _levelService.OnLevelStart += OnLevelStarted;
+            _levelService.OnLevelFinish += OnLevelFinished;
             _targetTriggerObserver.OnEnter += OnTargetEntered;
             _damageableTriggerObserver.OnEnter += OnDamageableEntered;
         }
@@ -38,6 +39,7 @@ namespace Factura.Gameplay.Enemies
         private void OnDestroy()
         {
             _levelService.OnLevelStart -= OnLevelStarted;
+            _levelService.OnLevelFinish -= OnLevelFinished;
             _targetTriggerObserver.OnEnter -= OnTargetEntered;
             _damageableTriggerObserver.OnEnter -= OnDamageableEntered;
         }
@@ -61,14 +63,25 @@ namespace Factura.Gameplay.Enemies
                 return;
             }
 
-            var patrolData = new EnemyPatrolData(transform, _patrolRadius, _dynamicMovable);
+            var patrolData = new EnemyPatrolData(transform, _patrolRadius, _movementHandler);
             var patrolState = new EnemyPatrolState(patrolData);
             _stateMachine.ChangeStateAsync(patrolState, destroyCancellationToken).Forget();
         }
 
+        private void OnLevelFinished()
+        {
+            if (!_stateMachine.IsRunning)
+            {
+                return;
+            }
+
+            _stateMachine.ChangeStateAsync(new EnemyIdleState(), destroyCancellationToken).Forget();
+            _stateMachine.Stop();
+        }
+
         private void OnTargetEntered(ITarget target)
         {
-             var chaseState = new EnemyChaseState(_dynamicMovable, target);
+            var chaseState = new EnemyChaseState(_movementHandler, target);
             _stateMachine.ChangeStateAsync(chaseState, destroyCancellationToken);
         }
 
@@ -81,7 +94,7 @@ namespace Factura.Gameplay.Enemies
 
         private void InitializeHandlers()
         {
-            _dynamicMovable = new MoveToTargetHandler(transform, moveToTargetConfiguration);
+            _movementHandler = new MoveToTargetHandler(transform, moveToTargetConfiguration);
         }
     }
 }

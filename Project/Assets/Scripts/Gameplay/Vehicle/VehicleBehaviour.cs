@@ -16,12 +16,6 @@ namespace Factura.Gameplay.Vehicle
 {
     public sealed class VehicleBehaviour : MonoBehaviour, ITarget, IDamageable
     {
-        public event Action OnDie
-        {
-            add => _damageable.OnDie += value;
-            remove => _damageable.OnDie -= value;
-        }
-
         [SerializeField] private int _health;
         [SerializeField] private MoveByWaypointsConfiguration _moveByWaypointsConfiguration;
         [SerializeField] private LocatorAttachmentConfiguration[] _attachmentConfigurations;
@@ -31,9 +25,9 @@ namespace Factura.Gameplay.Vehicle
 
         private IModulesLocator _locator;
         private IStateMachine<BaseVehicleState> _stateMachine;
-        private IMovable _movable;
-        private ITarget _target;
-        private IDamageable _damageable;
+        private MoveByWaypointsHandler _movementHandler;
+        private DynamicTargetHandler _target;
+        private DamageHandler _damageHandler;
 
         public Vector3 Position => _target.Position;
 
@@ -46,14 +40,16 @@ namespace Factura.Gameplay.Vehicle
             InitializeStateMachine();
             InitializeHandlers();
 
-            _damageable.OnDie += OnDied;
+            _damageHandler.OnDie += OnDied;
             _levelService.OnLevelStart += OnLevelStarted;
+            _levelService.OnLevelFinish += OnLevelFinished;
         }
 
         private void OnDestroy()
         {
-            _damageable.OnDie -= OnDied;
+            _damageHandler.OnDie -= OnDied;
             _levelService.OnLevelStart -= OnLevelStarted;
+            _levelService.OnLevelFinish -= OnLevelFinished;
         }
 
         public void Attach(BaseModuleBehaviour moduleBehaviour)
@@ -63,7 +59,7 @@ namespace Factura.Gameplay.Vehicle
 
         public void TakeDamage(int amount)
         {
-            _damageable.TakeDamage(amount);
+            _damageHandler.TakeDamage(amount);
         }
 
         private void OnDied()
@@ -73,9 +69,20 @@ namespace Factura.Gameplay.Vehicle
             _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken).Forget();
         }
 
+        private void OnLevelFinished()
+        {
+            if (!_stateMachine.IsRunning)
+            {
+                return;
+            }
+
+            _stateMachine.ChangeStateAsync(new VehicleIdleState(), destroyCancellationToken).Forget();
+            _stateMachine.Stop();
+        }
+
         private void OnLevelStarted()
         {
-            var moveState = new VehicleMoveState(_movable);
+            var moveState = new VehicleMoveState(_movementHandler);
             _stateMachine.ChangeStateAsync(moveState, destroyCancellationToken).Forget();
         }
 
@@ -83,8 +90,8 @@ namespace Factura.Gameplay.Vehicle
         {
             var cachedTransform = transform;
             var waypoints = _waypointsService.GetWaypoints(cachedTransform.position);
-            _movable = new MoveByWaypointsHandler(cachedTransform, waypoints, _moveByWaypointsConfiguration);
-            _damageable = new DamageHandler(_health);
+            _movementHandler = new MoveByWaypointsHandler(cachedTransform, waypoints, _moveByWaypointsConfiguration);
+            _damageHandler = new DamageHandler(_health);
             _target = new DynamicTargetHandler(cachedTransform);
         }
 

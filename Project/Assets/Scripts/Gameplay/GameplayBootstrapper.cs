@@ -5,13 +5,16 @@ using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Modules;
 using Factura.Gameplay.Tiles;
 using Factura.Gameplay.Vehicle;
+using Factura.Global.Services;
+using Factura.Global.States;
 using Factura.UI.Popups.LevelStart;
+using Factura.UI.Popups.LevelWin;
 using Factura.UI.Services;
 using UnityEngine;
 
 namespace Factura.Gameplay
 {
-    public class BootstrapperBehaviour : MonoBehaviour
+    public class GameplayBootstrapper : MonoBehaviour
     {
         [SerializeField] private EnemiesSpawnBehaviour _enemiesSpawnBehaviour;
         [SerializeField] private GroundTilesSpawnBehaviour _tilesSpawnBehaviour;
@@ -21,12 +24,14 @@ namespace Factura.Gameplay
         private BulletsPackBehaviour _bulletsPackBehaviour;
         private LevelService _levelService;
         private PopupService _popupService;
+        private GameStatesService _gameStatesService;
 
         private void Start()
         {
             var moduleService = ServiceLocator.Get<ModuleService>();
             _levelService = ServiceLocator.Get<LevelService>();
             _popupService = ServiceLocator.Get<PopupService>();
+            _gameStatesService = ServiceLocator.Get<GameStatesService>();
 
             _turretBehaviour = moduleService.Create<TurretBehaviour>();
             _bulletsPackBehaviour = moduleService.Create<BulletsPackBehaviour>();
@@ -44,6 +49,15 @@ namespace Factura.Gameplay
             _levelService.FireLevelPreStart();
 
             _popupService.Show<LevelStartPopupController, LevelStartModel>(new LevelStartModel());
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _levelService.FireLevelFinish();
+                _popupService.Show<LevelWinPopupController, LevelWinPopupModel>(new LevelWinPopupModel());
+            }
         }
     }
 }

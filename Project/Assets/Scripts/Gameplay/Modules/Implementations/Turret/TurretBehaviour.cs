@@ -40,11 +40,13 @@ namespace Factura.Gameplay.Modules
             _attachable = new AttachmentHandler(cachedTransform, CanAttach());
             _levelService = ServiceLocator.Get<LevelService>();
             _levelService.OnLevelStart += OnLevelStarted;
+            _levelService.OnLevelFinish += OnLevelFinished;
         }
 
         private void OnDestroy()
         {
             _levelService.OnLevelStart -= OnLevelStarted;
+            _levelService.OnLevelFinish -= OnLevelFinished;
         }
 
         private void OnLevelStarted()
@@ -56,6 +58,17 @@ namespace Factura.Gameplay.Modules
 
             var activeState = new TurretActiveState(_launcher);
             _stateMachine.ChangeStateAsync(activeState, destroyCancellationToken).Forget();
+        }
+
+        private void OnLevelFinished()
+        {
+            if (!_stateMachine.IsRunning)
+            {
+                return;
+            }
+
+            _stateMachine.ChangeStateAsync(new TurretIdleState(), destroyCancellationToken).Forget();
+            _stateMachine.Stop();
         }
 
         private AllComplexCondition CanAttach()

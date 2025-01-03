@@ -61,6 +61,7 @@ namespace Factura.UI.Services
 
             var viewGameObject = _currentController.DerivedView.gameObject;
             _currentController.Dispose();
+            _currentController = null;
             Object.Destroy(viewGameObject);
             HideBackground();
         }
