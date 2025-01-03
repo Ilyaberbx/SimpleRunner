@@ -7,14 +7,19 @@ using Factura.Gameplay.Conditions;
 using Factura.Gameplay.Launcher;
 using Factura.Gameplay.Modules.Locator;
 using Factura.Gameplay.Modules.States;
+using Factura.Gameplay.Projectiles;
+using Factura.Gameplay.Rotator;
 using Factura.Gameplay.Services.Level;
+using Factura.Gameplay.Shooter;
 using UnityEngine;
 
 namespace Factura.Gameplay.Modules
 {
     public sealed class TurretBehaviour : BaseModuleBehaviour
     {
-        [SerializeField] private TurretLauncherConfiguration _launcherConfiguration;
+        [SerializeField] private BaseProjectileBehaviour _projectilePrefab;
+        [SerializeField] private float _fireCooldown;
+        [SerializeField] private Transform _shootPoint;
 
         private LevelService _levelService;
 
@@ -29,7 +34,9 @@ namespace Factura.Gameplay.Modules
             var cachedTransform = transform;
             _stateMachine = new StateMachine<BaseTurretState>();
             _stateMachine.Run();
-            _launcher = new TurretLauncher(cachedTransform, Camera.main, _launcherConfiguration);
+            var shooter = new ProjectileShooter(_shootPoint, _projectilePrefab);
+            var rotator = new TurretRotator(cachedTransform);
+            _launcher = new TurretLauncher(Camera.main, _fireCooldown, rotator, shooter);
             _attachable = new AttachmentHandler(cachedTransform, CanAttach());
             _levelService = ServiceLocator.Get<LevelService>();
             _levelService.OnLevelStart += OnLevelStarted;

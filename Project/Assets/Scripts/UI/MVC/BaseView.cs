@@ -19,17 +19,5 @@ namespace Factura.UI.MVC
                 return _canvasGroup;
             }
         }
-
-        public bool Interactable
-        {
-            get => CanvasGroup.interactable;
-            set => CanvasGroup.interactable = value;
-        }
-
-        public bool BlocksRayCasts
-        {
-            get => CanvasGroup.blocksRaycasts;
-            set => CanvasGroup.blocksRaycasts = value;
-        }
     }
 }

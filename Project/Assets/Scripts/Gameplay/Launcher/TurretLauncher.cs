@@ -1,5 +1,6 @@
-using Better.Commons.Runtime.Extensions;
 using Factura.Gameplay.Extensions;
+using Factura.Gameplay.Rotator;
+using Factura.Gameplay.Shooter;
 using UnityEngine;
 
 namespace Factura.Gameplay.Launcher
@@ -8,29 +9,35 @@ namespace Factura.Gameplay.Launcher
     {
         private const float ForwardCompensateValue = 100;
 
-        private readonly Transform _source;
         private readonly Camera _camera;
-        private readonly TurretLauncherConfiguration _configuration;
+        private readonly float _fireCoolDown;
+        private readonly IRotator _rotator;
+        private readonly IShooter _shooter;
+        private float _timeSinceLastFire;
 
-        public TurretLauncher(Transform source, Camera camera, TurretLauncherConfiguration configuration)
+        public TurretLauncher(Camera camera, float fireCoolDown, IRotator rotator, IShooter shooter)
         {
-            _source = source;
             _camera = camera;
-            _configuration = configuration;
+            _fireCoolDown = fireCoolDown;
+            _rotator = rotator;
+            _shooter = shooter;
+            _timeSinceLastFire = _fireCoolDown;
         }
 
         public void Launch(float deltaTime, Vector3 mousePosition)
         {
-            RotateToMousePosition(mousePosition);
-        }
-
-        private void RotateToMousePosition(Vector3 mousePosition)
-        {
             var mouseWorldPosition = _camera.ScreenToWorldPoint(mousePosition.AddZ(ForwardCompensateValue));
-            var direction = mouseWorldPosition - _source.position;
-            direction = direction.Flat();
-            var angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            _source.rotation = Quaternion.Euler(0, angle, 0);
+            _rotator.RotateTo(mouseWorldPosition);
+
+            _timeSinceLastFire += deltaTime;
+
+            if (_timeSinceLastFire < _fireCoolDown)
+            {
+                return;
+            }
+
+            _shooter.Fire(mouseWorldPosition);
+            _timeSinceLastFire = 0f;
         }
     }
 }

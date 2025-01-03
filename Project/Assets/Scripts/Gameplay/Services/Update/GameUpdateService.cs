@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Better.Commons.Runtime.Extensions;
@@ -31,9 +32,9 @@ namespace Factura.Gameplay.Services.Update
                 return;
             }
 
-            foreach (var element in _elements)
+            foreach (var element in _elements.ToList())
             {
-                element.HandleUpdate(Time.deltaTime);
+                element.OnUpdate(Time.deltaTime);
             }
         }
 

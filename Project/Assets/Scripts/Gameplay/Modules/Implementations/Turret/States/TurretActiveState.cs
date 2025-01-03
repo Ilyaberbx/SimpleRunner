@@ -21,6 +21,7 @@ namespace Factura.Gameplay.Modules.States
         {
             _gameUpdateService = ServiceLocator.Get<GameUpdateService>();
             _inputService = ServiceLocator.Get<InputService>();
+            
             _gameUpdateService.Subscribe(this);
         }
 
@@ -29,7 +30,7 @@ namespace Factura.Gameplay.Modules.States
             _gameUpdateService.Unsubscribe(this);
         }
 
-        public void HandleUpdate(float deltaTime)
+        public void OnUpdate(float deltaTime)
         {
             if (!_inputService.IsMouse(0))
             {
