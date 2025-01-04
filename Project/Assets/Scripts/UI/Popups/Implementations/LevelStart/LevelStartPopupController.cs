@@ -5,13 +5,13 @@ using Factura.UI.Services;
 
 namespace Factura.UI.Popups.LevelStart
 {
-    public sealed class LevelStartPopupController : BasePopupController<LevelStartModel, LevelStartPopupView>
+    public sealed class LevelStartPopupController : BasePopupController<LevelStartPopupModel, LevelStartPopupView>
     {
         private LevelService _levelService;
         private PopupService _popupService;
         private CameraService _cameraService;
 
-        protected override void Show(LevelStartModel model, LevelStartPopupView view)
+        protected override void Show(LevelStartPopupModel model, LevelStartPopupView view)
         {
             base.Show(model, view);
 

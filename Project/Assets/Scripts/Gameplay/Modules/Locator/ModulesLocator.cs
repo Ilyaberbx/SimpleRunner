@@ -11,17 +11,17 @@ namespace Factura.Gameplay.Modules.Locator
         private const string ModuleIsNullMessage = "Module is null";
         private const string ModuleAlreadyAttachedFormat = "Module {0} already attached";
 
-        private readonly ILocator<Type, BaseModuleBehaviour> _source;
+        private readonly ILocator<Type, VehicleModuleBehaviour> _source;
         private readonly IReadOnlyCollection<LocatorAttachmentConfiguration> _attachmentConfigurations;
 
-        public ModulesLocator(ILocator<Type, BaseModuleBehaviour> source,
+        public ModulesLocator(ILocator<Type, VehicleModuleBehaviour> source,
             IReadOnlyCollection<LocatorAttachmentConfiguration> attachmentConfigurations)
         {
             _source = source;
             _attachmentConfigurations = attachmentConfigurations;
         }
 
-        public bool Has<TModule>() where TModule : BaseModuleBehaviour
+        public bool Has<TModule>() where TModule : VehicleModuleBehaviour
         {
             return Has(typeof(TModule));
         }
@@ -50,7 +50,7 @@ namespace Factura.Gameplay.Modules.Locator
             return true;
         }
 
-        public void Attach(BaseModuleBehaviour module)
+        public void Attach(VehicleModuleBehaviour module)
         {
             if (module == null)
             {

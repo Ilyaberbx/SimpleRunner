@@ -18,7 +18,7 @@ namespace Factura.Gameplay.Services.Enemies
         {
             await base.OnInitializeAsync(cancellationToken);
 
-            _factory = new EnemyFactory(Settings.FactoryConfiguration);
+            _factory = new EnemyFactory(Settings.Prefab);
         }
 
         public EnemyBehaviour CreateEnemy(Vector3 at)

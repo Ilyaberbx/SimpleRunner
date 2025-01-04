@@ -1,23 +1,30 @@
-using UnityEngine;
+using System.Threading;
+using System.Threading.Tasks;
+using Better.Locators.Runtime;
+using Factura.Gameplay.Modules;
+using Factura.Gameplay.Services.Modules;
 
 namespace Factura.Gameplay.Vehicle.States
 {
     public sealed class VehicleDeadState : BaseVehicleState
     {
-        private readonly GameObject _source;
+        private readonly VehicleModuleBehaviour _source;
 
-        public VehicleDeadState(GameObject source)
+        public VehicleDeadState(VehicleBehaviour source)
         {
             _source = source;
         }
 
-        protected override void Enter()
+        public override Task EnterAsync(CancellationToken token)
         {
-            Object.Destroy(_source);
+            var moduleService = ServiceLocator.Get<ModuleService>();
+            moduleService.Destroy(_source);
+            return Task.CompletedTask;
         }
 
-        protected override void Exit()
+        public override Task ExitAsync(CancellationToken token)
         {
+            return Task.CompletedTask;
         }
     }
 }

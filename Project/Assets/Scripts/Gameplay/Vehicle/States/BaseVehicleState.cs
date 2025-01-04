@@ -2,13 +2,13 @@ using Better.StateMachine.Runtime.States;
 
 namespace Factura.Gameplay.Vehicle.States
 {
-    public abstract class BaseVehicleState : SynchronousState
+    public abstract class BaseVehicleState : BaseState
     {
-        public sealed override void OnEntered()
+        public override void OnEntered()
         {
         }
 
-        public sealed override void OnExited()
+        public override void OnExited()
         {
         }
     }

@@ -7,10 +7,10 @@ namespace Factura.Gameplay.Services.Modules
     [Serializable]
     public sealed class ModuleCreationData
     {
-        [SerializeField] private BaseModuleBehaviour _prefab;
+        [SerializeField] private VehicleModuleBehaviour _prefab;
 
         public Type KeyType => Prefab != null ? Prefab.GetType() : null;
 
-        public BaseModuleBehaviour Prefab => _prefab;
+        public VehicleModuleBehaviour Prefab => _prefab;
     }
 }

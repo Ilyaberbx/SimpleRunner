@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Modules
 {
-    public sealed class BulletsPackBehaviour : BaseModuleBehaviour
+    public sealed class BulletsPackBehaviour : VehicleModuleBehaviour
     {
         private IAttachable _attachable;
 

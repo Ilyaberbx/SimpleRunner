@@ -12,11 +12,9 @@ namespace Factura.Gameplay.Services.Camera
     [Serializable]
     public sealed class CameraService : PocoService
     {
+        [SerializeField] private BrainCameraData[] _data;
         [SerializeField] private CinemachineBrain _brain;
-        [SerializeField] private CameraData[] _camerasData;
-
         public UnityEngine.Camera MainCamera { get; private set; }
-
         private CameraType _currentType;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -39,7 +37,8 @@ namespace Factura.Gameplay.Services.Camera
             }
 
             var cameraToActivate = data.Camera;
-            foreach (var camera in _camerasData.Select(temp => temp.Camera))
+
+            foreach (var camera in _data.Select(temp => temp.Camera))
             {
                 camera.Priority = 0;
             }
@@ -65,9 +64,9 @@ namespace Factura.Gameplay.Services.Camera
             cameraToSet.LookAt(target);
         }
 
-        private bool TryGetData(CameraType type, out CameraData data)
+        private bool TryGetData(CameraType type, out BrainCameraData data)
         {
-            data = _camerasData.FirstOrDefault(temp => temp.Type == type);
+            data =_data.FirstOrDefault(temp => temp.Type == type);
             return data != null;
         }
     }

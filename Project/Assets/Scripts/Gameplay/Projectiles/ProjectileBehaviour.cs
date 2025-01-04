@@ -16,10 +16,11 @@ namespace Factura.Gameplay.Projectiles
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _aliveTime;
 
-        private Vector3 _direction;
         private LevelService _levelService;
         private GameUpdateService _gameUpdateService;
+
         private Transform _cachedTransform;
+        private Vector3 _direction;
 
         public override void Initialize(Vector3 direction)
         {
@@ -30,6 +31,7 @@ namespace Factura.Gameplay.Projectiles
 
             _levelService.OnLevelFinish += OnLevelFinished;
             _visitableTriggerObserver.OnEnter += OnVisitableEntered;
+
             _gameUpdateService.Subscribe(this);
 
             SelfDestroyAfterDelay();
@@ -39,13 +41,19 @@ namespace Factura.Gameplay.Projectiles
         {
             _levelService.OnLevelFinish -= OnLevelFinished;
             _visitableTriggerObserver.OnEnter -= OnVisitableEntered;
+
             _gameUpdateService.Unsubscribe(this);
         }
 
         public void OnUpdate(float deltaTime)
         {
-            var movement = _direction * _moveSpeed * deltaTime;
+            var movement = ProcessMovement(deltaTime);
             _cachedTransform.position += movement;
+        }
+
+        private Vector3 ProcessMovement(float deltaTime)
+        {
+            return _direction * _moveSpeed * deltaTime;
         }
 
         public void Visit(EnemyBehaviour enemy)

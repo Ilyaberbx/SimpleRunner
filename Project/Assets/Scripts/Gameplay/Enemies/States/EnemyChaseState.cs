@@ -19,12 +19,12 @@ namespace Factura.Gameplay.Enemies.States
         protected override void Enter()
         {
             _dynamicMovable.SetTarget(_target);
-            _moveState.Enter();
+            //_moveState.Enter();
         }
 
         protected override void Exit()
         {
-            _moveState.Exit();
+            //_moveState.Exit();
         }
     }
 }

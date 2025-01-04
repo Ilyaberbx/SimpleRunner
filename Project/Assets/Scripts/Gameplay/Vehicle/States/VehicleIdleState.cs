@@ -1,13 +1,18 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Factura.Gameplay.Vehicle.States
 {
     public sealed class VehicleIdleState : BaseVehicleState
     {
-        protected override void Enter()
+        public override Task EnterAsync(CancellationToken token)
         {
+            return Task.CompletedTask;
         }
 
-        protected override void Exit()
+        public override Task ExitAsync(CancellationToken token)
         {
+            return Task.CompletedTask;
         }
     }
 }

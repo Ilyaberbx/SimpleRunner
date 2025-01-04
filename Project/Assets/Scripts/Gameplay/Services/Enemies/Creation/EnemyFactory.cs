@@ -6,24 +6,22 @@ namespace Factura.Gameplay.Services.Enemies
     public class EnemyFactory : IEnemyFactory
     {
         private const string ConfigurationNullMessage = "Can not create enemy due to configuration null reference";
+        private readonly EnemyBehaviour _prefab;
 
-        private readonly EnemyFactoryConfiguration _configuration;
-
-        public EnemyFactory(EnemyFactoryConfiguration configuration)
+        public EnemyFactory(EnemyBehaviour prefab)
         {
-            _configuration = configuration;
+            _prefab = prefab;
         }
 
         public EnemyBehaviour Create(Vector3 at, Transform parent)
         {
-            if (_configuration == null)
+            if (_prefab == null)
             {
                 Debug.LogError(ConfigurationNullMessage);
                 return null;
             }
 
-            var prefab = _configuration.Prefab;
-            return Object.Instantiate(prefab, at, Quaternion.identity, parent);
+            return Object.Instantiate(_prefab, at, Quaternion.identity, parent);
         }
     }
 }

@@ -5,9 +5,6 @@ namespace Factura.Gameplay.Attachment
 {
     public sealed class AttachmentHandler : IAttachable
     {
-        private const string AttachmentPointNullMessage = "Attachment point is null.";
-        private const string SuccessfullyAttachedMessage = "{0} successfully attached.";
-
         private readonly Transform _source;
         private readonly Condition _condition;
 
@@ -26,7 +23,6 @@ namespace Factura.Gameplay.Attachment
         {
             if (attachmentPoint == null)
             {
-                Debug.LogError(AttachmentPointNullMessage);
                 return false;
             }
 
@@ -37,7 +33,6 @@ namespace Factura.Gameplay.Attachment
 
             _source.SetParent(attachmentPoint);
             _source.localPosition = Vector3.zero;
-            Debug.Log(string.Format(SuccessfullyAttachedMessage, _source.name));
             return true;
         }
     }

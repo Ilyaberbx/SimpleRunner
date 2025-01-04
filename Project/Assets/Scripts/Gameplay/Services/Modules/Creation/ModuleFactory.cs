@@ -16,7 +16,7 @@ namespace Factura.Gameplay.Services.Modules
             _configuration = configuration;
         }
 
-        public TModule Create<TModule>() where TModule : BaseModuleBehaviour
+        public TModule Create<TModule>(Vector3 at) where TModule : VehicleModuleBehaviour
         {
             if (_configuration == null)
             {
@@ -34,7 +34,7 @@ namespace Factura.Gameplay.Services.Modules
             }
 
             var prefab = creationData.Prefab;
-            var derivedModule = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity, null);
+            var derivedModule = Object.Instantiate(prefab, at, Quaternion.identity, null);
 
             if (derivedModule is TModule concreteModule)
             {
@@ -44,7 +44,7 @@ namespace Factura.Gameplay.Services.Modules
             return null;
         }
 
-        private ModuleCreationData GetCreationData<TModule>() where TModule : BaseModuleBehaviour
+        private ModuleCreationData GetCreationData<TModule>() where TModule : VehicleModuleBehaviour
         {
             return _configuration.CreationData.FirstOrDefault(data => data.KeyType == typeof(TModule));
         }

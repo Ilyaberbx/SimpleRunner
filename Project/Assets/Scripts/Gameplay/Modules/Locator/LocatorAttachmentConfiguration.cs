@@ -8,7 +8,7 @@ namespace Factura.Gameplay.Modules.Locator
     [Serializable]
     public sealed class LocatorAttachmentConfiguration
     {
-        [SerializeReference, Select(typeof(BaseModuleBehaviour))]
+        [SerializeReference, Select(typeof(VehicleModuleBehaviour))]
         private SerializedType _serializedType;
 
         [SerializeField] private Transform _point;

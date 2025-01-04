@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Modules
 {
-    public sealed class TurretBehaviour : BaseModuleBehaviour
+    public sealed class TurretBehaviour : VehicleModuleBehaviour
     {
         [SerializeField] private BaseProjectileBehaviour _projectilePrefab;
         [SerializeField] private float _fireCooldown;

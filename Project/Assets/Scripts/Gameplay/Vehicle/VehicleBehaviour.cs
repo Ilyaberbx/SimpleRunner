@@ -1,7 +1,9 @@
 using System;
 using Better.Commons.Runtime.Extensions;
+using Better.Conditions.Runtime;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
+using Factura.Gameplay.Attachment;
 using Factura.Gameplay.Damage;
 using Factura.Gameplay.Modules;
 using Factura.Gameplay.Modules.Locator;
@@ -15,7 +17,7 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Vehicle
 {
-    public sealed class VehicleBehaviour : MonoBehaviour, ITarget, IDamageable, ICameraTarget
+    public sealed class VehicleBehaviour : VehicleModuleBehaviour, ITarget, IDamageable, ICameraTarget
     {
         [SerializeField] private Transform _cameraFollowPoint;
         [SerializeField] private Transform _cameraLookAtPoint;
@@ -33,9 +35,10 @@ namespace Factura.Gameplay.Vehicle
         private IStateMachine<BaseVehicleState> _stateMachine;
         private MoveByWaypointsHandler _movementHandler;
         private DamageHandler _damageHandler;
-        private DynamicTargetHandler _target;
+        private AttachmentHandler _attachmentHandler;
+        private DynamicTargetHandler _targetHandler;
 
-        public Vector3 Position => _target.Position;
+        public Vector3 Position => _targetHandler.Position;
 
         public void Initialize()
         {
@@ -47,7 +50,6 @@ namespace Factura.Gameplay.Vehicle
             InitializeHandlers();
 
             _damageHandler.OnDie += OnDied;
-            _movementHandler.OnReachDestination += OnDestinationReached;
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
         }
@@ -55,12 +57,38 @@ namespace Factura.Gameplay.Vehicle
         private void OnDestroy()
         {
             _damageHandler.OnDie -= OnDied;
-            _movementHandler.OnReachDestination -= OnDestinationReached;
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
         }
 
-        public void Attach(BaseModuleBehaviour moduleBehaviour)
+        #region Initialiation
+
+        private void InitializeHandlers()
+        {
+            var cachedTransform = transform;
+            var waypoints = _waypointsService.GetWaypoints(cachedTransform.position);
+            _movementHandler = new MoveByWaypointsHandler(cachedTransform, waypoints, _moveByWaypointsConfiguration);
+            _damageHandler = new DamageHandler(_health);
+            _targetHandler = new DynamicTargetHandler(cachedTransform);
+            _attachmentHandler = new AttachmentHandler(cachedTransform, new ActiveSelfCondition(gameObject, true));
+        }
+
+        private void InitializeStateMachine()
+        {
+            _stateMachine = new StateMachine<BaseVehicleState>();
+            _stateMachine.Run();
+        }
+
+        private void InitializeLocator()
+        {
+            var source = new Locator<Type, VehicleModuleBehaviour>();
+            _locator = new ModulesLocator(source, _attachmentConfigurations);
+        }
+
+        #endregion
+
+
+        public void Attach(VehicleModuleBehaviour moduleBehaviour)
         {
             _locator.Attach(moduleBehaviour);
         }
@@ -70,9 +98,14 @@ namespace Factura.Gameplay.Vehicle
             _damageHandler.TakeDamage(amount);
         }
 
+        protected override bool TryAttachInternal(Transform attachmentPoint)
+        {
+            return _attachmentHandler.TryAttach(attachmentPoint);
+        }
+
         private void OnDied()
         {
-            var deadState = new VehicleDeadState(gameObject);
+            var deadState = new VehicleDeadState(this);
             _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken).Forget();
             _levelService.FireLevelLose();
         }
@@ -97,27 +130,6 @@ namespace Factura.Gameplay.Vehicle
         {
             var moveState = new VehicleMoveState(_movementHandler);
             _stateMachine.ChangeStateAsync(moveState, destroyCancellationToken).Forget();
-        }
-
-        private void InitializeHandlers()
-        {
-            var cachedTransform = transform;
-            var waypoints = _waypointsService.GetWaypoints(cachedTransform.position);
-            _movementHandler = new MoveByWaypointsHandler(cachedTransform, waypoints, _moveByWaypointsConfiguration);
-            _damageHandler = new DamageHandler(_health);
-            _target = new DynamicTargetHandler(cachedTransform);
-        }
-
-        private void InitializeStateMachine()
-        {
-            _stateMachine = new StateMachine<BaseVehicleState>();
-            _stateMachine.Run();
-        }
-
-        private void InitializeLocator()
-        {
-            var source = new Locator<Type, BaseModuleBehaviour>();
-            _locator = new ModulesLocator(source, _attachmentConfigurations);
         }
     }
 }

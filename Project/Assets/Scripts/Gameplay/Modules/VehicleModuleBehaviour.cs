@@ -1,9 +1,11 @@
 using Factura.Gameplay.Modules.Locator;
+using Factura.Gameplay.Vehicle;
+using Factura.Gameplay.Visitors;
 using UnityEngine;
 
 namespace Factura.Gameplay.Modules
 {
-    public abstract class BaseModuleBehaviour : MonoBehaviour
+    public abstract class VehicleModuleBehaviour : MonoBehaviour
     {
         protected IModulesLocatorReadonly Locator { get; private set; }
         private bool IsInitialized => Locator != null;

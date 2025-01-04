@@ -17,9 +17,9 @@ namespace Factura.Gameplay
 {
     public class GameplayBootstrapper : MonoBehaviour
     {
+        [SerializeField] private Transform _vehicleSpawnPoint;
         [SerializeField] private EnemiesSpawnBehaviour _enemiesSpawnBehaviour;
         [SerializeField] private GroundTilesSpawnBehaviour _tilesSpawnBehaviour;
-        [SerializeField] private VehicleBehaviour _vehicleBehaviour;
 
         private LevelService _levelService;
         private PopupService _popupService;
@@ -28,6 +28,7 @@ namespace Factura.Gameplay
 
         private TurretBehaviour _turretBehaviour;
         private BulletsPackBehaviour _bulletsPackBehaviour;
+        private VehicleBehaviour _vehicleBehaviour;
 
 
         private void Start()
@@ -46,7 +47,7 @@ namespace Factura.Gameplay
             _levelService.OnLevelWin += OnLevelWin;
             _levelService.OnLevelLose += OnLevelLose;
             _levelService.FireLevelPreStart();
-            _popupService.Show<LevelStartPopupController, LevelStartModel>(new LevelStartModel());
+            _popupService.Show<LevelStartPopupController, LevelStartPopupModel>(new LevelStartPopupModel());
         }
 
         private void OnDestroy()
@@ -78,6 +79,7 @@ namespace Factura.Gameplay
 
         private void CreateModules()
         {
+            _vehicleBehaviour = _moduleService.Create<VehicleBehaviour>(_vehicleSpawnPoint.position);
             _turretBehaviour = _moduleService.Create<TurretBehaviour>();
             _bulletsPackBehaviour = _moduleService.Create<BulletsPackBehaviour>();
         }

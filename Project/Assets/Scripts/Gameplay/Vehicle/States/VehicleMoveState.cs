@@ -1,9 +1,18 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Factura.Gameplay.Movement;
 
 namespace Factura.Gameplay.Vehicle.States
 {
     public sealed class VehicleMoveState : BaseVehicleState
     {
+        public event Action OnDestinationReached
+        {
+            add => _moveState.OnDestinationReached += value;
+            remove => _moveState.OnDestinationReached -= value;
+        }
+
         private readonly MoveState _moveState;
 
         public VehicleMoveState(IMovable movable)
@@ -11,14 +20,14 @@ namespace Factura.Gameplay.Vehicle.States
             _moveState = new MoveState(movable);
         }
 
-        protected override void Enter()
+        public override Task EnterAsync(CancellationToken token)
         {
-            _moveState.Enter();
+            return _moveState.EnterAsync(token);
         }
 
-        protected override void Exit()
+        public override Task ExitAsync(CancellationToken token)
         {
-            _moveState.Exit();
+            return _moveState.ExitAsync(token);
         }
     }
 }

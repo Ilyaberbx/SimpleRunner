@@ -2,22 +2,20 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Better.Services.Runtime;
-using UnityEngine;
 
 namespace Factura.Gameplay.Services.Level
 {
-    public sealed class LevelService : MonoService
+    [Serializable]
+    public sealed class LevelService : PocoService<LevelServiceSettings>
     {
-        [SerializeField] private LevelConfiguration _levelConfiguration;
-
         public event Action OnLevelStart;
         public event Action OnLevelPreStart;
         public event Action OnLevelFinish;
         public event Action OnLevelLose;
         public event Action OnLevelWin;
 
-        public int LevelLength => _levelConfiguration.LevelLength;
-        public bool IsLevelFinished { get; private set; }
+        public int LevelLength => Settings.LevelLength;
+        private bool _isLevelFinished;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -41,13 +39,13 @@ namespace Factura.Gameplay.Services.Level
 
         private void FireLevelFinish()
         {
-            IsLevelFinished = true;
+            _isLevelFinished = true;
             OnLevelFinish?.Invoke();
         }
 
         public void FireLevelWin()
         {
-            if (IsLevelFinished)
+            if (_isLevelFinished)
             {
                 return;
             }
@@ -58,7 +56,7 @@ namespace Factura.Gameplay.Services.Level
 
         public void FireLevelLose()
         {
-            if (IsLevelFinished)
+            if (_isLevelFinished)
             {
                 return;
             }
