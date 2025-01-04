@@ -1,4 +1,4 @@
-using Factura.Gameplay.Tiles;
+using Factura.Gameplay.Tile;
 using UnityEngine;
 
 namespace Factura.Gameplay.Services.Tiles.Creation

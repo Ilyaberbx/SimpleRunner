@@ -1,4 +1,4 @@
-using Factura.Gameplay.Enemies;
+using Factura.Gameplay.Enemy;
 
 namespace Factura.Gameplay.Visitors
 {

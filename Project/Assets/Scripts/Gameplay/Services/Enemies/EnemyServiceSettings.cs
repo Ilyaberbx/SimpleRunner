@@ -1,4 +1,4 @@
-using Factura.Gameplay.Enemies;
+using Factura.Gameplay.Enemy;
 using UnityEngine;
 
 namespace Factura.Gameplay.Services.Enemies

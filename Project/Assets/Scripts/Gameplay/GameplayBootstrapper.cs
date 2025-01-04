@@ -1,11 +1,10 @@
 using Better.Locators.Runtime;
 using Factura.Gameplay.Car;
-using Factura.Gameplay.Enemies;
-using Factura.Gameplay.Modules;
+using Factura.Gameplay.Enemy;
 using Factura.Gameplay.Services.Camera;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Modules;
-using Factura.Gameplay.Tiles;
+using Factura.Gameplay.Tile;
 using Factura.UI.Popups.LevelLose;
 using Factura.UI.Popups.LevelStart;
 using Factura.UI.Popups.LevelWin;

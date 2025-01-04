@@ -1,6 +1,6 @@
 using System;
 using Better.Conditions.Runtime;
-using Factura.Gameplay.Modules.Locator;
+using Factura.Gameplay.ModulesLocator;
 
 namespace Factura.Gameplay.Conditions
 {

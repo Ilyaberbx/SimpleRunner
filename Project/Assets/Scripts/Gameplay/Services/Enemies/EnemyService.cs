@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Better.Services.Runtime;
-using Factura.Gameplay.Enemies;
+using Factura.Gameplay.Enemy;
 using UnityEngine;
 
 namespace Factura.Gameplay.Services.Enemies

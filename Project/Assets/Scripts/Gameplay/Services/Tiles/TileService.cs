@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Better.Services.Runtime;
 using Factura.Gameplay.Services.Tiles.Creation;
-using Factura.Gameplay.Tiles;
+using Factura.Gameplay.Tile;
 using UnityEngine;
 
 namespace Factura.Gameplay.Services.Tiles
