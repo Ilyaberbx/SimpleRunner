@@ -11,11 +11,8 @@ namespace Factura.Gameplay.Services.Modules
     [Serializable]
     public sealed class ModuleService : PocoService<ModuleServiceSettings>
     {
-        private IModuleFactory _moduleFactory;
-
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            _moduleFactory = new ModuleFactory(Settings.FactoryConfiguration);
             return Task.CompletedTask;
         }
 
@@ -24,12 +21,12 @@ namespace Factura.Gameplay.Services.Modules
             return Task.CompletedTask;
         }
 
-        public TModule Create<TModule>(Vector3 at = default) where TModule : VehicleModuleBehaviour
+        public TModule Create<TModule>(Vector3 at = default) where TModule : BaseModuleBehaviour
         {
-            return _moduleFactory.Create<TModule>(at);
+            return null;
         }
 
-        public void Destroy<TModule>(TModule module) where TModule : VehicleModuleBehaviour
+        public void Destroy<TModule>(TModule module) where TModule : BaseModuleBehaviour
         {
             var gameObject = module.gameObject;
             Object.Destroy(gameObject);

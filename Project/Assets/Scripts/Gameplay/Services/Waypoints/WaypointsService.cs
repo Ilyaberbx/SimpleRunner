@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Factura.Gameplay.Services.Waypoints
 {
     [Serializable]
-    public sealed class WaypointsService : PocoService<WaypointsServiceSettings>
+    public sealed class WaypointsService : PocoService<WaypointsServiceSettings>, IWaypointsProvider
     {
         private LevelService _levelService;
 

@@ -1,9 +1,12 @@
+using System;
 using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
-using Factura.Gameplay.Damage;
+using Factura.Gameplay.Car;
 using Factura.Gameplay.Enemies.States;
+using Factura.Gameplay.Health;
 using Factura.Gameplay.Movement;
+using Factura.Gameplay.Movement.Target;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Target;
 using Factura.Gameplay.Triggers;
@@ -12,20 +15,32 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Enemies
 {
-    public sealed class EnemyBehaviour : MonoBehaviour, IDamageable, IProjectileVisitable
+    public sealed class EnemyBehaviour : MonoBehaviour, IHealth, IProjectileVisitable, IEnemyVisitor
     {
-        [SerializeField] private int _health;
+        public event Action OnDie
+        {
+            add => _health.OnDie += value;
+            remove => _health.OnDie -= value;
+        }
+
+        [SerializeField] private int _healthCount;
+
         [SerializeField] private int _damage;
+
         [SerializeField] private float _patrolRadius;
+
         [SerializeField] private TargetTriggerObserver _targetTriggerObserver;
-        [SerializeField] private DamageableTriggerObserver _damageableTriggerObserver;
-        [SerializeField] private MoveToTargetConfiguration moveToTargetConfiguration;
+
+        [SerializeField] private EnemyVisitableTriggerObserver _visitableTriggerObserver;
+
+        [SerializeField] private MoveToTargetConfiguration _moveToTargetConfiguration;
 
         private LevelService _levelService;
+
         private ITarget _target;
         private IStateMachine<BaseEnemyState> _stateMachine;
-        private DamageHandler _damageHandler;
-        private MoveToTargetHandler _movementHandler;
+        private IHealth _health;
+        private IDynamicMovable _movement;
 
         private void Start()
         {
@@ -35,8 +50,8 @@ namespace Factura.Gameplay.Enemies
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
             _targetTriggerObserver.OnEnter += OnTargetEntered;
-            _damageableTriggerObserver.OnEnter += OnDamageableEntered;
-            _damageHandler.OnDie += OnDied;
+            _visitableTriggerObserver.OnEnter += OnDamageableEntered;
+            _health.OnDie += OnDied;
         }
 
         private void OnDestroy()
@@ -44,12 +59,12 @@ namespace Factura.Gameplay.Enemies
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
             _targetTriggerObserver.OnEnter -= OnTargetEntered;
-            _damageableTriggerObserver.OnEnter -= OnDamageableEntered;
+            _visitableTriggerObserver.OnEnter -= OnDamageableEntered;
         }
 
         public void TakeDamage(int amount)
         {
-            _damageHandler.TakeDamage(amount);
+            _health.TakeDamage(amount);
         }
 
         public void Accept(IProjectileVisitor visitor)
@@ -62,10 +77,10 @@ namespace Factura.Gameplay.Enemies
             _target = target;
         }
 
-        private void OnDamageableEntered(IDamageable damageable)
+        private void OnDamageableEntered(IEnemyVisitable visitable)
         {
             SetDeadState();
-            damageable.TakeDamage(_damage);
+            visitable.Accept(this);
         }
 
         private void OnDied()
@@ -86,7 +101,7 @@ namespace Factura.Gameplay.Enemies
                 return;
             }
 
-            var patrolData = new EnemyPatrolData(transform, _patrolRadius, _movementHandler);
+            var patrolData = new EnemyPatrolData(transform, _patrolRadius, _movement);
             var patrolState = new EnemyPatrolState(patrolData);
             _stateMachine.ChangeStateAsync(patrolState, destroyCancellationToken).Forget();
         }
@@ -104,7 +119,7 @@ namespace Factura.Gameplay.Enemies
 
         private void OnTargetEntered(ITarget target)
         {
-            var chaseState = new EnemyChaseState(_movementHandler, target);
+            var chaseState = new EnemyChaseState(_movement, target);
             _stateMachine.ChangeStateAsync(chaseState, destroyCancellationToken);
         }
 
@@ -116,8 +131,18 @@ namespace Factura.Gameplay.Enemies
 
         private void InitializeHandlers()
         {
-            _movementHandler = new MoveToTargetHandler(transform, moveToTargetConfiguration);
-            _damageHandler = new DamageHandler(_health);
+            _movement = new MoveToTargetComponent(transform, _moveToTargetConfiguration);
+            _health = new HealthComponent(_healthCount);
+        }
+
+        public void Visit(CarBehaviour carBehaviour)
+        {
+            if (carBehaviour == null)
+            {
+                return;
+            }
+
+            carBehaviour.TakeDamage(_damage);
         }
     }
 }

@@ -1,24 +1,20 @@
-using Better.Conditions.Runtime;
 using Factura.Gameplay.Attachment;
-using Factura.Gameplay.Modules.Locator;
 using UnityEngine;
 
 namespace Factura.Gameplay.Modules
 {
-    public sealed class BulletsPackBehaviour : VehicleModuleBehaviour
+    public sealed class BulletsPackBehaviour : BaseModuleBehaviour
     {
-        private IAttachable _attachable;
+        private IAttachable _attachment;
 
-        public override void Setup(IModulesLocatorReadonly locator)
+        public void Initialize(IAttachable attachment)
         {
-            base.Setup(locator);
-
-            _attachable = new AttachmentHandler(transform, new ActiveSelfCondition(gameObject, true));
+            _attachment = attachment;
         }
 
         protected override bool TryAttachInternal(Transform attachmentPoint)
         {
-            return _attachable.TryAttach(attachmentPoint);
+            return _attachment.TryAttach(attachmentPoint);
         }
     }
 }

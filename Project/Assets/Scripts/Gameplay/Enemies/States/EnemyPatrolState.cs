@@ -48,7 +48,7 @@ namespace Factura.Gameplay.Enemies.States
                 var randomPosition = Random.insideUnitSphere * PatrolRadius;
                 var targetPosition = randomPosition.Flat() + _startPosition;
 
-                DynamicMovable.SetTarget(new StaticTargetHandler(targetPosition));
+                DynamicMovable.SetTarget(new StaticTargetComponent(targetPosition));
                 _moveTween = DynamicMovable.MoveTween();
 
                 try

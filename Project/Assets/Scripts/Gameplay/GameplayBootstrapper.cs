@@ -1,11 +1,11 @@
 using Better.Locators.Runtime;
+using Factura.Gameplay.Car;
 using Factura.Gameplay.Enemies;
 using Factura.Gameplay.Modules;
 using Factura.Gameplay.Services.Camera;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Modules;
 using Factura.Gameplay.Tiles;
-using Factura.Gameplay.Vehicle;
 using Factura.UI.Popups.LevelLose;
 using Factura.UI.Popups.LevelStart;
 using Factura.UI.Popups.LevelWin;
@@ -28,7 +28,7 @@ namespace Factura.Gameplay
 
         private TurretBehaviour _turretBehaviour;
         private BulletsPackBehaviour _bulletsPackBehaviour;
-        private VehicleBehaviour _vehicleBehaviour;
+        private CarBehaviour _carBehaviour;
 
 
         private void Start()
@@ -58,17 +58,17 @@ namespace Factura.Gameplay
 
         private void SetTargets()
         {
-            _tilesSpawnBehaviour.SetTarget(_vehicleBehaviour);
-            _enemiesSpawnBehaviour.SetTarget(_vehicleBehaviour);
-            _cameraService.SetTarget(_vehicleBehaviour, CameraType.PreStartCamera, false);
-            _cameraService.SetTarget(_vehicleBehaviour, CameraType.FollowCamera, true);
+            _tilesSpawnBehaviour.SetTarget(_carBehaviour);
+            _enemiesSpawnBehaviour.SetTarget(_carBehaviour);
+            _cameraService.SetTarget(_carBehaviour, CameraType.PreStartCamera, false);
+            _cameraService.SetTarget(_carBehaviour, CameraType.FollowCamera, true);
         }
 
         private void InitializeVehicle()
         {
-            _vehicleBehaviour.Initialize();
-            _vehicleBehaviour.Attach(_bulletsPackBehaviour);
-            _vehicleBehaviour.Attach(_turretBehaviour);
+            // _carBehaviour.Initialize();
+            _carBehaviour.Attach(_bulletsPackBehaviour);
+            _carBehaviour.Attach(_turretBehaviour);
         }
 
         private void InitializeSpawners()
@@ -79,7 +79,7 @@ namespace Factura.Gameplay
 
         private void CreateModules()
         {
-            _vehicleBehaviour = _moduleService.Create<VehicleBehaviour>(_vehicleSpawnPoint.position);
+            _carBehaviour = _moduleService.Create<CarBehaviour>(_vehicleSpawnPoint.position);
             _turretBehaviour = _moduleService.Create<TurretBehaviour>();
             _bulletsPackBehaviour = _moduleService.Create<BulletsPackBehaviour>();
         }

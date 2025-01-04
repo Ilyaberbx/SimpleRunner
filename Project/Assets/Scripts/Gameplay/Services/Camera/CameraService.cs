@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Better.Services.Runtime;
 using Cinemachine;
+using Factura.Gameplay.Camera;
 using Factura.Gameplay.Extensions;
 using UnityEngine;
 
@@ -36,37 +37,37 @@ namespace Factura.Gameplay.Services.Camera
                 return;
             }
 
-            var cameraToActivate = data.Camera;
+            var selectionCamera = data.Camera;
 
             foreach (var camera in _data.Select(temp => temp.Camera))
             {
                 camera.Priority = 0;
             }
 
-            cameraToActivate.Priority = 1;
+            selectionCamera.Priority = 1;
         }
 
-        public void SetTarget(ICameraTarget target, CameraType type, bool follow)
+        public void SetTarget(ICameraTargetReadonly target, CameraType type, bool follow)
         {
             if (!TryGetData(type, out var data))
             {
                 return;
             }
 
-            var cameraToSet = data.Camera;
+            var selectionCamera = data.Camera;
 
             if (follow)
             {
-                cameraToSet.SetTarget(target);
+                selectionCamera.SetTarget(target);
                 return;
             }
 
-            cameraToSet.LookAt(target);
+            selectionCamera.LookAt(target);
         }
 
         private bool TryGetData(CameraType type, out BrainCameraData data)
         {
-            data =_data.FirstOrDefault(temp => temp.Type == type);
+            data = _data.FirstOrDefault(temp => temp.Type == type);
             return data != null;
         }
     }
