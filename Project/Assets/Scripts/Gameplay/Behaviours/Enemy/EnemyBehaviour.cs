@@ -1,12 +1,10 @@
-using System;
-using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
+using Factura.Gameplay.Attack;
 using Factura.Gameplay.Car;
 using Factura.Gameplay.Enemy.States;
 using Factura.Gameplay.Health;
 using Factura.Gameplay.Movement;
-using Factura.Gameplay.Movement.Target;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Target;
 using Factura.Gameplay.Triggers;
@@ -15,25 +13,10 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Enemy
 {
-    public sealed class EnemyBehaviour : MonoBehaviour, IHealth, IProjectileVisitable, IEnemyVisitor
+    public sealed class EnemyBehaviour : MonoBehaviour, IProjectileVisitable, IEnemyVisitor
     {
-        public event Action OnDie
-        {
-            add => _health.OnDie += value;
-            remove => _health.OnDie -= value;
-        }
-
-        [SerializeField] private int _healthCount;
-
-        [SerializeField] private int _damage;
-
-        [SerializeField] private float _patrolRadius;
-
         [SerializeField] private TargetTriggerObserver _targetTriggerObserver;
-
         [SerializeField] private EnemyVisitableTriggerObserver _visitableTriggerObserver;
-
-        [SerializeField] private MoveToTargetConfiguration _moveToTargetConfiguration;
 
         private LevelService _levelService;
 
@@ -41,16 +24,27 @@ namespace Factura.Gameplay.Enemy
         private IStateMachine<BaseEnemyState> _stateMachine;
         private IHealth _health;
         private IDynamicMovable _movement;
+        private IAttack _attack;
 
-        private void Start()
+        public void Initialize(
+            IHealth health,
+            IStateMachine<BaseEnemyState> stateMachine,
+            IDynamicMovable movement,
+            IAttack attack)
+
         {
-            InitializeStateMachine();
-            InitializeHandlers();
+            _attack = attack;
+            _health = health;
+            _stateMachine = stateMachine;
+            _movement = movement;
+            _stateMachine.Run();
+
             _levelService = ServiceLocator.Get<LevelService>();
+
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
             _targetTriggerObserver.OnEnter += OnTargetEntered;
-            _visitableTriggerObserver.OnEnter += OnDamageableEntered;
+            _visitableTriggerObserver.OnEnter += OnVisitableEntered;
             _health.OnDie += OnDied;
         }
 
@@ -59,7 +53,7 @@ namespace Factura.Gameplay.Enemy
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
             _targetTriggerObserver.OnEnter -= OnTargetEntered;
-            _visitableTriggerObserver.OnEnter -= OnDamageableEntered;
+            _visitableTriggerObserver.OnEnter -= OnVisitableEntered;
         }
 
         public void TakeDamage(int amount)
@@ -77,7 +71,7 @@ namespace Factura.Gameplay.Enemy
             _target = target;
         }
 
-        private void OnDamageableEntered(IEnemyVisitable visitable)
+        private void OnVisitableEntered(IEnemyVisitable visitable)
         {
             SetDeadState();
             visitable.Accept(this);
@@ -88,10 +82,10 @@ namespace Factura.Gameplay.Enemy
             SetDeadState();
         }
 
-        private void SetDeadState()
+        private async void SetDeadState()
         {
             var deadState = new EnemyDeadState(gameObject);
-            _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken);
+            await _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken);
         }
 
         private void OnLevelStarted()
@@ -101,48 +95,32 @@ namespace Factura.Gameplay.Enemy
                 return;
             }
 
-            var patrolData = new EnemyPatrolData(transform, _patrolRadius, _movement);
-            var patrolState = new EnemyPatrolState(patrolData);
-            _stateMachine.ChangeStateAsync(patrolState, destroyCancellationToken).Forget();
+            // var patrolData = new EnemyPatrolData(transform, _patrolRadius, _movement);
+            // var patrolState = new EnemyPatrolState(patrolData);
+            // _stateMachine.ChangeStateAsync(patrolState, destroyCancellationToken).Forget();
         }
 
-        private void OnLevelFinished()
+        private async void OnLevelFinished()
         {
             if (!_stateMachine.IsRunning || _stateMachine.CurrentState is EnemyDeadState)
             {
                 return;
             }
 
-            _stateMachine.ChangeStateAsync(new EnemyIdleState(), destroyCancellationToken).Forget();
+            await _stateMachine.ChangeStateAsync(new EnemyIdleState(), destroyCancellationToken);
             _stateMachine.Stop();
         }
 
-        private void OnTargetEntered(ITarget target)
+        private async void OnTargetEntered(ITarget target)
         {
             var chaseState = new EnemyChaseState(_movement, target);
-            _stateMachine.ChangeStateAsync(chaseState, destroyCancellationToken);
+            await _stateMachine.ChangeStateAsync(chaseState, destroyCancellationToken);
         }
 
-        private void InitializeStateMachine()
+        public async void Visit(CarBehaviour carBehaviour)
         {
-            _stateMachine = new StateMachine<BaseEnemyState>();
-            _stateMachine.Run();
-        }
-
-        private void InitializeHandlers()
-        {
-            _movement = new MoveToTargetComponent(transform, _moveToTargetConfiguration);
-            _health = new HealthComponent(_healthCount);
-        }
-
-        public void Visit(CarBehaviour carBehaviour)
-        {
-            if (carBehaviour == null)
-            {
-                return;
-            }
-
-            carBehaviour.TakeDamage(_damage);
+            var attackState = new EnemyAttackState(carBehaviour.Health, _attack);
+            await _stateMachine.ChangeStateAsync(attackState, destroyCancellationToken);
         }
     }
 }

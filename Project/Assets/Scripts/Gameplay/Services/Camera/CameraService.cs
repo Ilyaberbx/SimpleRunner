@@ -4,14 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Better.Services.Runtime;
 using Cinemachine;
-using Factura.Gameplay.Camera;
 using Factura.Gameplay.Extensions;
 using UnityEngine;
 
 namespace Factura.Gameplay.Services.Camera
 {
     [Serializable]
-    public sealed class CameraService : PocoService
+    public sealed class CameraService : PocoService, ICameraProvider
     {
         [SerializeField] private BrainCameraData[] _data;
         [SerializeField] private CinemachineBrain _brain;
@@ -21,7 +20,6 @@ namespace Factura.Gameplay.Services.Camera
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             MainCamera = _brain.GetComponent<UnityEngine.Camera>();
-
             return Task.CompletedTask;
         }
 
@@ -47,7 +45,7 @@ namespace Factura.Gameplay.Services.Camera
             selectionCamera.Priority = 1;
         }
 
-        public void SetTarget(ICameraTargetReadonly target, CameraType type, bool follow)
+        public void SetTarget(ICameraTarget target, CameraType type, bool follow)
         {
             if (!TryGetData(type, out var data))
             {

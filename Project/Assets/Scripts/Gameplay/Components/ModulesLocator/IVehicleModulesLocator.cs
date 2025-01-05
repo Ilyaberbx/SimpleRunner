@@ -3,15 +3,14 @@ using UnityEngine;
 
 namespace Factura.Gameplay.ModulesLocator
 {
-    public interface IModulesLocatorReadonly
+    public interface IVehicleModulesLocatorReadonly
     {
-        bool Has<TModule>() where TModule : BaseModuleBehaviour;
         bool Has(Type type);
         bool TryGetAttachmentPoint(Type type, out Transform point);
     }
 
-    public interface IVehicleModulesLocator : IModulesLocatorReadonly
+    public interface IVehicleModulesLocator : IVehicleModulesLocatorReadonly
     {
-        void Attach(BaseModuleBehaviour module);
+        void Attach(VehicleModuleBehaviour module);
     }
 }

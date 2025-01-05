@@ -1,15 +1,15 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Better.Locators.Runtime;
-using Factura.Gameplay.Services.Modules;
+using Factura.Gameplay.Services.Module;
 
 namespace Factura.Gameplay.Car.States
 {
     public sealed class CarDeadState : BaseCarState
     {
-        private readonly BaseModuleBehaviour _source;
+        private readonly VehicleModuleBehaviour _source;
 
-        public CarDeadState(BaseModuleBehaviour source)
+        public CarDeadState(VehicleModuleBehaviour source)
         {
             _source = source;
         }

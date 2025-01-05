@@ -7,6 +7,7 @@ using Factura.Gameplay.Car.States;
 using Factura.Gameplay.Health;
 using Factura.Gameplay.ModulesLocator;
 using Factura.Gameplay.Movement;
+using Factura.Gameplay.Services.Camera;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Target;
 using Factura.Gameplay.Visitors;
@@ -14,51 +15,41 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Car
 {
-    public sealed class CarBehaviour : BaseModuleBehaviour,
-        ITarget,
-        ICameraTargetReadonly,
-        IEnemyVisitable
+    public sealed class CarBehaviour : VehicleModuleBehaviour, IEnemyVisitable
     {
         [SerializeField] private Transform _cameraFollowPoint;
         [SerializeField] private Transform _cameraLookAtPoint;
 
         private LevelService _levelService;
 
-        private IVehicleModulesLocator _locator;
         private IStateMachine<BaseCarState> _stateMachine;
-        private IHealth _health;
         private IMovable _movement;
         private IAttachable _attachment;
-        private ITarget _target;
-        private ICameraTarget _cameraTarget;
         private CarMoveState _moveState;
-
-        public Transform CameraFollow => _cameraTarget.CameraFollow;
-        public Transform CameraLookAt => _cameraTarget.CameraLookAt;
-        public Vector3 Position => _target.Position;
+        
+        public IHealth Health { get; private set; }
+        public ITarget Target { get; private set; }
+        public ICameraTarget CameraTarget { get; private set; }
+        public IVehicleModulesLocator ModulesLocator { get; private set; }
 
         public void Initialize(IVehicleModulesLocator locator,
             IHealth health,
             IStateMachine<BaseCarState> stateMachine,
             IMovable movement,
             IAttachable attachment,
-            ITarget target,
-            ICameraTarget cameraTarget)
+            ITarget target)
         {
             _levelService = ServiceLocator.Get<LevelService>();
 
             _stateMachine = stateMachine;
-            _locator = locator;
-            _health = health;
+            ModulesLocator = locator;
+            Health = health;
             _movement = movement;
             _attachment = attachment;
-            _target = target;
-            _cameraTarget = cameraTarget;
+            Target = target;
+            CameraTarget = new CameraTargetComponent(_cameraFollowPoint, _cameraLookAtPoint);
 
-            _cameraTarget.SetFollow(_cameraFollowPoint);
-            _cameraTarget.SetLookAt(_cameraLookAtPoint);
-
-            _health.OnDie += OnDied;
+            Health.OnDie += OnDied;
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
 
@@ -67,19 +58,9 @@ namespace Factura.Gameplay.Car
 
         private void OnDestroy()
         {
-            _health.OnDie -= OnDied;
+            Health.OnDie -= OnDied;
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
-        }
-
-        public void Attach(BaseModuleBehaviour moduleBehaviour)
-        {
-            _locator.Attach(moduleBehaviour);
-        }
-
-        public void TakeDamage(int amount)
-        {
-            _health.TakeDamage(amount);
         }
 
         public void Accept(IEnemyVisitor visitor)

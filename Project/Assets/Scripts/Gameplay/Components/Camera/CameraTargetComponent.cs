@@ -1,20 +1,17 @@
+using Factura.Gameplay.Services.Camera;
 using UnityEngine;
 
 namespace Factura.Gameplay.Camera
 {
     public sealed class CameraTargetComponent : ICameraTarget
     {
-        public Transform CameraFollow { get; private set; }
-        public Transform CameraLookAt { get; private set; }
+        public Transform CameraFollow { get; }
+        public Transform CameraLookAt { get; }
 
-        public void SetFollow(Transform point)
+        public CameraTargetComponent(Transform cameraFollow, Transform cameraLookAt)
         {
-            CameraFollow = point;
-        }
-
-        public void SetLookAt(Transform point)
-        {
-            CameraLookAt = point;
+            CameraFollow = cameraFollow;
+            CameraLookAt = cameraLookAt;
         }
     }
 }

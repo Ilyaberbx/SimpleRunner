@@ -1,12 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Better.Locators.Runtime;
 using Better.Services.Runtime;
+using Factura.Global.Services.StaticData;
 
 namespace Factura.Gameplay.Services.Level
 {
     [Serializable]
-    public sealed class LevelService : PocoService<LevelServiceSettings>
+    public sealed class LevelService : PocoService
     {
         public event Action OnLevelStart;
         public event Action OnLevelPreStart;
@@ -14,8 +16,10 @@ namespace Factura.Gameplay.Services.Level
         public event Action OnLevelLose;
         public event Action OnLevelWin;
 
-        public int LevelLength => Settings.LevelLength;
         private bool _isLevelFinished;
+        private IStaticDataProvider _staticDataProvider;
+        private LevelConfiguration _levelConfiguration;
+        public int LevelLength => _levelConfiguration.Length;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -24,6 +28,8 @@ namespace Factura.Gameplay.Services.Level
 
         protected override Task OnPostInitializeAsync(CancellationToken cancellationToken)
         {
+            _staticDataProvider = ServiceLocator.Get<StaticDataService>();
+            _levelConfiguration = _staticDataProvider.GetLevelConfiguration();
             return Task.CompletedTask;
         }
 

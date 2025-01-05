@@ -1,4 +1,3 @@
-using Better.Conditions.Runtime;
 using UnityEngine;
 
 namespace Factura.Gameplay.Attachment
@@ -7,5 +6,4 @@ namespace Factura.Gameplay.Attachment
     {
         bool TryAttach(Transform to);
     }
-    
 }

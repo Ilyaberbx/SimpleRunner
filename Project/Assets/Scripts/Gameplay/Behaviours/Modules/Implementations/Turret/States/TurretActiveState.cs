@@ -2,6 +2,7 @@ using Better.Locators.Runtime;
 using Factura.Gameplay.Launcher;
 using Factura.Gameplay.Services.Update;
 using Factura.Global.Services;
+using Factura.Global.Services.Input;
 
 namespace Factura.Gameplay.States
 {

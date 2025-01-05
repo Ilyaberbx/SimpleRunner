@@ -7,9 +7,9 @@ namespace Factura.Gameplay.Conditions
     public sealed class HasModuleCondition : Condition
     {
         private readonly Type _moduleType;
-        private readonly IModulesLocatorReadonly _locator;
+        private readonly IVehicleModulesLocatorReadonly _locator;
 
-        public HasModuleCondition(Type moduleType, IModulesLocatorReadonly locator)
+        public HasModuleCondition(Type moduleType, IVehicleModulesLocatorReadonly locator)
         {
             _moduleType = moduleType;
             _locator = locator;
