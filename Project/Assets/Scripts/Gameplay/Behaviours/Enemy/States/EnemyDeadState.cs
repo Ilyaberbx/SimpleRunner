@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Factura.Gameplay.Enemy.States
@@ -11,13 +13,15 @@ namespace Factura.Gameplay.Enemy.States
             _source = source;
         }
 
-        protected override void Enter()
+        public override Task EnterAsync(CancellationToken token)
         {
-            Object.Destroy(_source);
+            _source.SetActive(false);
+            return Task.CompletedTask;
         }
 
-        protected override void Exit()
+        public override Task ExitAsync(CancellationToken token)
         {
+            return Task.CompletedTask;
         }
     }
 }

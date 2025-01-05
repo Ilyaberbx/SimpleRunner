@@ -1,9 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Factura.Gameplay.Health;
 
 namespace Factura.Gameplay.Attack
 {
     public interface IAttack
     {
-        public void Process(IHealth health);
+        public Task ProcessAsync(IHealth health, CancellationToken token);
     }
 }

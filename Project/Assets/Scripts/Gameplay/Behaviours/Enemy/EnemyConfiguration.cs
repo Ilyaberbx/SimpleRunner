@@ -10,12 +10,14 @@ namespace Factura.Gameplay.Enemy
         [SerializeField] private int _healthAmount;
         [SerializeField] private int _damage;
         [SerializeField] private float _patrolRadius;
-        [SerializeField] private MoveToTargetConfiguration _moveToTargetConfiguration;
+        [SerializeField] private MoveToTargetConfiguration _chaseMovementConfiguration;
+        [SerializeField] private MoveToTargetConfiguration _patrolMovementConfiguration;
 
         public int HealthAmount => _healthAmount;
         public int Damage => _damage;
         public float PatrolRadius => _patrolRadius;
-        public MoveToTargetConfiguration ToTargetConfiguration => _moveToTargetConfiguration;
+        public MoveToTargetConfiguration ChaseMovementConfiguration => _chaseMovementConfiguration;
+        public MoveToTargetConfiguration PatrolMovementConfiguration => _patrolMovementConfiguration;
         public EnemyBehaviour Prefab => _prefab;
     }
 }

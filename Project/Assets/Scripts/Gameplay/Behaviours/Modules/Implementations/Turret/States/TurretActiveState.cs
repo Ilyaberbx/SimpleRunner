@@ -1,7 +1,6 @@
 using Better.Locators.Runtime;
 using Factura.Gameplay.Launcher;
 using Factura.Gameplay.Services.Update;
-using Factura.Global.Services;
 using Factura.Global.Services.Input;
 
 namespace Factura.Gameplay.States
@@ -22,7 +21,7 @@ namespace Factura.Gameplay.States
         {
             _gameUpdateService = ServiceLocator.Get<GameUpdateService>();
             _inputService = ServiceLocator.Get<InputService>();
-            
+
             _gameUpdateService.Subscribe(this);
         }
 

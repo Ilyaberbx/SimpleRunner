@@ -1,33 +1,39 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DG.Tweening;
 using Factura.Gameplay.Movement;
 
 namespace Factura.Gameplay.Car.States
 {
     public sealed class CarMoveState : BaseCarState
     {
-        public event Action OnDestinationReached
-        {
-            add => _moveState.OnDestinationReached += value;
-            remove => _moveState.OnDestinationReached -= value;
-        }
+        public event Action OnDestinationReached;
 
-        private readonly MoveState _moveState;
+        private readonly IMovable _movable;
+        private Tween _moveTween;
 
         public CarMoveState(IMovable movable)
         {
-            _moveState = new MoveState(movable);
+            _movable = movable;
         }
 
         public override Task EnterAsync(CancellationToken token)
         {
-            return _moveState.EnterAsync(token);
+            _moveTween = _movable.MoveTween();
+            _moveTween.OnComplete(OnTweenFinished);
+            return Task.CompletedTask;
         }
 
         public override Task ExitAsync(CancellationToken token)
         {
-            return _moveState.ExitAsync(token);
+            _moveTween?.Kill();
+            return Task.CompletedTask;
+        }
+
+        private void OnTweenFinished()
+        {
+            OnDestinationReached?.Invoke();
         }
     }
 }

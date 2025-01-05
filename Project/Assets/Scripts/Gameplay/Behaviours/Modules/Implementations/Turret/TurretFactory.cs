@@ -10,32 +10,38 @@ using UnityEngine;
 
 namespace Factura.Gameplay
 {
-    public class TurretFactory : IModuleFactory
+    public class TurretFactory : VehicleModuleFactory
     {
         private readonly TurretConfiguration _configuration;
         private readonly ICameraProvider _cameraProvider;
 
         public TurretFactory(TurretConfiguration configuration, ICameraProvider cameraProvider)
+            : base(configuration)
         {
             _configuration = configuration;
             _cameraProvider = cameraProvider;
         }
 
-        public VehicleModuleBehaviour Create(Vector3 at)
+        public override VehicleModuleBehaviour Create(Vector3 at)
         {
             var prefab = _configuration.Prefab;
             var turretBehaviour = Object.Instantiate(prefab, at, Quaternion.identity, null);
+            Initialize(turretBehaviour);
+
             var turretTransform = turretBehaviour.transform;
             var camera = _cameraProvider.MainCamera;
             var shootPoint = turretBehaviour.ShootPoint;
-
             var attachment = new ImmediateAttachmentComponent(turretTransform);
             var lookAt = new LookAtTargetComponent(turretTransform);
             var shoot = new ProjectileShootComponent(shootPoint, _configuration.ProjectilePrefab);
             var launcher = new LauncherComponent(camera, _configuration.FireCooldown, lookAt, shoot);
             var stateMachine = new StateMachine<BaseTurretState>();
 
-            turretBehaviour.Initialize(attachment, launcher, stateMachine);
+            turretBehaviour.Initialize(
+                attachment,
+                launcher,
+                stateMachine);
+
             return turretBehaviour;
         }
     }

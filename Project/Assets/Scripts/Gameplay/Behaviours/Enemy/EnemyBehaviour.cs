@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
 using Factura.Gameplay.Attack;
@@ -5,6 +7,7 @@ using Factura.Gameplay.Car;
 using Factura.Gameplay.Enemy.States;
 using Factura.Gameplay.Health;
 using Factura.Gameplay.Movement;
+using Factura.Gameplay.Patrol;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Target;
 using Factura.Gameplay.Triggers;
@@ -22,21 +25,25 @@ namespace Factura.Gameplay.Enemy
 
         private ITarget _target;
         private IStateMachine<BaseEnemyState> _stateMachine;
-        private IHealth _health;
-        private IDynamicMovable _movement;
+        private IDynamicMovable _chaseMovement;
         private IAttack _attack;
+        private IPatrol _patrol;
+
+        public IHealth Health { get; private set; }
 
         public void Initialize(
             IHealth health,
             IStateMachine<BaseEnemyState> stateMachine,
-            IDynamicMovable movement,
+            IDynamicMovable chaseMovement,
+            IPatrol patrol,
             IAttack attack)
 
         {
+            _patrol = patrol;
             _attack = attack;
-            _health = health;
+            Health = health;
             _stateMachine = stateMachine;
-            _movement = movement;
+            _chaseMovement = chaseMovement;
             _stateMachine.Run();
 
             _levelService = ServiceLocator.Get<LevelService>();
@@ -45,7 +52,7 @@ namespace Factura.Gameplay.Enemy
             _levelService.OnLevelFinish += OnLevelFinished;
             _targetTriggerObserver.OnEnter += OnTargetEntered;
             _visitableTriggerObserver.OnEnter += OnVisitableEntered;
-            _health.OnDie += OnDied;
+            Health.OnDie += OnDied;
         }
 
         private void OnDestroy()
@@ -54,11 +61,7 @@ namespace Factura.Gameplay.Enemy
             _levelService.OnLevelFinish -= OnLevelFinished;
             _targetTriggerObserver.OnEnter -= OnTargetEntered;
             _visitableTriggerObserver.OnEnter -= OnVisitableEntered;
-        }
-
-        public void TakeDamage(int amount)
-        {
-            _health.TakeDamage(amount);
+            Health.OnDie -= OnDied;
         }
 
         public void Accept(IProjectileVisitor visitor)
@@ -69,12 +72,23 @@ namespace Factura.Gameplay.Enemy
         public void SetTarget(ITarget target)
         {
             _target = target;
+
+            if (_levelService.IsLevelStarted)
+            {
+                SetPatrolState();
+            }
         }
 
-        private void OnVisitableEntered(IEnemyVisitable visitable)
+        public Task Visit(CarBehaviour carBehaviour)
         {
+            var attackState = new EnemyAttackState(carBehaviour.Health, _attack);
+            return _stateMachine.ChangeStateAsync(attackState, destroyCancellationToken);
+        }
+
+        private async void OnVisitableEntered(IEnemyVisitable visitable)
+        {
+            await visitable.Accept(this);
             SetDeadState();
-            visitable.Accept(this);
         }
 
         private void OnDied()
@@ -82,27 +96,14 @@ namespace Factura.Gameplay.Enemy
             SetDeadState();
         }
 
-        private async void SetDeadState()
-        {
-            var deadState = new EnemyDeadState(gameObject);
-            await _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken);
-        }
-
         private void OnLevelStarted()
         {
-            if (_target == null)
-            {
-                return;
-            }
-
-            // var patrolData = new EnemyPatrolData(transform, _patrolRadius, _movement);
-            // var patrolState = new EnemyPatrolState(patrolData);
-            // _stateMachine.ChangeStateAsync(patrolState, destroyCancellationToken).Forget();
+            SetPatrolState();
         }
 
         private async void OnLevelFinished()
         {
-            if (!_stateMachine.IsRunning || _stateMachine.CurrentState is EnemyDeadState)
+            if (!_stateMachine.IsRunning || _stateMachine.CurrentState is EnemyDeadState or EnemyAttackState)
             {
                 return;
             }
@@ -111,16 +112,33 @@ namespace Factura.Gameplay.Enemy
             _stateMachine.Stop();
         }
 
-        private async void OnTargetEntered(ITarget target)
+        private void OnTargetEntered(ITarget target)
         {
-            var chaseState = new EnemyChaseState(_movement, target);
-            await _stateMachine.ChangeStateAsync(chaseState, destroyCancellationToken);
+            var chaseState = new EnemyChaseState(target, _chaseMovement);
+            _stateMachine.ChangeStateAsync(chaseState, destroyCancellationToken).Forget();
         }
 
-        public async void Visit(CarBehaviour carBehaviour)
+        private async void SetDeadState()
         {
-            var attackState = new EnemyAttackState(carBehaviour.Health, _attack);
-            await _stateMachine.ChangeStateAsync(attackState, destroyCancellationToken);
+            if (!_stateMachine.IsRunning)
+            {
+                return;
+            }
+
+            var deadState = new EnemyDeadState(gameObject);
+            await _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken);
+            _stateMachine.Stop();
+        }
+
+        private void SetPatrolState()
+        {
+            if (_target == null)
+            {
+                return;
+            }
+
+            var patrolState = new EnemyPatrolState(_patrol);
+            _stateMachine.ChangeStateAsync(patrolState, destroyCancellationToken).Forget();
         }
     }
 }

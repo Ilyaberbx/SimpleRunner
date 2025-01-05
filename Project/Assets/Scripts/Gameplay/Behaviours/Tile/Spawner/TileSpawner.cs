@@ -20,13 +20,14 @@ namespace Factura.Gameplay.Tile.Spawner
         private ITarget _target;
 
         private Task _spawningTask;
-        private CancellationTokenSource _finishCancellationSource;
-        private CancellationTokenSource _disposeCancellationSource;
+        private CancellationTokenSource _finishLevelCancellationSource;
+        private readonly CancellationTokenSource _disposeCancellationSource;
 
         private IReadOnlyList<TileBehaviour> Tiles => _tileService.Tiles;
 
         public TileSpawner(int preStartTilesCount)
         {
+            _disposeCancellationSource = new CancellationTokenSource();
             _preStartTilesCount = preStartTilesCount;
             _tileService = ServiceLocator.Get<TileService>();
             _levelService = ServiceLocator.Get<LevelService>();
@@ -37,8 +38,6 @@ namespace Factura.Gameplay.Tile.Spawner
         {
             UnregisterLevelEvents();
             _disposeCancellationSource?.Cancel();
-            _spawningTask?.Dispose();
-            _finishCancellationSource?.Dispose();
         }
 
         public void SetTarget(ITarget target)
@@ -76,15 +75,16 @@ namespace Factura.Gameplay.Tile.Spawner
 
         private void OnLevelStarted()
         {
-            _finishCancellationSource =
-                CancellationTokenSource.CreateLinkedTokenSource(_disposeCancellationSource.Token);
-            _spawningTask = SpawnTilesAsync(_finishCancellationSource.Token);
+            _finishLevelCancellationSource = CancellationTokenSource
+                .CreateLinkedTokenSource(_disposeCancellationSource.Token);
+
+            _spawningTask = SpawnTilesAsync(_finishLevelCancellationSource.Token);
             _spawningTask.Forget();
         }
 
         private void OnLevelFinished()
         {
-            _finishCancellationSource.Cancel();
+            _finishLevelCancellationSource?.Cancel();
         }
 
         private async Task SpawnTilesAsync(CancellationToken token)

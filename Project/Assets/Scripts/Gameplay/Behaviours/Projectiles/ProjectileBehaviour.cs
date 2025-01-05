@@ -14,7 +14,7 @@ namespace Factura.Gameplay.Projectiles
         [SerializeField] private ProjectileVisitableTriggerObserver _visitableTriggerObserver;
         [SerializeField] private int _damage;
         [SerializeField] private float _moveSpeed;
-        [SerializeField] private float _aliveTime;
+        [SerializeField] private float _lifetime;
 
         private LevelService _levelService;
         private GameUpdateService _gameUpdateService;
@@ -34,7 +34,7 @@ namespace Factura.Gameplay.Projectiles
 
             _gameUpdateService.Subscribe(this);
 
-            SelfDestroyAfterDelay();
+            DestroyAfterLifetime();
         }
 
         private void OnDestroy()
@@ -58,7 +58,7 @@ namespace Factura.Gameplay.Projectiles
 
         public void Visit(EnemyBehaviour enemy)
         {
-            enemy.TakeDamage(_damage);
+            enemy.Health.TakeDamage(_damage);
         }
 
         private void OnLevelFinished()
@@ -66,9 +66,9 @@ namespace Factura.Gameplay.Projectiles
             DestroyImmediately();
         }
 
-        private void SelfDestroyAfterDelay()
+        private void DestroyAfterLifetime()
         {
-            Destroy(gameObject, _aliveTime);
+            Destroy(gameObject, _lifetime);
         }
 
         private void DestroyImmediately()

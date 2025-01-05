@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using Better.Conditions.Runtime;
 using Factura.Gameplay.ModulesLocator;
 
@@ -6,10 +7,10 @@ namespace Factura.Gameplay.Conditions
 {
     public sealed class HasModuleCondition : Condition
     {
-        private readonly Type _moduleType;
+        private readonly VehicleModuleType _moduleType;
         private readonly IVehicleModulesLocatorReadonly _locator;
 
-        public HasModuleCondition(Type moduleType, IVehicleModulesLocatorReadonly locator)
+        public HasModuleCondition(VehicleModuleType moduleType, IVehicleModulesLocatorReadonly locator)
         {
             _moduleType = moduleType;
             _locator = locator;
@@ -28,9 +29,9 @@ namespace Factura.Gameplay.Conditions
                 return false;
             }
 
-            if (_moduleType == null)
+            if (_moduleType == VehicleModuleType.None)
             {
-                exception = new NullReferenceException(nameof(_moduleType));
+                exception = new InvalidEnumArgumentException(nameof(_moduleType));
                 return false;
             }
 

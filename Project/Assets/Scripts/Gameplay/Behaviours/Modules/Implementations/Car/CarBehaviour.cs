@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
@@ -15,8 +16,10 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Car
 {
-    public sealed class CarBehaviour : VehicleModuleBehaviour, IEnemyVisitable
+    public sealed class CarBehaviour : VehicleModuleBehaviour, IEnemyVisitable, ITarget
     {
+        [SerializeField] private Transform _turretAttachmentPoint;
+        [SerializeField] private Transform _bulletsPackAttachmentPoint;
         [SerializeField] private Transform _cameraFollowPoint;
         [SerializeField] private Transform _cameraLookAtPoint;
 
@@ -26,7 +29,8 @@ namespace Factura.Gameplay.Car
         private IMovable _movement;
         private IAttachable _attachment;
         private CarMoveState _moveState;
-        
+
+        public Vector3 Position => Target.Position;
         public IHealth Health { get; private set; }
         public ITarget Target { get; private set; }
         public ICameraTarget CameraTarget { get; private set; }
@@ -49,6 +53,9 @@ namespace Factura.Gameplay.Car
             Target = target;
             CameraTarget = new CameraTargetComponent(_cameraFollowPoint, _cameraLookAtPoint);
 
+            ModulesLocator.RegisterAttachment(VehicleModuleType.BulletsPack, _bulletsPackAttachmentPoint);
+            ModulesLocator.RegisterAttachment(VehicleModuleType.Turret, _turretAttachmentPoint);
+
             Health.OnDie += OnDied;
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
@@ -58,19 +65,40 @@ namespace Factura.Gameplay.Car
 
         private void OnDestroy()
         {
+            ModulesLocator.UnregisterAttachment(VehicleModuleType.BulletsPack);
+            ModulesLocator.UnregisterAttachment(VehicleModuleType.Turret);
+
             Health.OnDie -= OnDied;
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
         }
 
-        public void Accept(IEnemyVisitor visitor)
+        public Task Accept(IEnemyVisitor visitor)
         {
-            visitor?.Visit(this);
+            return visitor?.Visit(this);
         }
 
         protected override bool TryAttachInternal(Transform attachmentPoint)
         {
             return _attachment.TryAttach(attachmentPoint);
+        }
+
+        private void OnLevelStarted()
+        {
+            _moveState = new CarMoveState(_movement);
+            _moveState.OnDestinationReached += OnDestinationReached;
+            _stateMachine.ChangeStateAsync(_moveState, destroyCancellationToken).Forget();
+        }
+
+        private void OnLevelFinished()
+        {
+            if (!_stateMachine.IsRunning)
+            {
+                return;
+            }
+
+            _stateMachine.ChangeStateAsync(new CarIdleState(), destroyCancellationToken).Forget();
+            _stateMachine.Stop();
         }
 
         private void OnDied()
@@ -85,24 +113,6 @@ namespace Factura.Gameplay.Car
             _moveState.OnDestinationReached -= OnDestinationReached;
             _moveState = null;
             _levelService.FireLevelWin();
-        }
-
-        private void OnLevelFinished()
-        {
-            if (!_stateMachine.IsRunning)
-            {
-                return;
-            }
-
-            _stateMachine.ChangeStateAsync(new CarIdleState(), destroyCancellationToken).Forget();
-            _stateMachine.Stop();
-        }
-
-        private void OnLevelStarted()
-        {
-            _moveState = new CarMoveState(_movement);
-            _moveState.OnDestinationReached += OnDestinationReached;
-            _stateMachine.ChangeStateAsync(_moveState, destroyCancellationToken).Forget();
         }
     }
 }

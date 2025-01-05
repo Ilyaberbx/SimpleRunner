@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Better.Locators.Runtime;
@@ -11,37 +10,36 @@ namespace Factura.Gameplay.ModulesLocator
         private const string ModuleIsNullMessage = "Module is null";
         private const string ModuleAlreadyAttachedFormat = "Module {0} already attached";
 
-        private readonly ILocator<Type, VehicleModuleBehaviour> _source;
-        private readonly IReadOnlyCollection<LocatorAttachmentData> _attachmentData;
+        private readonly ILocator<VehicleModuleType, VehicleModuleBehaviour> _source;
+        private readonly List<AttachmentData> _attachments;
 
-        public VehicleModulesLocator(ILocator<Type, VehicleModuleBehaviour> source,
-            IReadOnlyCollection<LocatorAttachmentData> attachmentData)
+        public VehicleModulesLocator(ILocator<VehicleModuleType, VehicleModuleBehaviour> source)
         {
             _source = source;
-            _attachmentData = attachmentData;
+            _attachments = new List<AttachmentData>();
         }
 
-        public bool Has(Type type)
+        public bool Has(VehicleModuleType type)
         {
-            return type != null && _source.ContainsKey(type);
+            return _source.ContainsKey(type);
         }
 
-        public bool TryGetAttachmentPoint(Type type, out Transform point)
+        public bool TryGetAttachmentPoint(VehicleModuleType moduleType, out Transform point)
         {
-            if (_attachmentData == null)
+            if (_attachments == null)
             {
                 point = null;
                 return false;
             }
 
-            var data = _attachmentData.FirstOrDefault(temp => temp.ModuleType == type);
-            if (data == null)
+            var attachment = _attachments.FirstOrDefault(temp => temp.ModuleType == moduleType);
+            if (attachment == null)
             {
                 point = null;
                 return false;
             }
 
-            point = data.Point;
+            point = attachment.Point;
             return true;
         }
 
@@ -53,20 +51,42 @@ namespace Factura.Gameplay.ModulesLocator
                 return;
             }
 
-            var moduleType = module.GetType();
+            var moduleType = module.GetModuleType();
             if (_source.ContainsKey(moduleType))
             {
-                var message = string.Format(ModuleAlreadyAttachedFormat, moduleType.Name);
+                var message = string.Format(ModuleAlreadyAttachedFormat, moduleType);
                 Debug.LogWarning(message);
                 return;
             }
 
-            module.SetupLocator(this);
-            var isAttached = module.TryAttach();
+            var isAttached = module.TryAttach(this);
             if (isAttached)
             {
                 _source.TryAdd(moduleType, module);
             }
+        }
+
+        public void RegisterAttachment(VehicleModuleType type, Transform point)
+        {
+            if (_attachments.Any(temp => temp.ModuleType == type))
+            {
+                return;
+            }
+
+            var attachment = new AttachmentData(type, point);
+            _attachments.Add(attachment);
+        }
+
+        public void UnregisterAttachment(VehicleModuleType type)
+        {
+            var attachment = _attachments.FirstOrDefault(temp => temp.ModuleType == type);
+
+            if (attachment == null)
+            {
+                return;
+            }
+
+            _attachments.Remove(attachment);
         }
     }
 }

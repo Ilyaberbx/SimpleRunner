@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Factura.Gameplay.Attack;
 using Factura.Gameplay.Health;
 
@@ -14,13 +16,14 @@ namespace Factura.Gameplay.Enemy.States
             _attack = attack;
         }
 
-        protected override void Enter()
+        public override Task EnterAsync(CancellationToken token)
         {
-            _attack.Process(_targetHealth);
+            return _attack.ProcessAsync(_targetHealth, token);
         }
 
-        protected override void Exit()
+        public override Task ExitAsync(CancellationToken token)
         {
+            return Task.CompletedTask;
         }
     }
 }

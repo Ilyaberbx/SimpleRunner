@@ -10,6 +10,7 @@ using Factura.Gameplay.Tile.Spawner;
 using Factura.Global.Services.StaticData;
 using Factura.UI.Popups.LevelLose;
 using Factura.UI.Popups.LevelStart;
+using Factura.UI.Popups.LevelWin;
 using Factura.UI.Services;
 using UnityEngine;
 using CameraType = Factura.Gameplay.Services.Camera.CameraType;
@@ -22,7 +23,7 @@ namespace Factura.Gameplay
 
         private LevelService _levelService;
         private PopupService _popupService;
-        private ModuleService _moduleService;
+        private VehicleModuleService _vehicleModuleService;
         private CameraService _cameraService;
         private WaypointsService _waypointsService;
         private IGameplayStaticDataProvider _gameplayStaticDataProvider;
@@ -30,22 +31,20 @@ namespace Factura.Gameplay
         private TurretBehaviour _turretBehaviour;
         private BulletsPackBehaviour _bulletsPackBehaviour;
         private CarBehaviour _carBehaviour;
-        private EnemySpawner _enemySpawner;
 
+        private EnemySpawner _enemySpawner;
         private TileSpawner _tilesSpawner;
 
         private void Start()
         {
             _gameplayStaticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
-            _moduleService = ServiceLocator.Get<ModuleService>();
+            _vehicleModuleService = ServiceLocator.Get<VehicleModuleService>();
             _levelService = ServiceLocator.Get<LevelService>();
             _waypointsService = ServiceLocator.Get<WaypointsService>();
             _popupService = ServiceLocator.Get<PopupService>();
             _cameraService = ServiceLocator.Get<CameraService>();
             _cameraService.SetActive(CameraType.PreStartCamera);
 
-            RegisterFactories();
-            CreateModules();
             InitializeVehicleModules();
             InitializeSpawners();
             SetCarAsTarget();
@@ -61,7 +60,7 @@ namespace Factura.Gameplay
         {
             _levelService.OnLevelWin -= OnLevelWin;
             _levelService.OnLevelLose -= OnLevelLose;
-            _moduleService.UnregisterAllFactories();
+            _vehicleModuleService.UnregisterAllFactories();
             DisposeSpawners();
         }
 
@@ -108,19 +107,21 @@ namespace Factura.Gameplay
 
         private void RegisterFactories()
         {
-            var carConfiguration = _moduleService.GetConfiguration<CarConfiguration>();
-            var turretConfiguration = _moduleService.GetConfiguration<TurretConfiguration>();
-            var bulletsPackConfiguration = _moduleService.GetConfiguration<BulletsPackConfiguration>();
-            _moduleService.RegisterFactory<CarBehaviour>(new CarFactory(carConfiguration, _waypointsService));
-            _moduleService.RegisterFactory<TurretBehaviour>(new TurretFactory(turretConfiguration, _cameraService));
-            _moduleService.RegisterFactory<BulletsPackBehaviour>(new BulletsPackFactory(bulletsPackConfiguration));
+            var carConfiguration = _vehicleModuleService.GetConfiguration<CarConfiguration>();
+            var turretConfiguration = _vehicleModuleService.GetConfiguration<TurretConfiguration>();
+            var bulletsPackConfiguration = _vehicleModuleService.GetConfiguration<BulletsPackConfiguration>();
+            _vehicleModuleService.RegisterFactory<CarBehaviour>(new CarFactory(carConfiguration, _waypointsService));
+            _vehicleModuleService.RegisterFactory<TurretBehaviour>(new TurretFactory(turretConfiguration,
+                _cameraService));
+            _vehicleModuleService.RegisterFactory<BulletsPackBehaviour>(
+                new BulletsPackFactory(bulletsPackConfiguration));
         }
 
         private void CreateModules()
         {
-            _carBehaviour = _moduleService.Create<CarBehaviour>(_carSpawnPoint.position);
-            _turretBehaviour = _moduleService.Create<TurretBehaviour>();
-            _bulletsPackBehaviour = _moduleService.Create<BulletsPackBehaviour>();
+            _carBehaviour = _vehicleModuleService.Create<CarBehaviour>(_carSpawnPoint.position);
+            _turretBehaviour = _vehicleModuleService.Create<TurretBehaviour>();
+            _bulletsPackBehaviour = _vehicleModuleService.Create<BulletsPackBehaviour>();
         }
 
         private void OnLevelLose()
@@ -131,8 +132,8 @@ namespace Factura.Gameplay
 
         private void OnLevelWin()
         {
-            _popupService.Show<LevelLosePopupController, LevelLosePopupModel>(PopupType.LevelWin,
-                new LevelLosePopupModel());
+            _popupService.Show<LevelWinPopupController, LevelWinPopupModel>(PopupType.LevelWin,
+                new LevelWinPopupModel());
         }
     }
 }

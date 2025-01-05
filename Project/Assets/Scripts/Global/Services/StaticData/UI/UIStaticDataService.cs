@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,10 +9,10 @@ using Factura.UI.Services;
 
 namespace Factura.Global.Services.StaticData
 {
+    [Serializable]
     public sealed class UIStaticDataService : PocoService, IUIStaticDataProvider
     {
-        private ResourcesProviderService _assetsProvider;
-
+        private IAssetsProvider _assetsProvider;
         private PopupsConfiguration _popupsConfiguration;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)

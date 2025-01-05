@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -15,6 +16,7 @@ using Factura.Global.Services.AssetsManagement;
 
 namespace Factura.Global.Services.StaticData
 {
+    [Serializable]
     public sealed class GameplayStaticDataService : PocoService, IGameplayStaticDataProvider
     {
         private IAssetsProvider _assetsProvider;
@@ -35,8 +37,8 @@ namespace Factura.Global.Services.StaticData
         protected override async Task OnPostInitializeAsync(CancellationToken cancellationToken)
         {
             _assetsProvider = ServiceLocator.Get<ResourcesProviderService>();
-            _moduleConfigurationsMap = await LoadModulesConfiguration();
             _levelConfiguration = await LoadLevelConfiguration();
+            _moduleConfigurationsMap = await LoadModulesConfiguration();
             _enemyConfiguration = await LoadEnemyConfiguration();
             _enemySpawnerConfiguration = await LoadEnemySpawnConfiguration();
             _tileSpawnerConfiguration = await LoadTileSpawnerConfiguration();
@@ -86,7 +88,7 @@ namespace Factura.Global.Services.StaticData
         }
 
         #endregion
-        
+
         public BaseModuleConfiguration GetModuleConfiguration(VehicleModuleType type) =>
             _moduleConfigurationsMap.GetValueOrDefault(type);
         public EnemyConfiguration GetEnemyConfiguration() => _enemyConfiguration;

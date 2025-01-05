@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace Factura.Gameplay.Visitors
 {
     public interface IEnemyVisitable
     {
-        void Accept(IEnemyVisitor visitor);
+        Task Accept(IEnemyVisitor visitor);
     }
 }

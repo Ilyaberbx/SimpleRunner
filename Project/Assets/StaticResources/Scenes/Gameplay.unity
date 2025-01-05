@@ -186,6 +186,7 @@ Transform:
   - {fileID: 841533867}
   - {fileID: 1900860736}
   - {fileID: 176724977}
+  - {fileID: 705507995}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &176724976
@@ -343,7 +344,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 128433824}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &841533866
 GameObject:
@@ -732,7 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 1
+  m_BindingMode: 5
   m_FollowOffset: {x: 0, y: 15, z: -10}
   m_XDamping: 3
   m_YDamping: 1
@@ -742,50 +743,6 @@ MonoBehaviour:
   m_YawDamping: 0
   m_RollDamping: 0
   m_AngularDamping: 0
---- !u!1 &1705391039
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1705391040}
-  - component: {fileID: 1705391041}
-  m_Layer: 0
-  m_Name: EnemiesSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1705391040
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1705391039}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1705391041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1705391039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bd81ef0f46e451ab9758a73de6f1a11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1900860735
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,9 +823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8ab67d8414a82b1c568ba81963188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vehicleSpawnPoint: {fileID: 2083529720}
-  _enemiesSpawnBehaviour: {fileID: 1705391041}
-  _tilesSpawnBehaviour: {fileID: 2141167722}
+  _carSpawnPoint: {fileID: 2083529720}
 --- !u!114 &1982629070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,30 +845,15 @@ MonoBehaviour:
       type: {class: PocoServicesInstaller, ns: Better.Contexts.Runtime.Installers, asm: Better.Contexts.Runtime}
       data:
         _services:
-        - rid: 6450054128750559232
-        - rid: 6450054128750559233
-        - rid: 1409579020730236932
+        - rid: 6450054194563121155
+        - rid: 6450054194563121156
         - rid: 1409579020730236930
         - rid: 6450054152123056129
-        - rid: 6450054171135049728
+        - rid: 6450054194563121157
+        - rid: 6450054194563121159
     - rid: 1409579020730236930
       type: {class: WaypointsService, ns: Factura.Gameplay.Services.Waypoints, asm: Assembly-CSharp}
-      data:
-        _settings: {fileID: 11400000, guid: 7a0ade2a12b598f4785698ba002372b6, type: 2}
-    - rid: 1409579020730236932
-      type: {class: ModuleService, ns: Factura.Gameplay.Services.Modules, asm: Assembly-CSharp}
-      data:
-        _settings: {fileID: 11400000, guid: 7eb7b6cf905c8714ea1ae31674bc6e6b, type: 2}
-    - rid: 6450054128750559232
-      type: {class: TileService, ns: Factura.Gameplay.Services.Tiles, asm: Assembly-CSharp}
-      data:
-        _settings: {fileID: 11400000, guid: 947432a4ec6509b4e8ba9a68f1b9d687, type: 2}
-        _root: {fileID: 243850232}
-    - rid: 6450054128750559233
-      type: {class: EnemyService, ns: Factura.Gameplay.Services.Enemies, asm: Assembly-CSharp}
-      data:
-        _settings: {fileID: 11400000, guid: 00fba9cb2fddab84c992c43d94b5625d, type: 2}
-        _root: {fileID: 841533867}
+      data: 
     - rid: 6450054152123056129
       type: {class: CameraService, ns: Factura.Gameplay.Services.Camera, asm: Assembly-CSharp}
       data:
@@ -923,10 +863,20 @@ MonoBehaviour:
         - _camera: {fileID: 1002932507}
           _type: 1
         _brain: {fileID: 1573129789}
-    - rid: 6450054171135049728
+    - rid: 6450054194563121155
       type: {class: LevelService, ns: Factura.Gameplay.Services.Level, asm: Assembly-CSharp}
+      data: 
+    - rid: 6450054194563121156
+      type: {class: EnemyService, ns: Factura.Gameplay.Services.Enemy, asm: Assembly-CSharp}
       data:
-        _settings: {fileID: 11400000, guid: 84e10f5ef887ba5428962ed89f2220d1, type: 2}
+        _root: {fileID: 841533867}
+    - rid: 6450054194563121157
+      type: {class: TileService, ns: Factura.Gameplay.Services.Tile, asm: Assembly-CSharp}
+      data:
+        _root: {fileID: 243850232}
+    - rid: 6450054194563121159
+      type: {class: VehicleModuleService, ns: Factura.Gameplay.Services.Module, asm: Assembly-CSharp}
+      data: 
 --- !u!1 &2011032684
 GameObject:
   m_ObjectHideFlags: 3
@@ -1009,7 +959,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2083529720}
   m_Layer: 0
-  m_Name: VehicleSpawnPoint
+  m_Name: CarSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1030,56 +980,9 @@ Transform:
   m_Children: []
   m_Father: {fileID: 176724977}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2141167720
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2141167721}
-  - component: {fileID: 2141167722}
-  m_Layer: 0
-  m_Name: TilesSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2141167721
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141167720}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2141167722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141167720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19823d6d625a4c348110bfacff9a48e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 705507995}
   - {fileID: 1982629068}
   - {fileID: 128433824}
-  - {fileID: 2141167721}
-  - {fileID: 1705391040}

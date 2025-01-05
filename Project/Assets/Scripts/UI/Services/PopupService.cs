@@ -57,7 +57,7 @@ namespace Factura.UI.Services
 
             if (data == null || data.ViewPrefab == null)
             {
-                PopupsDebugHelper.PrintCannotFindView(type);
+                PopupsLogHelper.LogCannotFindView(type);
                 return default;
             }
 
@@ -98,12 +98,12 @@ namespace Factura.UI.Services
             {
                 if (controllerType == requestedControllerType) return true;
 
-                PopupsDebugHelper.PrintMappingMismatched<TRequestedController>(controllerType, type);
+                PopupsLogHelper.LogMappingMismatched<TRequestedController>(controllerType, type);
                 return false;
             }
 
 
-            PopupsDebugHelper.PrintCannotFindController(type);
+            PopupsLogHelper.LogCannotFindController(type);
             return false;
         }
 

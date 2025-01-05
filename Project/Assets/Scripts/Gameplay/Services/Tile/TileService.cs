@@ -39,6 +39,7 @@ namespace Factura.Gameplay.Services.Tile
         {
             var staticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
             _tileConfiguration = staticDataProvider.GetTileConfiguration();
+            _factory = new TileFactory(_tileConfiguration);
             return Task.CompletedTask;
         }
 

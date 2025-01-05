@@ -14,6 +14,7 @@ namespace Factura.Gameplay.Enemy.Spawner
     {
         private readonly TileService _tileService;
         private readonly EnemyService _enemyService;
+
         private readonly float _widthOffset;
         private readonly float _enemiesPerTile;
         private readonly int _tileIndexThreshold;

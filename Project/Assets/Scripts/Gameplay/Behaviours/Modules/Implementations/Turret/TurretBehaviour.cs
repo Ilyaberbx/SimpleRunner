@@ -3,10 +3,8 @@ using Better.Conditions.Runtime;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
 using Factura.Gameplay.Attachment;
-using Factura.Gameplay.BulletsPack;
 using Factura.Gameplay.Conditions;
 using Factura.Gameplay.Launcher;
-using Factura.Gameplay.ModulesLocator;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.States;
 using UnityEngine;
@@ -34,18 +32,17 @@ namespace Factura.Gameplay
             _launcher = launcher;
             _stateMachine = stateMachine;
             _levelService = ServiceLocator.Get<LevelService>();
+            _stateMachine.Run();
+            _stateMachine.ChangeStateAsync(new TurretIdleState());
+            
+            _levelService.OnLevelStart += OnLevelStarted;
+            _levelService.OnLevelFinish += OnLevelFinished;
         }
 
         private void OnDestroy()
         {
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
-        }
-
-        public override void SetupLocator(IVehicleModulesLocatorReadonly locator)
-        {
-            base.SetupLocator(locator);
-            _attachmentCondition = new HasModuleCondition(typeof(BulletsPackBehaviour), locator);
         }
 
         private void OnLevelStarted()
@@ -72,6 +69,7 @@ namespace Factura.Gameplay
 
         protected override bool TryAttachInternal(Transform attachmentPoint)
         {
+            _attachmentCondition = new HasModuleCondition(VehicleModuleType.BulletsPack, Locator);
             return _attachmentCondition.SafeInvoke() && _attachment.TryAttach(attachmentPoint);
         }
     }

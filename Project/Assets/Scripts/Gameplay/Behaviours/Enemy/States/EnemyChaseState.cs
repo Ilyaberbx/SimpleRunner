@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+using DG.Tweening;
 using Factura.Gameplay.Movement;
 using Factura.Gameplay.Target;
 
@@ -5,26 +8,27 @@ namespace Factura.Gameplay.Enemy.States
 {
     public sealed class EnemyChaseState : BaseEnemyState
     {
-        private readonly IDynamicMovable _dynamicMovable;
         private readonly ITarget _target;
-        private readonly MoveState _moveState;
+        private readonly IDynamicMovable _movement;
+        private Tween _moveTween;
 
-        public EnemyChaseState(IDynamicMovable dynamicMovable, ITarget target)
+        public EnemyChaseState(ITarget target, IDynamicMovable movement)
         {
             _target = target;
-            _dynamicMovable = dynamicMovable;
-            _moveState = new MoveState(dynamicMovable);
+            _movement = movement;
         }
 
-        protected override void Enter()
+        public override Task EnterAsync(CancellationToken token)
         {
-            _dynamicMovable.SetTarget(_target);
-            //_moveState.Enter();
+            _movement.SetTarget(_target);
+            _moveTween = _movement.MoveTween();
+            return Task.CompletedTask;
         }
 
-        protected override void Exit()
+        public override Task ExitAsync(CancellationToken token)
         {
-            //_moveState.Exit();
+            _moveTween?.Kill();
+            return Task.CompletedTask;
         }
     }
 }

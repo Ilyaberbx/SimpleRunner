@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Factura.Gameplay
 {
-    [CreateAssetMenu(menuName = "Configs/Gameplay/Turret", fileName = "CarConfiguration", order = 0)]
+    [CreateAssetMenu(menuName = "Configs/Gameplay/VehicleModules/Turret", fileName = "TurretConfiguration", order = 0)]
     public sealed class TurretConfiguration : BaseModuleConfiguration
     {
         [SerializeField] private TurretBehaviour _prefab;

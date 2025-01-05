@@ -20,6 +20,7 @@ namespace Factura.Gameplay.Services.Level
         private IGameplayStaticDataProvider _gameplayStaticDataProvider;
         private LevelConfiguration _levelConfiguration;
         public int LevelLength => _levelConfiguration.Length;
+        public bool IsLevelStarted { get; private set; }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -36,6 +37,7 @@ namespace Factura.Gameplay.Services.Level
         public void FireLevelStart()
         {
             OnLevelStart?.Invoke();
+            IsLevelStarted = true;
         }
 
         public void FireLevelPreStart()

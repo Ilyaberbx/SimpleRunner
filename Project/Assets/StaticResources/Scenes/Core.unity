@@ -559,25 +559,36 @@ MonoBehaviour:
       type: {class: PocoServicesInstaller, ns: Better.Contexts.Runtime.Installers, asm: Better.Contexts.Runtime}
       data:
         _services:
-        - rid: 6450054146183397382
+        - rid: 6450054194563121152
         - rid: 6450054146183397385
-        - rid: 6450054146183397386
+        - rid: 6450054194563121153
+        - rid: 6450054194563121154
+        - rid: 6450054194563121160
+        - rid: 6450054194563121161
     - rid: 6450054146183397381
       type: {class: MonoServicesInstaller, ns: Better.Contexts.Runtime.Installers, asm: Better.Contexts.Runtime}
       data:
         _services:
         - {fileID: 2022316881}
-    - rid: 6450054146183397382
-      type: {class: GameStatesService, ns: Factura.Global.Services, asm: Assembly-CSharp}
-      data: 
     - rid: 6450054146183397385
       type: {class: PopupService, ns: Factura.UI.Services, asm: Assembly-CSharp}
       data:
-        _settings: {fileID: 11400000, guid: 9f77740f9e692ab44a63f73ff36d4083, type: 2}
         _backgroundGroup: {fileID: 806273929}
         _root: {fileID: 1876198447}
-    - rid: 6450054146183397386
-      type: {class: InputService, ns: Factura.Global.Services, asm: Assembly-CSharp}
+    - rid: 6450054194563121152
+      type: {class: GameStatesService, ns: Factura.Global.Services.StatesManagement, asm: Assembly-CSharp}
+      data: 
+    - rid: 6450054194563121153
+      type: {class: InputService, ns: Factura.Global.Services.Input, asm: Assembly-CSharp}
+      data: 
+    - rid: 6450054194563121154
+      type: {class: ResourcesProviderService, ns: Factura.Global.Services.AssetsManagement, asm: Assembly-CSharp}
+      data: 
+    - rid: 6450054194563121160
+      type: {class: GameplayStaticDataService, ns: Factura.Global.Services.StaticData, asm: Assembly-CSharp}
+      data: 
+    - rid: 6450054194563121161
+      type: {class: UIStaticDataService, ns: Factura.Global.Services.StaticData, asm: Assembly-CSharp}
       data: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

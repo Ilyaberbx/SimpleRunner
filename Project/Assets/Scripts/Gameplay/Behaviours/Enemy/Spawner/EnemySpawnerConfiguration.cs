@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Enemy.Spawner
 {
-    [CreateAssetMenu(menuName = "Configs/Gameplay/Spawners/Enemy", fileName = "EnemySpawnConfiguration", order = 0)]
+    [CreateAssetMenu(menuName = "Configs/Gameplay/Spawners/Enemy", fileName = "EnemySpawnerConfiguration", order = 0)]
     public sealed class EnemySpawnerConfiguration : ScriptableObject
     {
         [SerializeField] private float _widthOffset;

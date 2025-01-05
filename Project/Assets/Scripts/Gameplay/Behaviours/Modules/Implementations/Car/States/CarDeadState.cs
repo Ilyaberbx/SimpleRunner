@@ -7,17 +7,17 @@ namespace Factura.Gameplay.Car.States
 {
     public sealed class CarDeadState : BaseCarState
     {
-        private readonly VehicleModuleBehaviour _source;
+        private readonly CarBehaviour _context;
 
-        public CarDeadState(VehicleModuleBehaviour source)
+        public CarDeadState(CarBehaviour context)
         {
-            _source = source;
+            _context = context;
         }
 
         public override Task EnterAsync(CancellationToken token)
         {
-            var moduleService = ServiceLocator.Get<ModuleService>();
-            moduleService.Destroy(_source);
+            var moduleService = ServiceLocator.Get<VehicleModuleService>();
+            moduleService.Destroy(_context);
             return Task.CompletedTask;
         }
 
