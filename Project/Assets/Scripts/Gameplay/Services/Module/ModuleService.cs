@@ -13,7 +13,7 @@ using Object = UnityEngine.Object;
 namespace Factura.Gameplay.Services.Module
 {
     [Serializable]
-    public sealed class ModuleService : PocoService<ModuleServiceSettings>
+    public sealed class ModuleService : PocoService
     {
         private const string FactoryAlreadyRegisteredFormat = "Factory for {0} already registered";
         private const string CanNotFindFactoryFormat = "Can not find factory for {0}";
@@ -23,7 +23,7 @@ namespace Factura.Gameplay.Services.Module
         private readonly IDictionary<Type, BaseModuleConfiguration> _configurationsTypeMap =
             new Dictionary<Type, BaseModuleConfiguration>();
 
-        private IStaticDataProvider _staticDataProvider;
+        private IGameplayStaticDataProvider _gameplayStaticDataProvider;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -32,11 +32,11 @@ namespace Factura.Gameplay.Services.Module
 
         protected override Task OnPostInitializeAsync(CancellationToken cancellationToken)
         {
-            _staticDataProvider = ServiceLocator.Get<StaticDataService>();
+            _gameplayStaticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
 
-            var carConfiguration = _staticDataProvider.GetModuleConfiguration(VehicleModuleType.Car);
-            var turretConfiguration = _staticDataProvider.GetModuleConfiguration(VehicleModuleType.Turret);
-            var bulletsPackConfiguration = _staticDataProvider.GetModuleConfiguration(VehicleModuleType.BulletsPack);
+            var carConfiguration = _gameplayStaticDataProvider.GetModuleConfiguration(VehicleModuleType.Car);
+            var turretConfiguration = _gameplayStaticDataProvider.GetModuleConfiguration(VehicleModuleType.Turret);
+            var bulletsPackConfiguration = _gameplayStaticDataProvider.GetModuleConfiguration(VehicleModuleType.BulletsPack);
 
             _configurationsTypeMap.Add(typeof(CarConfiguration), carConfiguration);
             _configurationsTypeMap.Add(typeof(TurretConfiguration), turretConfiguration);

@@ -17,7 +17,7 @@ namespace Factura.Gameplay.Services.Level
         public event Action OnLevelWin;
 
         private bool _isLevelFinished;
-        private IStaticDataProvider _staticDataProvider;
+        private IGameplayStaticDataProvider _gameplayStaticDataProvider;
         private LevelConfiguration _levelConfiguration;
         public int LevelLength => _levelConfiguration.Length;
 
@@ -28,8 +28,8 @@ namespace Factura.Gameplay.Services.Level
 
         protected override Task OnPostInitializeAsync(CancellationToken cancellationToken)
         {
-            _staticDataProvider = ServiceLocator.Get<StaticDataService>();
-            _levelConfiguration = _staticDataProvider.GetLevelConfiguration();
+            _gameplayStaticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
+            _levelConfiguration = _gameplayStaticDataProvider.GetLevelConfiguration();
             return Task.CompletedTask;
         }
 

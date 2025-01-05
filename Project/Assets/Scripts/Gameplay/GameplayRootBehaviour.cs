@@ -10,7 +10,6 @@ using Factura.Gameplay.Tile.Spawner;
 using Factura.Global.Services.StaticData;
 using Factura.UI.Popups.LevelLose;
 using Factura.UI.Popups.LevelStart;
-using Factura.UI.Popups.LevelWin;
 using Factura.UI.Services;
 using UnityEngine;
 using CameraType = Factura.Gameplay.Services.Camera.CameraType;
@@ -26,7 +25,7 @@ namespace Factura.Gameplay
         private ModuleService _moduleService;
         private CameraService _cameraService;
         private WaypointsService _waypointsService;
-        private IStaticDataProvider _staticDataProvider;
+        private IGameplayStaticDataProvider _gameplayStaticDataProvider;
 
         private TurretBehaviour _turretBehaviour;
         private BulletsPackBehaviour _bulletsPackBehaviour;
@@ -37,7 +36,7 @@ namespace Factura.Gameplay
 
         private void Start()
         {
-            _staticDataProvider = ServiceLocator.Get<StaticDataService>();
+            _gameplayStaticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
             _moduleService = ServiceLocator.Get<ModuleService>();
             _levelService = ServiceLocator.Get<LevelService>();
             _waypointsService = ServiceLocator.Get<WaypointsService>();
@@ -54,7 +53,8 @@ namespace Factura.Gameplay
             _levelService.OnLevelWin += OnLevelWin;
             _levelService.OnLevelLose += OnLevelLose;
             _levelService.FireLevelPreStart();
-            _popupService.Show<LevelStartPopupController, LevelStartPopupModel>(new LevelStartPopupModel());
+            _popupService.Show<LevelStartPopupController, LevelStartPopupModel>(PopupType.LevelStart,
+                new LevelStartPopupModel());
         }
 
         private void OnDestroy()
@@ -81,11 +81,11 @@ namespace Factura.Gameplay
 
         private void InitializeSpawners()
         {
-            var enemySpawnerConfiguration = _staticDataProvider.GetEnemySpawnerConfiguration();
+            var enemySpawnerConfiguration = _gameplayStaticDataProvider.GetEnemySpawnerConfiguration();
             using var enemySpawnerFactory = new EnemySpawnerFactory(enemySpawnerConfiguration);
             _enemySpawner = enemySpawnerFactory.Create();
 
-            var tileSpawnerConfiguration = _staticDataProvider.GetTileSpawnerConfiguration();
+            var tileSpawnerConfiguration = _gameplayStaticDataProvider.GetTileSpawnerConfiguration();
             using var tileSpawnerFactory = new TileSpawnerFactory(tileSpawnerConfiguration);
             _tilesSpawner = tileSpawnerFactory.Create();
         }
@@ -125,12 +125,14 @@ namespace Factura.Gameplay
 
         private void OnLevelLose()
         {
-            _popupService.Show<LevelLosePopupController, LevelLosePopupModel>(new LevelLosePopupModel());
+            _popupService.Show<LevelLosePopupController, LevelLosePopupModel>(PopupType.LevelLose,
+                new LevelLosePopupModel());
         }
 
         private void OnLevelWin()
         {
-            _popupService.Show<LevelWinPopupController, LevelWinPopupModel>(new LevelWinPopupModel());
+            _popupService.Show<LevelLosePopupController, LevelLosePopupModel>(PopupType.LevelWin,
+                new LevelLosePopupModel());
         }
     }
 }

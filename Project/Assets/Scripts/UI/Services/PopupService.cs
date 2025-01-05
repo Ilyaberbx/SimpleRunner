@@ -1,40 +1,63 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Better.Locators.Runtime;
 using Better.Services.Runtime;
+using Factura.Global.Services.StaticData;
+using Factura.UI.Helpers;
 using Factura.UI.MVC;
+using Factura.UI.Popups.LevelLose;
+using Factura.UI.Popups.LevelStart;
+using Factura.UI.Popups.LevelWin;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Factura.UI.Services
 {
     [Serializable]
-    public sealed class PopupService : PocoService<PopupServiceSettings>
+    public sealed class PopupService : PocoService
     {
         [SerializeField] private CanvasGroup _backgroundGroup;
         [SerializeField] private Transform _root;
 
         private BaseController _currentController;
-        private const string CanNotFindViewFormat = "Can not find view for controller {0}";
+        private readonly IDictionary<PopupType, Type> _controllerPopupMap = new Dictionary<PopupType, Type>();
+        private IUIStaticDataProvider _staticDataProvider;
 
-        protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            await base.OnInitializeAsync(cancellationToken);
             HideBackground();
+
+            _controllerPopupMap.Add(PopupType.LevelWin, typeof(LevelWinPopupController));
+            _controllerPopupMap.Add(PopupType.LevelLose, typeof(LevelLosePopupController));
+            _controllerPopupMap.Add(PopupType.LevelStart, typeof(LevelStartPopupController));
+
+            return Task.CompletedTask;
         }
 
-        public TController Show<TController, TModel>(TModel model)
+        protected override Task OnPostInitializeAsync(CancellationToken cancellationToken)
+        {
+            _staticDataProvider = ServiceLocator.Get<UIStaticDataService>();
+            return Task.CompletedTask;
+        }
+
+        public TController Show<TController, TModel>(PopupType type, TModel model)
             where TController : BaseController<TModel>, new()
             where TModel : IModel
         {
-            var controllerType = typeof(TController);
-            var data = Settings.Data.FirstOrDefault(temp => temp.Type == controllerType);
+            var isValid = ValidateController<TController>(type);
+
+            if (!isValid)
+            {
+                return null;
+            }
+
+            var data = _staticDataProvider.GetPopupConfiguration(type);
 
             if (data == null || data.ViewPrefab == null)
             {
-                var message = string.Format(CanNotFindViewFormat, typeof(TController).Name);
-                Debug.LogError(message);
+                PopupsDebugHelper.PrintCannotFindView(type);
                 return default;
             }
 
@@ -64,6 +87,24 @@ namespace Factura.UI.Services
             _currentController = null;
             Object.Destroy(viewGameObject);
             HideBackground();
+        }
+
+        private bool ValidateController<TRequestedController>(PopupType type)
+            where TRequestedController : BaseController, new()
+        {
+            var requestedControllerType = typeof(TRequestedController);
+
+            if (_controllerPopupMap.TryGetValue(type, out var controllerType))
+            {
+                if (controllerType == requestedControllerType) return true;
+
+                PopupsDebugHelper.PrintMappingMismatched<TRequestedController>(controllerType, type);
+                return false;
+            }
+
+
+            PopupsDebugHelper.PrintCannotFindController(type);
+            return false;
         }
 
         private void ShowBackground()

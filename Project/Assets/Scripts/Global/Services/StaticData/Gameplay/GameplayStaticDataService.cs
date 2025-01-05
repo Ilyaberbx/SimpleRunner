@@ -8,12 +8,14 @@ using Factura.Gameplay;
 using Factura.Gameplay.Enemy;
 using Factura.Gameplay.Enemy.Spawner;
 using Factura.Gameplay.Services.Level;
+using Factura.Gameplay.Services.Tile.Creation;
+using Factura.Gameplay.Services.Waypoints;
 using Factura.Gameplay.Tile.Spawner;
 using Factura.Global.Services.AssetsManagement;
 
 namespace Factura.Global.Services.StaticData
 {
-    public sealed class StaticDataService : PocoService, IStaticDataProvider
+    public sealed class GameplayStaticDataService : PocoService, IGameplayStaticDataProvider
     {
         private IAssetsProvider _assetsProvider;
 
@@ -22,6 +24,8 @@ namespace Factura.Global.Services.StaticData
         private EnemyConfiguration _enemyConfiguration;
         private EnemySpawnerConfiguration _enemySpawnerConfiguration;
         private TileSpawnerConfiguration _tileSpawnerConfiguration;
+        private TileConfiguration _tileConfiguration;
+        private WaypointsConfiguration _waypointsConfiguration;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -36,9 +40,22 @@ namespace Factura.Global.Services.StaticData
             _enemyConfiguration = await LoadEnemyConfiguration();
             _enemySpawnerConfiguration = await LoadEnemySpawnConfiguration();
             _tileSpawnerConfiguration = await LoadTileSpawnerConfiguration();
+            _tileConfiguration = await LoadTileConfiguration();
+            _waypointsConfiguration = await LoadWaypointsConfiguration();
         }
 
+
         #region Configurations Loading
+
+        private Task<WaypointsConfiguration> LoadWaypointsConfiguration()
+        {
+            return _assetsProvider.Load<WaypointsConfiguration>(StaticDataAddresses.Waypoints);
+        }
+
+        private Task<TileConfiguration> LoadTileConfiguration()
+        {
+            return _assetsProvider.Load<TileConfiguration>(StaticDataAddresses.Tile);
+        }
 
         private Task<TileSpawnerConfiguration> LoadTileSpawnerConfiguration()
         {
@@ -69,14 +86,14 @@ namespace Factura.Global.Services.StaticData
         }
 
         #endregion
-
-
+        
         public BaseModuleConfiguration GetModuleConfiguration(VehicleModuleType type) =>
             _moduleConfigurationsMap.GetValueOrDefault(type);
         public EnemyConfiguration GetEnemyConfiguration() => _enemyConfiguration;
         public EnemySpawnerConfiguration GetEnemySpawnerConfiguration() => _enemySpawnerConfiguration;
-
         public TileSpawnerConfiguration GetTileSpawnerConfiguration() => _tileSpawnerConfiguration;
+        public TileConfiguration GetTileConfiguration() => _tileConfiguration;
         public LevelConfiguration GetLevelConfiguration() => _levelConfiguration;
+        public WaypointsConfiguration GetWaypointsConfiguration() => _waypointsConfiguration;
     }
 }

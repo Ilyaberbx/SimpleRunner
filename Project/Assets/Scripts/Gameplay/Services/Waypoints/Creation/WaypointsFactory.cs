@@ -13,9 +13,9 @@ namespace Factura.Gameplay.Services.Waypoints
         private const int MaxValue = 100;
         private const int MinValue = 0;
 
-        private WaypointsFactoryConfiguration _configuration;
+        private WaypointsConfiguration _configuration;
 
-        public WaypointsFactory(WaypointsFactoryConfiguration configuration)
+        public WaypointsFactory(WaypointsConfiguration configuration)
         {
             _configuration = configuration;
         }

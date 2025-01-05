@@ -1,10 +1,9 @@
-using System;
 using UnityEngine;
 
 namespace Factura.Gameplay.Services.Waypoints
 {
-    [Serializable]
-    public sealed class WaypointsFactoryConfiguration
+    [CreateAssetMenu(menuName = "Configs/Gameplay/Waypoints", fileName = "WaypointsConfiguration", order = 0)]
+    public sealed class WaypointsConfiguration : ScriptableObject
     {
         [SerializeField] private int _resolution;
         [SerializeField] private int _turnRange;

@@ -1,11 +1,10 @@
-using System;
 using Factura.Gameplay.Tile;
 using UnityEngine;
 
 namespace Factura.Gameplay.Services.Tile.Creation
 {
-    [Serializable]
-    public sealed class TilesFactoryConfiguration
+    [CreateAssetMenu(menuName = "Configs/Gameplay/Tile", fileName = "TileConfiguration", order = 0)]
+    public sealed class TileConfiguration : ScriptableObject
     {
         [SerializeField] private TileBehaviour _prefab;
 

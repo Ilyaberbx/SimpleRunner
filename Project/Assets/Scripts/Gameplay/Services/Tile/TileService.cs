@@ -2,22 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Better.Locators.Runtime;
 using Better.Services.Runtime;
 using Factura.Gameplay.Services.Tile.Creation;
 using Factura.Gameplay.Tile;
+using Factura.Global.Services.StaticData;
 using UnityEngine;
 
 namespace Factura.Gameplay.Services.Tile
 {
     [Serializable]
-    public sealed class TileService : PocoService<TilesServiceSettings>
+    public sealed class TileService : PocoService
     {
         public event Action<TileBehaviour, int> OnTileCreate;
 
         [SerializeField] private Transform _root;
 
-        private ITilesFactory _factory;
+        private TileFactory _factory;
         private List<TileBehaviour> _tiles = new();
+        private TileConfiguration _tileConfiguration;
 
         private float? _cachedTileLength;
         private Bounds? _cachedTileBounds;
@@ -26,14 +29,16 @@ namespace Factura.Gameplay.Services.Tile
         public float TileLength => _cachedTileLength ??= CalculateTileSize();
         public Bounds TileBounds => _cachedTileBounds ??= CalculateTileBounds();
 
+
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            _factory = new TilesFactory(Settings.FactoryConfiguration);
             return Task.CompletedTask;
         }
 
         protected override Task OnPostInitializeAsync(CancellationToken cancellationToken)
         {
+            var staticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
+            _tileConfiguration = staticDataProvider.GetTileConfiguration();
             return Task.CompletedTask;
         }
 
@@ -50,8 +55,8 @@ namespace Factura.Gameplay.Services.Tile
 
         private MeshRenderer GetPrefabMeshRenderer()
         {
-            var prefab = Settings.FactoryConfiguration.Prefab;
-            return prefab.GetComponent<MeshRenderer>();
+            var prefab = _tileConfiguration.Prefab;
+            return prefab.MeshRenderer;
         }
 
         private float CalculateTileSize()

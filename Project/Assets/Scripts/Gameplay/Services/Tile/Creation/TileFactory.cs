@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Services.Tile.Creation
 {
-    public sealed class TilesFactory : ITilesFactory
+    public sealed class TileFactory 
     {
         private const string ConfigurationNullMessage = "Can not create tile due to configuration null reference";
-        private readonly TilesFactoryConfiguration _configuration;
+        private readonly TileConfiguration _configuration;
 
-        public TilesFactory(TilesFactoryConfiguration configuration)
+        public TileFactory(TileConfiguration configuration)
         {
             _configuration = configuration;
         }

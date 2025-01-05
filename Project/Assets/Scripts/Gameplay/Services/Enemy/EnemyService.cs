@@ -23,7 +23,7 @@ namespace Factura.Gameplay.Services.Enemy
 
         protected override Task OnPostInitializeAsync(CancellationToken cancellationToken)
         {
-            var staticDataProvider = ServiceLocator.Get<StaticDataService>();
+            var staticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
             _factory = new EnemyFactory(staticDataProvider.GetEnemyConfiguration());
             return Task.CompletedTask;
         }
