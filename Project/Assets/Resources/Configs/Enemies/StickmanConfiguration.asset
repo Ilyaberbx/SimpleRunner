@@ -95,4 +95,4 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     _speed: 0.4
-  _lookAtSpeed: 200
+  _lookAtSpeed: 1

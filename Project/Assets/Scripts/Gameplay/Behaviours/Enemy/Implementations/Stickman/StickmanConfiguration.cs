@@ -7,12 +7,12 @@ namespace Factura.Gameplay.Enemy.Stickman
     public sealed class StickmanConfiguration : ScriptableObject
     {
         [SerializeField] private StickmanBehaviour _prefab;
-        [SerializeField] private int _healthAmount;
-        [SerializeField] private int _damage;
-        [SerializeField] private float _patrolRadius;
+        [Range(0, 100)] [SerializeField] private int _healthAmount;
+        [Range(0, 100)] [SerializeField] private int _damage;
+        [Range(0f, 20f)] [SerializeField] private float _patrolRadius;
         [SerializeField] private MoveToTargetConfiguration _chaseMovementConfiguration;
         [SerializeField] private MoveToTargetConfiguration _patrolMovementConfiguration;
-        [SerializeField] private float _lookAtSpeed;
+        [Range(0f, 1f)] [SerializeField] private float _lookAtSpeed;
 
         public StickmanBehaviour Prefab => _prefab;
         public int HealthAmount => _healthAmount;

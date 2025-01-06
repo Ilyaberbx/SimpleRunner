@@ -7,7 +7,7 @@ namespace Factura.Gameplay.Car
     public sealed class CarConfiguration : BaseModuleConfiguration
     {
         [SerializeField] private CarBehaviour _prefab;
-        [SerializeField] private int _healthAmount;
+        [Range(0, 100)] [SerializeField] private int _healthAmount;
         [SerializeField] private MoveByWaypointsConfiguration _movementConfiguration;
 
         public int HealthAmount => _healthAmount;

@@ -7,9 +7,9 @@ namespace Factura.Gameplay.Projectiles
     public sealed class ProjectileConfiguration : ScriptableObject
     {
         [SerializeField] private ProjectileBehaviour _prefab;
-        [SerializeField] private float _moveSpeed;
-        [SerializeField] private float _lifeTime;
-        [SerializeField] private int _damage;
+        [Range(0f, 100f)] [SerializeField] private float _moveSpeed;
+        [Range(0f, 10f)] [SerializeField] private float _lifeTime;
+        [Range(0, 100)] [SerializeField] private int _damage;
 
         public ProjectileBehaviour Prefab => _prefab;
         public float MoveSpeed => _moveSpeed;
