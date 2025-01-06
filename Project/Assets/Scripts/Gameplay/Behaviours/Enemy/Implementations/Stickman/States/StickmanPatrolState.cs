@@ -13,7 +13,6 @@ namespace Factura.Gameplay.Enemy.Stickman
         private readonly ILookAt _lookAt;
         private readonly IStickmanAnimator _animator;
         private readonly IPatrol _patrol;
-        private CancellationToken _token;
 
         public StickmanPatrolState(ILookAt lookAt,
             IStickmanAnimator animator,
@@ -26,7 +25,6 @@ namespace Factura.Gameplay.Enemy.Stickman
 
         public override Task EnterAsync(CancellationToken token)
         {
-            _token = token;
             _animator.PlayPatrol(true);
             _patrol.ConductAsync(token).Forget();
             _patrol.OnTargetChanged += OnPatrolTargetChanged;
@@ -48,9 +46,7 @@ namespace Factura.Gameplay.Enemy.Stickman
                 return;
             }
 
-            _lookAt
-                .LookAt(target.Position, _token)
-                .Forget();
+            _lookAt.Process(target.Position);
         }
     }
 }

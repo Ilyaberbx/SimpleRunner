@@ -31,12 +31,13 @@ namespace Factura.Gameplay
             _attachment = attachment;
             _launcher = launcher;
             _stateMachine = stateMachine;
+            
             _levelService = ServiceLocator.Get<LevelService>();
-            _stateMachine.Run();
-            _stateMachine.ChangeStateAsync(new TurretIdleState());
-
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
+            
+            _stateMachine.Run();
+            _stateMachine.ChangeStateAsync(new TurretIdleState());
         }
 
         private void OnDestroy()

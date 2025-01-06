@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Factura.Gameplay.Launcher;
 using Factura.Gameplay.Services.Update;
@@ -44,9 +43,7 @@ namespace Factura.Gameplay.States
                 return;
             }
 
-            _launcher
-                .Launch(deltaTime, _inputService.GetMousePosition(), _token)
-                .Forget();
+            _launcher.Launch(deltaTime, _inputService.GetMousePosition());
         }
     }
 }

@@ -3,7 +3,6 @@ using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
 using Factura.Gameplay.Animations;
 using Factura.Gameplay.Attack;
-using Factura.Gameplay.Car;
 using Factura.Gameplay.Health;
 using Factura.Gameplay.LookAt;
 using Factura.Gameplay.Movement;

@@ -7,17 +7,17 @@ namespace Factura.Gameplay.Enemy.Stickman
 {
     public sealed class StickmanDeadState : BaseStickmanState
     {
-        private readonly BaseEnemyBehaviour _source;
+        private readonly BaseEnemyBehaviour _context;
 
-        public StickmanDeadState(BaseEnemyBehaviour source)
+        public StickmanDeadState(BaseEnemyBehaviour context)
         {
-            _source = source;
+            _context = context;
         }
 
         public override Task EnterAsync(CancellationToken token)
         {
             var enemyService = ServiceLocator.Get<EnemyService>();
-            enemyService.Release(_source);
+            enemyService.Release(_context);
             return Task.CompletedTask;
         }
 

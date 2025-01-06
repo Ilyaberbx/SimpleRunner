@@ -20,7 +20,6 @@ namespace Factura.Gameplay.Enemy.Stickman
         private readonly IDynamicMovable _movement;
         private Tween _moveTween;
         private GameUpdateService _gameUpdateService;
-        private CancellationToken _token;
 
         public StickmanChaseState(ILookAt lookAt,
             IStickmanAnimator animator,
@@ -35,7 +34,6 @@ namespace Factura.Gameplay.Enemy.Stickman
 
         public override Task EnterAsync(CancellationToken token)
         {
-            _token = token;
             _gameUpdateService = ServiceLocator.Get<GameUpdateService>();
             _animator.PlayChase(true);
             _movement.SetTarget(_target);
@@ -54,12 +52,7 @@ namespace Factura.Gameplay.Enemy.Stickman
 
         public void OnUpdate(float deltaTime)
         {
-            LookAt(_target.Position);
-        }
-
-        private void LookAt(Vector3 target)
-        {
-            _lookAt.LookAt(target, _token).Forget();
+            _lookAt.Process(_target.Position);
         }
     }
 }

@@ -1,5 +1,3 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Factura.Gameplay.Health;
 
 namespace Factura.Gameplay.Attack
@@ -12,11 +10,10 @@ namespace Factura.Gameplay.Attack
         {
             _damage = damage;
         }
-        
-        public Task ProcessAsync(IHealth health, CancellationToken token)
+
+        public void Process(IHealth health)
         {
             health.TakeDamage(_damage);
-            return Task.CompletedTask;
         }
     }
 }

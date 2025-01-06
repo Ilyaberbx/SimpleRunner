@@ -29,10 +29,10 @@ namespace Factura.Gameplay.Car
         private IStateMachine<BaseCarState> _stateMachine;
         private IMovable _movement;
         private IAttachable _attachment;
+        private IHealth _health;
         private CarMoveState _moveState;
 
         public Vector3 Position => Target.Position;
-        public IHealth Health { get; private set; }
         public ITarget Target { get; private set; }
         public ICameraTarget CameraTarget { get; private set; }
         public IVehicleModulesLocator ModulesLocator { get; private set; }
@@ -48,7 +48,7 @@ namespace Factura.Gameplay.Car
 
             _stateMachine = stateMachine;
             ModulesLocator = locator;
-            Health = health;
+            _health = health;
             _movement = movement;
             _attachment = attachment;
             Target = target;
@@ -57,7 +57,7 @@ namespace Factura.Gameplay.Car
             ModulesLocator.RegisterAttachment(VehicleModuleType.BulletsPack, _bulletsPackAttachmentPoint);
             ModulesLocator.RegisterAttachment(VehicleModuleType.Turret, _turretAttachmentPoint);
 
-            Health.OnDie += OnDied;
+            _health.OnDie += OnDied;
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
 
@@ -69,7 +69,7 @@ namespace Factura.Gameplay.Car
             ModulesLocator.UnregisterAttachment(VehicleModuleType.BulletsPack);
             ModulesLocator.UnregisterAttachment(VehicleModuleType.Turret);
 
-            Health.OnDie -= OnDied;
+            _health.OnDie -= OnDied;
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
         }
@@ -113,9 +113,7 @@ namespace Factura.Gameplay.Car
 
         public void Visit(StickmanBehaviour stickmanBehaviour)
         {
-            stickmanBehaviour
-                .Attack
-                .ProcessAsync(Health, destroyCancellationToken);
+            stickmanBehaviour.Attack.Process(_health);
         }
     }
 }
