@@ -1,9 +1,9 @@
-using Factura.Gameplay.Car;
+using Factura.Gameplay.Enemy.Stickman;
 
 namespace Factura.Gameplay.Visitors
 {
     public interface IEnemyVisitor
     {
-        void Visit(CarBehaviour carBehaviour);
+        void Visit(StickmanBehaviour stickmanBehaviour);
     }
 }

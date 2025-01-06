@@ -3,31 +3,30 @@ using System.Threading.Tasks;
 using Factura.Gameplay.Animations;
 using Factura.Gameplay.Attack;
 using Factura.Gameplay.Health;
+using Factura.Gameplay.Visitors;
 
 namespace Factura.Gameplay.Enemy.Stickman
 {
     public class StickmanAttackState : BaseStickmanState
     {
+        private readonly StickmanBehaviour _context;
         private readonly StickmanAnimationEventsObserver _animationEventsObserver;
+        private readonly IEnemyVisitor _visitor;
         private readonly IStickmanAnimator _stickmanAnimator;
-        private readonly IHealth _targetHealth;
-        private readonly IAttack _attack;
-        private CancellationToken _token;
 
-        public StickmanAttackState(StickmanAnimationEventsObserver animationEventsObserver,
-            IStickmanAnimator stickmanAnimator,
-            IHealth targetHealth,
-            IAttack attack)
+        public StickmanAttackState(StickmanBehaviour context,
+            StickmanAnimationEventsObserver animationEventsObserver,
+            IEnemyVisitor visitor,
+            IStickmanAnimator stickmanAnimator)
         {
+            _context = context;
             _animationEventsObserver = animationEventsObserver;
+            _visitor = visitor;
             _stickmanAnimator = stickmanAnimator;
-            _targetHealth = targetHealth;
-            _attack = attack;
         }
 
         public override Task EnterAsync(CancellationToken token)
         {
-            _token = token;
             _stickmanAnimator.PlayAttack();
             _animationEventsObserver.OnAttack += OnAttacked;
             return Task.CompletedTask;
@@ -41,7 +40,7 @@ namespace Factura.Gameplay.Enemy.Stickman
 
         private void OnAttacked()
         {
-            _attack.ProcessAsync(_targetHealth, _token);
+            _visitor.Visit(_context);
         }
     }
 }

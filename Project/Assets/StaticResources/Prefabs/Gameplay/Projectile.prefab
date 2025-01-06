@@ -96,10 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8428af8507694919b1b263d5f518ecf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _visitableTriggerObserver: {fileID: 7190495636917009924}
-  _damage: 5
-  _moveSpeed: 60
-  _lifetime: 2.5
+  _visitorTriggerObserver: {fileID: 7190495636917009924}
 --- !u!114 &7190495636917009924
 MonoBehaviour:
   m_ObjectHideFlags: 0

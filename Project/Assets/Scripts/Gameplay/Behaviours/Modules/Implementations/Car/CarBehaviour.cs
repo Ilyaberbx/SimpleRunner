@@ -5,6 +5,7 @@ using Better.StateMachine.Runtime;
 using Factura.Gameplay.Attachment;
 using Factura.Gameplay.Camera;
 using Factura.Gameplay.Car.States;
+using Factura.Gameplay.Enemy.Stickman;
 using Factura.Gameplay.Health;
 using Factura.Gameplay.ModulesLocator;
 using Factura.Gameplay.Movement;
@@ -16,7 +17,7 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Car
 {
-    public sealed class CarBehaviour : VehicleModuleBehaviour, IEnemyVisitable, ITarget
+    public sealed class CarBehaviour : VehicleModuleBehaviour, IEnemyVisitor, ITarget
     {
         [SerializeField] private Transform _turretAttachmentPoint;
         [SerializeField] private Transform _bulletsPackAttachmentPoint;
@@ -73,11 +74,6 @@ namespace Factura.Gameplay.Car
             _levelService.OnLevelFinish -= OnLevelFinished;
         }
 
-        public void Accept(IEnemyVisitor visitor)
-        {
-             visitor?.Visit(this);
-        }
-
         protected override bool TryAttachInternal(Transform attachmentPoint)
         {
             return _attachment.TryAttach(attachmentPoint);
@@ -113,6 +109,13 @@ namespace Factura.Gameplay.Car
             _moveState.OnDestinationReached -= OnDestinationReached;
             _moveState = null;
             _levelService.FireLevelWin();
+        }
+
+        public void Visit(StickmanBehaviour stickmanBehaviour)
+        {
+            stickmanBehaviour
+                .Attack
+                .ProcessAsync(Health, destroyCancellationToken);
         }
     }
 }

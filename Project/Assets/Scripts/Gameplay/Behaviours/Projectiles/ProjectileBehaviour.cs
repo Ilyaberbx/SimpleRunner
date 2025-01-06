@@ -9,18 +9,20 @@ using UnityEngine;
 namespace Factura.Gameplay.Projectiles
 {
     [RequireComponent(typeof(Rigidbody))]
-    public sealed class ProjectileBehaviour : BaseProjectileBehaviour, IProjectileVisitor, IGameUpdatable
+    public sealed class ProjectileBehaviour : BaseProjectileBehaviour, IGameUpdatable
     {
-        [SerializeField] private ProjectileVisitableTriggerObserver _visitableTriggerObserver;
-        [SerializeField] private int _damage;
-        [SerializeField] private float _moveSpeed;
-        [SerializeField] private float _lifetime;
+        [SerializeField] private ProjectileVisitorTriggerObserver _visitorTriggerObserver;
+        private int _damage;
+        private float _moveSpeed;
+        private float _lifetime;
 
         private LevelService _levelService;
         private GameUpdateService _gameUpdateService;
 
         private Transform _cachedTransform;
         private Vector3 _direction;
+
+        public int Damage => _damage;
 
         public void Initialize(int damage, float moveSpeed, float lifeTime)
         {
@@ -38,7 +40,7 @@ namespace Factura.Gameplay.Projectiles
             _direction = direction;
             DestroyAfterLifetime();
             _levelService.OnLevelFinish += OnLevelFinished;
-            _visitableTriggerObserver.OnEnter += OnVisitableEntered;
+            _visitorTriggerObserver.OnEnter += OnVisitorEntered;
 
             _gameUpdateService.Subscribe(this);
         }
@@ -46,7 +48,7 @@ namespace Factura.Gameplay.Projectiles
         private void OnDestroy()
         {
             _levelService.OnLevelFinish -= OnLevelFinished;
-            _visitableTriggerObserver.OnEnter -= OnVisitableEntered;
+            _visitorTriggerObserver.OnEnter -= OnVisitorEntered;
 
             _gameUpdateService.Unsubscribe(this);
         }
@@ -64,7 +66,7 @@ namespace Factura.Gameplay.Projectiles
 
         public void Visit(StickmanBehaviour stickman)
         {
-            stickman.Health.TakeDamage(_damage);
+            stickman.Health.TakeDamage(Damage);
             DestroyImmediately();
         }
 
@@ -83,9 +85,9 @@ namespace Factura.Gameplay.Projectiles
             Destroy(gameObject);
         }
 
-        private void OnVisitableEntered(IProjectileVisitable visitable)
+        private void OnVisitorEntered(IProjectileVisitor visitor)
         {
-            visitable?.Accept(this);
+            visitor.Visit(this);
         }
     }
 }

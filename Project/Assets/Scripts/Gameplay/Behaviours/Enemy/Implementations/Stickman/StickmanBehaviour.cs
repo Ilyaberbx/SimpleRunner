@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Better.StateMachine.Runtime;
@@ -9,7 +8,7 @@ using Factura.Gameplay.Health;
 using Factura.Gameplay.LookAt;
 using Factura.Gameplay.Movement;
 using Factura.Gameplay.Patrol;
-using Factura.Gameplay.Services.Enemy;
+using Factura.Gameplay.Projectiles;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Target;
 using Factura.Gameplay.Triggers;
@@ -18,11 +17,11 @@ using UnityEngine;
 
 namespace Factura.Gameplay.Enemy.Stickman
 {
-    public sealed class StickmanBehaviour : BaseEnemyBehaviour, IProjectileVisitable, IEnemyVisitor
+    public sealed class StickmanBehaviour : BaseEnemyBehaviour, IProjectileVisitor
     {
         [SerializeField] private Animator _sourceAnimator;
         [SerializeField] private TargetTriggerObserver _targetTriggerObserver;
-        [SerializeField] private EnemyVisitableTriggerObserver _visitableTriggerObserver;
+        [SerializeField] private EnemyVisitorTriggerObserver _visitorTriggerObserver;
         [SerializeField] private StickmanAnimationEventsObserver _animationEventsObserver;
 
         private LevelService _levelService;
@@ -35,11 +34,11 @@ namespace Factura.Gameplay.Enemy.Stickman
         private IStickmanAnimator _animator;
         private ILookAt _chaseLookAt;
         private ILookAt _patrolLookAt;
-        private EnemyService _enemyService;
 
         public IHealth Health { get; private set; }
         public Animator SourceAnimator => _sourceAnimator;
         private bool IsDead => !_stateMachine.IsRunning || _stateMachine.CurrentState is StickmanDeadState;
+        public IAttack Attack => _attack;
 
         public void Initialize(
             ILookAt chaseLookAt,
@@ -63,12 +62,11 @@ namespace Factura.Gameplay.Enemy.Stickman
             _stateMachine.Run();
 
             _levelService = ServiceLocator.Get<LevelService>();
-            _enemyService = ServiceLocator.Get<EnemyService>();
 
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
             _targetTriggerObserver.OnEnter += OnTargetEntered;
-            _visitableTriggerObserver.OnEnter += OnVisitableEntered;
+            _visitorTriggerObserver.OnEnter += OnVisitorEntered;
             _animationEventsObserver.OnAttack += OnAttacked;
             Health.OnDie += OnDied;
         }
@@ -78,14 +76,23 @@ namespace Factura.Gameplay.Enemy.Stickman
             _levelService.OnLevelStart -= OnLevelStarted;
             _levelService.OnLevelFinish -= OnLevelFinished;
             _targetTriggerObserver.OnEnter -= OnTargetEntered;
-            _visitableTriggerObserver.OnEnter -= OnVisitableEntered;
+            _visitorTriggerObserver.OnEnter -= OnVisitorEntered;
             _animationEventsObserver.OnAttack -= OnAttacked;
             Health.OnDie -= OnDied;
         }
 
-        public void Accept(IProjectileVisitor visitor)
+        private void OnVisitorEntered(IEnemyVisitor visitor)
         {
-            visitor.Visit(this);
+            if (IsDead)
+            {
+                return;
+            }
+
+            var attackState = new StickmanAttackState(this, _animationEventsObserver, visitor, _animator);
+
+            _stateMachine
+                .ChangeStateAsync(attackState, destroyCancellationToken)
+                .Forget();
         }
 
         public void SetTarget(ITarget target)
@@ -103,25 +110,6 @@ namespace Factura.Gameplay.Enemy.Stickman
             }
         }
 
-        public void Visit(CarBehaviour carBehaviour)
-        {
-            if (IsDead)
-            {
-                return;
-            }
-
-            var attackState =
-                new StickmanAttackState(_animationEventsObserver, _animator, carBehaviour.Health, _attack);
-
-            _stateMachine
-                .ChangeStateAsync(attackState, destroyCancellationToken)
-                .Forget();
-        }
-
-        private void OnVisitableEntered(IEnemyVisitable visitable)
-        {
-            visitable.Accept(this);
-        }
 
         private void OnAttacked()
         {
@@ -190,6 +178,17 @@ namespace Factura.Gameplay.Enemy.Stickman
 
             var patrolState = new StickmanPatrolState(_patrolLookAt, _animator, _patrol);
             _stateMachine.ChangeStateAsync(patrolState, destroyCancellationToken).Forget();
+        }
+
+        public void Accept(IEnemyVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+
+        public void Visit(ProjectileBehaviour projectileBehaviour)
+        {
+            var damage = projectileBehaviour.Damage;
+            Health.TakeDamage(damage);
         }
     }
 }
