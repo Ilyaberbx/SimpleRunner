@@ -3,7 +3,6 @@ using Factura.Gameplay.Attachment;
 using Factura.Gameplay.Launcher;
 using Factura.Gameplay.LookAt;
 using Factura.Gameplay.Services.Camera;
-using Factura.Gameplay.Services.Module;
 using Factura.Gameplay.Shoot;
 using Factura.Gameplay.States;
 using UnityEngine;
@@ -33,7 +32,7 @@ namespace Factura.Gameplay
             var shootPoint = turretBehaviour.ShootPoint;
             var attachment = new ImmediateAttachmentComponent(turretTransform);
             var lookAt = new ImmediateLookAtComponent(turretTransform);
-            var shoot = new ProjectileShootComponent(shootPoint, _configuration.ProjectilePrefab);
+            var shoot = new ProjectileShootComponent(shootPoint, _configuration.ProjectileConfiguration);
             var launcher = new LauncherComponent(camera, _configuration.FireCooldown, lookAt, shoot);
             var stateMachine = new StateMachine<BaseTurretState>();
 

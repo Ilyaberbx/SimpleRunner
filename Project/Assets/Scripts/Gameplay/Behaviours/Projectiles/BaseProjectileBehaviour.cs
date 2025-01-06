@@ -4,6 +4,6 @@ namespace Factura.Gameplay.Projectiles
 {
     public abstract class BaseProjectileBehaviour : MonoBehaviour
     {
-        public abstract void Initialize(Vector3 direction);
+        public abstract void Fire(Vector3 direction);
     }
 }

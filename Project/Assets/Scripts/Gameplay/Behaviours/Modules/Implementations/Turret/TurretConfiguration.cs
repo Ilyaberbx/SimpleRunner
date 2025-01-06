@@ -8,10 +8,10 @@ namespace Factura.Gameplay
     {
         [SerializeField] private TurretBehaviour _prefab;
         [SerializeField] private float _fireCooldown;
-        [SerializeField] private BaseProjectileBehaviour _projectilePrefab;
-
+        [SerializeField] private ProjectileConfiguration _projectileConfiguration;
+        
         public float FireCooldown => _fireCooldown;
-        public BaseProjectileBehaviour ProjectilePrefab => _projectilePrefab;
         public TurretBehaviour Prefab => _prefab;
+        public ProjectileConfiguration ProjectileConfiguration => _projectileConfiguration;
     }
 }

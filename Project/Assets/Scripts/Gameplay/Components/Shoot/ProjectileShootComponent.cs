@@ -9,28 +9,22 @@ namespace Factura.Gameplay.Shoot
         private const string ProjectileIsNotSetMessage = "ProjectilePrefab is not set.";
 
         private readonly Transform _shootPoint;
-        private readonly BaseProjectileBehaviour _projectilePrefab;
+        private readonly ProjectileFactory _projectileFactory;
 
-        public ProjectileShootComponent(Transform shootPoint, BaseProjectileBehaviour projectilePrefab)
+        public ProjectileShootComponent(Transform shootPoint, ProjectileConfiguration projectileConfiguration)
         {
             _shootPoint = shootPoint;
-            _projectilePrefab = projectilePrefab;
+            _projectileFactory = new ProjectileFactory(projectileConfiguration);
         }
 
         public void Shot(Vector3 mouseWorldPosition)
         {
-            if (_projectilePrefab == null)
-            {
-                Debug.LogWarning(ProjectileIsNotSetMessage);
-                return;
-            }
-
             var shootPosition = _shootPoint.position;
-            var projectile = Object.Instantiate(_projectilePrefab, shootPosition, Quaternion.identity);
+            var projectileBehaviour = _projectileFactory.Create(shootPosition);
             shootPosition = shootPosition.Flat();
             mouseWorldPosition = mouseWorldPosition.Flat();
             var direction = shootPosition.DirectionTo(mouseWorldPosition);
-            projectile.Initialize(direction);
+            projectileBehaviour.Fire(direction);
         }
     }
 }

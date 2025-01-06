@@ -22,19 +22,25 @@ namespace Factura.Gameplay.Projectiles
         private Transform _cachedTransform;
         private Vector3 _direction;
 
-        public override void Initialize(Vector3 direction)
+        public void Initialize(int damage, float moveSpeed, float lifeTime)
         {
+            _damage = damage;
+            _moveSpeed = moveSpeed;
+            _lifetime = lifeTime;
+
             _cachedTransform = transform;
-            _direction = direction;
             _levelService = ServiceLocator.Get<LevelService>();
             _gameUpdateService = ServiceLocator.Get<GameUpdateService>();
+        }
 
+        public override void Fire(Vector3 direction)
+        {
+            _direction = direction;
+            DestroyAfterLifetime();
             _levelService.OnLevelFinish += OnLevelFinished;
             _visitableTriggerObserver.OnEnter += OnVisitableEntered;
 
             _gameUpdateService.Subscribe(this);
-
-            DestroyAfterLifetime();
         }
 
         private void OnDestroy()
