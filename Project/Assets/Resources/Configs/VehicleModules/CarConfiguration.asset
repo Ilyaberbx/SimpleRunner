@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 1
   _prefab: {fileID: 3107787886816866075, guid: a095bf9fbab42754f96b7cbe092eb9a9, type: 3}
-  _healthAmount: 10
+  _healthAmount: 100
   _movementConfiguration:
-    _moveSpeed: 10
+    _moveSpeed: 15
     _curve:
       serializedVersion: 2
       m_Curve:

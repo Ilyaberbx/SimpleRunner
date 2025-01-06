@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 2
   _prefab: {fileID: 780516178070371506, guid: e1514377766c2404eb6141de42e93571, type: 3}
-  _fireCooldown: 0.1
+  _fireCooldown: 0.15
   _projectilePrefab: {fileID: 2754551075977915949, guid: 0724925bd475e124d87e9666a085714b, type: 3}

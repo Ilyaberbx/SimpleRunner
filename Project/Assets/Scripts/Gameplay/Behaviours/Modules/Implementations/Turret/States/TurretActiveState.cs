@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+using Better.Commons.Runtime.Extensions;
 using Better.Locators.Runtime;
 using Factura.Gameplay.Launcher;
 using Factura.Gameplay.Services.Update;
@@ -11,23 +14,27 @@ namespace Factura.Gameplay.States
         private InputService _inputService;
 
         private readonly ILauncher _launcher;
+        private CancellationToken _token;
 
         public TurretActiveState(ILauncher launcher)
         {
             _launcher = launcher;
         }
 
-        protected override void Enter()
+        public override Task EnterAsync(CancellationToken token)
         {
+            _token = token;
             _gameUpdateService = ServiceLocator.Get<GameUpdateService>();
             _inputService = ServiceLocator.Get<InputService>();
 
             _gameUpdateService.Subscribe(this);
+            return Task.CompletedTask;
         }
 
-        protected override void Exit()
+        public override Task ExitAsync(CancellationToken token)
         {
             _gameUpdateService.Unsubscribe(this);
+            return Task.CompletedTask;
         }
 
         public void OnUpdate(float deltaTime)
@@ -37,7 +44,9 @@ namespace Factura.Gameplay.States
                 return;
             }
 
-            _launcher.Launch(deltaTime, _inputService.GetMousePosition());
+            _launcher
+                .Launch(deltaTime, _inputService.GetMousePosition(), _token)
+                .Forget();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Factura.Gameplay.Services.Waypoints
     {
         private LevelService _levelService;
         private WaypointsConfiguration _waypointsConfiguration;
+        private IGameplayStaticDataProvider _staticDataProvider;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -22,8 +23,8 @@ namespace Factura.Gameplay.Services.Waypoints
 
         protected override Task OnPostInitializeAsync(CancellationToken cancellationToken)
         {
-            var staticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
-            _waypointsConfiguration = staticDataProvider.GetWaypointsConfiguration();
+            _staticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
+            _waypointsConfiguration = _staticDataProvider.GetWaypointsConfiguration();
             _levelService = ServiceLocator.Get<LevelService>();
             return Task.CompletedTask;
         }

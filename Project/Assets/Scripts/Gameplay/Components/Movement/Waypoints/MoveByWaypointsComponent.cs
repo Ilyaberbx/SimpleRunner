@@ -30,7 +30,8 @@ namespace Factura.Gameplay.Movement.Waypoints
             return _source.DOPath(_waypoints, speed, pathType, pathMode, resolution)
                 .SetSpeedBased()
                 .SetEase(curve)
-                .SetLookAt(lookAt);
+                .SetLookAt(lookAt)
+                .SetId(_source);
         }
     }
 }

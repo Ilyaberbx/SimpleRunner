@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Better.Locators.Runtime;
 using Better.Services.Runtime;
 using Factura.Gameplay;
-using Factura.Gameplay.Enemy;
-using Factura.Gameplay.Enemy.Spawner;
+using Factura.Gameplay.Enemy.Stickman;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Tile.Creation;
 using Factura.Gameplay.Services.Waypoints;
@@ -23,8 +22,8 @@ namespace Factura.Global.Services.StaticData
 
         private IReadOnlyDictionary<VehicleModuleType, BaseModuleConfiguration> _moduleConfigurationsMap;
         private LevelConfiguration _levelConfiguration;
-        private EnemyConfiguration _enemyConfiguration;
-        private EnemySpawnerConfiguration _enemySpawnerConfiguration;
+        private StickmanConfiguration _stickmanConfiguration;
+        private StickmanSpawnerConfiguration _stickmanSpawnerConfiguration;
         private TileSpawnerConfiguration _tileSpawnerConfiguration;
         private TileConfiguration _tileConfiguration;
         private WaypointsConfiguration _waypointsConfiguration;
@@ -39,8 +38,8 @@ namespace Factura.Global.Services.StaticData
             _assetsProvider = ServiceLocator.Get<ResourcesProviderService>();
             _levelConfiguration = await LoadLevelConfiguration();
             _moduleConfigurationsMap = await LoadModulesConfiguration();
-            _enemyConfiguration = await LoadEnemyConfiguration();
-            _enemySpawnerConfiguration = await LoadEnemySpawnConfiguration();
+            _stickmanConfiguration = await LoadStickmanConfiguration();
+            _stickmanSpawnerConfiguration = await LoadEnemySpawnConfiguration();
             _tileSpawnerConfiguration = await LoadTileSpawnerConfiguration();
             _tileConfiguration = await LoadTileConfiguration();
             _waypointsConfiguration = await LoadWaypointsConfiguration();
@@ -64,14 +63,14 @@ namespace Factura.Global.Services.StaticData
             return _assetsProvider.Load<TileSpawnerConfiguration>(StaticDataAddresses.TileSpawner);
         }
 
-        private Task<EnemySpawnerConfiguration> LoadEnemySpawnConfiguration()
+        private Task<StickmanSpawnerConfiguration> LoadEnemySpawnConfiguration()
         {
-            return _assetsProvider.Load<EnemySpawnerConfiguration>(StaticDataAddresses.EnemySpawner);
+            return _assetsProvider.Load<StickmanSpawnerConfiguration>(StaticDataAddresses.EnemySpawner);
         }
 
-        private Task<EnemyConfiguration> LoadEnemyConfiguration()
+        private Task<StickmanConfiguration> LoadStickmanConfiguration()
         {
-            return _assetsProvider.Load<EnemyConfiguration>(StaticDataAddresses.Enemy);
+            return _assetsProvider.Load<StickmanConfiguration>(StaticDataAddresses.Stickman);
         }
 
         private Task<LevelConfiguration> LoadLevelConfiguration()
@@ -91,8 +90,8 @@ namespace Factura.Global.Services.StaticData
 
         public BaseModuleConfiguration GetModuleConfiguration(VehicleModuleType type) =>
             _moduleConfigurationsMap.GetValueOrDefault(type);
-        public EnemyConfiguration GetEnemyConfiguration() => _enemyConfiguration;
-        public EnemySpawnerConfiguration GetEnemySpawnerConfiguration() => _enemySpawnerConfiguration;
+        public StickmanConfiguration GetStickmanConfiguration() => _stickmanConfiguration;
+        public StickmanSpawnerConfiguration GetEnemySpawnerConfiguration() => _stickmanSpawnerConfiguration;
         public TileSpawnerConfiguration GetTileSpawnerConfiguration() => _tileSpawnerConfiguration;
         public TileConfiguration GetTileConfiguration() => _tileConfiguration;
         public LevelConfiguration GetLevelConfiguration() => _levelConfiguration;

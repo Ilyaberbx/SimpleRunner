@@ -3,9 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Better.Locators.Runtime;
 using Better.Services.Runtime;
+using DG.Tweening;
 using Factura.Gameplay.Enemy;
+using Factura.Gameplay.Enemy.Stickman;
 using Factura.Global.Services.StaticData;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Factura.Gameplay.Services.Enemy
 {
@@ -14,7 +17,8 @@ namespace Factura.Gameplay.Services.Enemy
     {
         [SerializeField] private Transform _root;
 
-        private IEnemyFactory _factory;
+        private StickmanFactory _factory;
+        private IGameplayStaticDataProvider _staticDataProvider;
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -23,15 +27,20 @@ namespace Factura.Gameplay.Services.Enemy
 
         protected override Task OnPostInitializeAsync(CancellationToken cancellationToken)
         {
-            var staticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
-            _factory = new EnemyFactory(staticDataProvider.GetEnemyConfiguration());
+            _staticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
+            _factory = new StickmanFactory(_staticDataProvider.GetStickmanConfiguration());
             return Task.CompletedTask;
         }
 
-        public EnemyBehaviour CreateEnemy(Vector3 at)
+        public StickmanBehaviour CreateStickman(Vector3 at)
         {
-            var enemy = _factory.Create(at, _root);
-            return enemy;
+            return _factory.Create(at, _root);
+        }
+
+        public void Release(BaseEnemyBehaviour enemyBehaviour)
+        {
+            DOTween.Kill(enemyBehaviour.transform);
+            Object.Destroy(enemyBehaviour.gameObject);
         }
     }
 }

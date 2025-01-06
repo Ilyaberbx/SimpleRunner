@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Better.Locators.Runtime;
@@ -7,17 +8,22 @@ namespace Factura.Gameplay.Car.States
 {
     public sealed class CarDeadState : BaseCarState
     {
-        private readonly CarBehaviour _context;
+        private readonly IReadOnlyList<VehicleModuleBehaviour> _modules;
 
-        public CarDeadState(CarBehaviour context)
+        public CarDeadState(IReadOnlyList<VehicleModuleBehaviour> modules)
         {
-            _context = context;
+            _modules = modules;
         }
 
         public override Task EnterAsync(CancellationToken token)
         {
             var moduleService = ServiceLocator.Get<VehicleModuleService>();
-            moduleService.Destroy(_context);
+
+            foreach (var module in _modules)
+            {
+                moduleService.Release(module);
+            }
+
             return Task.CompletedTask;
         }
 

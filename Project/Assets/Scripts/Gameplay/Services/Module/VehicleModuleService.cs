@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Better.Locators.Runtime;
 using Better.Services.Runtime;
+using DG.Tweening;
 using Factura.Gameplay.BulletsPack;
 using Factura.Gameplay.Car;
 using Factura.Global.Services.StaticData;
@@ -99,10 +100,10 @@ namespace Factura.Gameplay.Services.Module
             return null;
         }
 
-        public void Destroy<TModule>(TModule module) where TModule : VehicleModuleBehaviour
+        public void Release(VehicleModuleBehaviour module)
         {
-            var gameObject = module.gameObject;
-            Object.Destroy(gameObject);
+            DOTween.Kill(module);
+            Object.Destroy(module.gameObject);
         }
     }
 }

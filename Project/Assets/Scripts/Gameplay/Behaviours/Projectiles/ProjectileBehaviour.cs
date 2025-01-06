@@ -1,5 +1,5 @@
 using Better.Locators.Runtime;
-using Factura.Gameplay.Enemy;
+using Factura.Gameplay.Enemy.Stickman;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Update;
 using Factura.Gameplay.Triggers;
@@ -56,9 +56,10 @@ namespace Factura.Gameplay.Projectiles
             return _direction * _moveSpeed * deltaTime;
         }
 
-        public void Visit(EnemyBehaviour enemy)
+        public void Visit(StickmanBehaviour stickman)
         {
-            enemy.Health.TakeDamage(_damage);
+            stickman.Health.TakeDamage(_damage);
+            DestroyImmediately();
         }
 
         private void OnLevelFinished()

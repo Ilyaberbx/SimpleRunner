@@ -1,7 +1,9 @@
+using Better.Contexts.Runtime;
 using Better.Locators.Runtime;
+using Factura.Core;
 using Factura.Gameplay.BulletsPack;
 using Factura.Gameplay.Car;
-using Factura.Gameplay.Enemy.Spawner;
+using Factura.Gameplay.Enemy.Stickman;
 using Factura.Gameplay.Services.Camera;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Module;
@@ -20,6 +22,7 @@ namespace Factura.Gameplay
     public class GameplayRootBehaviour : MonoBehaviour
     {
         [SerializeField] private Transform _carSpawnPoint;
+        [SerializeField] private MonoContextAdapter _context;
 
         private LevelService _levelService;
         private PopupService _popupService;
@@ -32,11 +35,12 @@ namespace Factura.Gameplay
         private BulletsPackBehaviour _bulletsPackBehaviour;
         private CarBehaviour _carBehaviour;
 
-        private EnemySpawner _enemySpawner;
+        private StickmanSpawner _stickmanSpawner;
         private TileSpawner _tilesSpawner;
 
-        private void Start()
+        private async void Start()
         {
+            await _context.EnterAsync();
             _gameplayStaticDataProvider = ServiceLocator.Get<GameplayStaticDataService>();
             _vehicleModuleService = ServiceLocator.Get<VehicleModuleService>();
             _levelService = ServiceLocator.Get<LevelService>();
@@ -62,6 +66,7 @@ namespace Factura.Gameplay
             _levelService.OnLevelLose -= OnLevelLose;
             _vehicleModuleService.UnregisterAllFactories();
             DisposeSpawners();
+            _context.Exit();
         }
 
         private void InitializeVehicleModules()
@@ -81,8 +86,8 @@ namespace Factura.Gameplay
         private void InitializeSpawners()
         {
             var enemySpawnerConfiguration = _gameplayStaticDataProvider.GetEnemySpawnerConfiguration();
-            using var enemySpawnerFactory = new EnemySpawnerFactory(enemySpawnerConfiguration);
-            _enemySpawner = enemySpawnerFactory.Create();
+            using var enemySpawnerFactory = new StickmanSpawnerFactory(enemySpawnerConfiguration);
+            _stickmanSpawner = enemySpawnerFactory.Create();
 
             var tileSpawnerConfiguration = _gameplayStaticDataProvider.GetTileSpawnerConfiguration();
             using var tileSpawnerFactory = new TileSpawnerFactory(tileSpawnerConfiguration);
@@ -92,15 +97,15 @@ namespace Factura.Gameplay
         private void DisposeSpawners()
         {
             _tilesSpawner.Dispose();
-            _enemySpawner.Dispose();
+            _stickmanSpawner.Dispose();
             _tilesSpawner = null;
-            _enemySpawner = null;
+            _stickmanSpawner = null;
         }
 
         private void SetCarAsTarget()
         {
             _tilesSpawner.SetTarget(_carBehaviour.Target);
-            _enemySpawner.SetTarget(_carBehaviour.Target);
+            _stickmanSpawner.SetTarget(_carBehaviour.Target);
             _cameraService.SetTarget(_carBehaviour.CameraTarget, CameraType.PreStartCamera, false);
             _cameraService.SetTarget(_carBehaviour.CameraTarget, CameraType.FollowCamera, true);
         }

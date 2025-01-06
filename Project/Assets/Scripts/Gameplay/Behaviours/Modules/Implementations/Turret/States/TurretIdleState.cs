@@ -1,13 +1,18 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Factura.Gameplay.States
 {
     public sealed class TurretIdleState : BaseTurretState
     {
-        protected override void Enter()
+        public override Task EnterAsync(CancellationToken token)
         {
+            return Task.CompletedTask;
         }
 
-        protected override void Exit()
+        public override Task ExitAsync(CancellationToken token)
         {
+            return Task.CompletedTask;
         }
     }
 }

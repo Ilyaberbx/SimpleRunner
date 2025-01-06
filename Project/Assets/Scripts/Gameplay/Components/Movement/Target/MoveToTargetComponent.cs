@@ -34,6 +34,7 @@ namespace Factura.Gameplay.Movement.Target
                 .DOMove(_target.Position, speed)
                 .SetSpeedBased()
                 .SetEase(curve)
+                .SetId(_source)
                 .OnUpdate(OnTweenUpdated);
 
             return _tween;
@@ -41,6 +42,11 @@ namespace Factura.Gameplay.Movement.Target
 
         private void OnTweenUpdated()
         {
+            if (_target.Position == default)
+            {
+                return;
+            }
+
             _tween.ChangeEndValue(_target.Position, true);
         }
     }

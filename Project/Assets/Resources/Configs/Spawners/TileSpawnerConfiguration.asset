@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78714cbff9194bebb7538da9d94f2015, type: 3}
   m_Name: TileSpawnerConfiguration
   m_EditorClassIdentifier: 
-  _preStartTilesCount: 2
+  _preStartTilesCount: 3

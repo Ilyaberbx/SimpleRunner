@@ -32,7 +32,7 @@ namespace Factura.Gameplay
             var camera = _cameraProvider.MainCamera;
             var shootPoint = turretBehaviour.ShootPoint;
             var attachment = new ImmediateAttachmentComponent(turretTransform);
-            var lookAt = new LookAtTargetComponent(turretTransform);
+            var lookAt = new ImmediateLookAtComponent(turretTransform);
             var shoot = new ProjectileShootComponent(shootPoint, _configuration.ProjectilePrefab);
             var launcher = new LauncherComponent(camera, _configuration.FireCooldown, lookAt, shoot);
             var stateMachine = new StateMachine<BaseTurretState>();

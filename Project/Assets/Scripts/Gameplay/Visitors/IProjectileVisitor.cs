@@ -1,9 +1,9 @@
-using Factura.Gameplay.Enemy;
+using Factura.Gameplay.Enemy.Stickman;
 
 namespace Factura.Gameplay.Visitors
 {
     public interface IProjectileVisitor
     {
-        void Visit(EnemyBehaviour enemy);
+        void Visit(StickmanBehaviour stickman);
     }
 }

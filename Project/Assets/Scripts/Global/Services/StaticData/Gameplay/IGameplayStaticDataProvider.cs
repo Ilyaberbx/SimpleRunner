@@ -1,6 +1,5 @@
 using Factura.Gameplay;
-using Factura.Gameplay.Enemy;
-using Factura.Gameplay.Enemy.Spawner;
+using Factura.Gameplay.Enemy.Stickman;
 using Factura.Gameplay.Services.Level;
 using Factura.Gameplay.Services.Tile.Creation;
 using Factura.Gameplay.Services.Waypoints;
@@ -11,8 +10,8 @@ namespace Factura.Global.Services.StaticData
     public interface IGameplayStaticDataProvider
     {
         BaseModuleConfiguration GetModuleConfiguration(VehicleModuleType type);
-        EnemyConfiguration GetEnemyConfiguration();
-        EnemySpawnerConfiguration GetEnemySpawnerConfiguration();
+        StickmanConfiguration GetStickmanConfiguration();
+        StickmanSpawnerConfiguration GetEnemySpawnerConfiguration();
         TileSpawnerConfiguration GetTileSpawnerConfiguration();
         TileConfiguration GetTileConfiguration();
         LevelConfiguration GetLevelConfiguration();

@@ -12,12 +12,16 @@ namespace Factura.Gameplay.ModulesLocator
 
         private readonly ILocator<VehicleModuleType, VehicleModuleBehaviour> _source;
         private readonly List<AttachmentData> _attachments;
+        private readonly List<VehicleModuleBehaviour> _attachedModules;
 
         public VehicleModulesLocator(ILocator<VehicleModuleType, VehicleModuleBehaviour> source)
         {
             _source = source;
+            _attachedModules = new List<VehicleModuleBehaviour>();
             _attachments = new List<AttachmentData>();
         }
+
+        public IReadOnlyList<VehicleModuleBehaviour> AttachedModules => _attachedModules;
 
         public bool Has(VehicleModuleType type)
         {
@@ -62,7 +66,10 @@ namespace Factura.Gameplay.ModulesLocator
             var isAttached = module.TryAttach(this);
             if (isAttached)
             {
-                _source.TryAdd(moduleType, module);
+                if (_source.TryAdd(moduleType, module))
+                {
+                    _attachedModules.Add(module);
+                }
             }
         }
 

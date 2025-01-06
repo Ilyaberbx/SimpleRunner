@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Factura.Gameplay.Extensions;
 using Factura.Gameplay.LookAt;
 using Factura.Gameplay.Shoot;
@@ -24,12 +26,12 @@ namespace Factura.Gameplay.Launcher
             _timeSinceLastFire = _fireCoolDown;
         }
 
-        public void Launch(float deltaTime, Vector3 mousePosition)
+        public async Task Launch(float deltaTime, Vector3 mousePosition, CancellationToken token)
         {
             var compensatedMousePosition = mousePosition.AddZ(ForwardCompensateValue);
             var mouseWorldPosition = _camera.ScreenToWorldPoint(compensatedMousePosition);
 
-            _lookAt.LookAt(mouseWorldPosition);
+            await _lookAt.LookAt(mouseWorldPosition, token);
 
             if (!TryProcessCooldown(deltaTime))
             {

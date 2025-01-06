@@ -73,9 +73,9 @@ namespace Factura.Gameplay.Car
             _levelService.OnLevelFinish -= OnLevelFinished;
         }
 
-        public Task Accept(IEnemyVisitor visitor)
+        public void Accept(IEnemyVisitor visitor)
         {
-            return visitor?.Visit(this);
+             visitor?.Visit(this);
         }
 
         protected override bool TryAttachInternal(Transform attachmentPoint)
@@ -103,7 +103,7 @@ namespace Factura.Gameplay.Car
 
         private void OnDied()
         {
-            var deadState = new CarDeadState(this);
+            var deadState = new CarDeadState(ModulesLocator.AttachedModules);
             _stateMachine.ChangeStateAsync(deadState, destroyCancellationToken).Forget();
             _levelService.FireLevelLose();
         }

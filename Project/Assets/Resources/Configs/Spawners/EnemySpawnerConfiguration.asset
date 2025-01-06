@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a18668c8f5a4c5aaad21a92acb97593, type: 3}
   m_Name: EnemySpawnerConfiguration
   m_EditorClassIdentifier: 
-  _widthOffset: 60
-  _enemiesPreTile: 30
+  _widthOffset: 70
+  _enemiesPreTile: 40
   _thresholdSpawnTileIndex: 0

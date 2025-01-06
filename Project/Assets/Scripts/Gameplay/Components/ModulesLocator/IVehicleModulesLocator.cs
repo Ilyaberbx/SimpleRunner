@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Factura.Gameplay.ModulesLocator
 {
     public interface IVehicleModulesLocatorReadonly
     {
+        IReadOnlyList<VehicleModuleBehaviour> AttachedModules { get; }
         bool Has(VehicleModuleType type);
         bool TryGetAttachmentPoint(VehicleModuleType type, out Transform point);
     }

@@ -787,7 +787,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1982629068}
   - component: {fileID: 1982629069}
-  - component: {fileID: 1982629070}
+  - component: {fileID: 1982629071}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -824,7 +824,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _carSpawnPoint: {fileID: 2083529720}
---- !u!114 &1982629070
+  _context: {fileID: 1982629071}
+--- !u!114 &1982629071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -833,28 +834,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 1982629067}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0addc0a301c89c049ba7b29c96695784, type: 3}
+  m_Script: {fileID: 11500000, guid: 28c02394e1494454b6bf9b15e13c5850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _installers:
-  - rid: 1409578998483910659
+  - rid: 6450054215478280192
   references:
     version: 2
     RefIds:
-    - rid: 1409578998483910659
+    - rid: 6450054215478280192
       type: {class: PocoServicesInstaller, ns: Better.Contexts.Runtime.Installers, asm: Better.Contexts.Runtime}
       data:
         _services:
-        - rid: 6450054194563121155
-        - rid: 6450054194563121156
-        - rid: 1409579020730236930
-        - rid: 6450054152123056129
-        - rid: 6450054194563121157
-        - rid: 6450054194563121159
-    - rid: 1409579020730236930
+        - rid: 6450054215478280194
+        - rid: 6450054215478280195
+        - rid: 6450054215478280196
+        - rid: 6450054215478280197
+        - rid: 6450054215478280198
+        - rid: 6450054215478280199
+    - rid: 6450054215478280194
+      type: {class: LevelService, ns: Factura.Gameplay.Services.Level, asm: Assembly-CSharp}
+      data: 
+    - rid: 6450054215478280195
+      type: {class: EnemyService, ns: Factura.Gameplay.Services.Enemy, asm: Assembly-CSharp}
+      data:
+        _root: {fileID: 841533867}
+    - rid: 6450054215478280196
       type: {class: WaypointsService, ns: Factura.Gameplay.Services.Waypoints, asm: Assembly-CSharp}
       data: 
-    - rid: 6450054152123056129
+    - rid: 6450054215478280197
       type: {class: CameraService, ns: Factura.Gameplay.Services.Camera, asm: Assembly-CSharp}
       data:
         _data:
@@ -863,18 +871,11 @@ MonoBehaviour:
         - _camera: {fileID: 1002932507}
           _type: 1
         _brain: {fileID: 1573129789}
-    - rid: 6450054194563121155
-      type: {class: LevelService, ns: Factura.Gameplay.Services.Level, asm: Assembly-CSharp}
-      data: 
-    - rid: 6450054194563121156
-      type: {class: EnemyService, ns: Factura.Gameplay.Services.Enemy, asm: Assembly-CSharp}
-      data:
-        _root: {fileID: 841533867}
-    - rid: 6450054194563121157
+    - rid: 6450054215478280198
       type: {class: TileService, ns: Factura.Gameplay.Services.Tile, asm: Assembly-CSharp}
       data:
         _root: {fileID: 243850232}
-    - rid: 6450054194563121159
+    - rid: 6450054215478280199
       type: {class: VehicleModuleService, ns: Factura.Gameplay.Services.Module, asm: Assembly-CSharp}
       data: 
 --- !u!1 &2011032684

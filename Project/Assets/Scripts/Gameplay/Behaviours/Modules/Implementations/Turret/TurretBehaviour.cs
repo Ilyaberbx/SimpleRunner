@@ -34,7 +34,7 @@ namespace Factura.Gameplay
             _levelService = ServiceLocator.Get<LevelService>();
             _stateMachine.Run();
             _stateMachine.ChangeStateAsync(new TurretIdleState());
-            
+
             _levelService.OnLevelStart += OnLevelStarted;
             _levelService.OnLevelFinish += OnLevelFinished;
         }
@@ -56,14 +56,14 @@ namespace Factura.Gameplay
             _stateMachine.ChangeStateAsync(activeState, destroyCancellationToken).Forget();
         }
 
-        private void OnLevelFinished()
+        private async void OnLevelFinished()
         {
             if (!_stateMachine.IsRunning || _stateMachine.CurrentState is not TurretActiveState)
             {
                 return;
             }
 
-            _stateMachine.ChangeStateAsync(new TurretIdleState(), destroyCancellationToken).Forget();
+            await _stateMachine.ChangeStateAsync(new TurretIdleState(), destroyCancellationToken);
             _stateMachine.Stop();
         }
 

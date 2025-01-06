@@ -1,9 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Factura.Gameplay.LookAt
 {
     public interface ILookAt
     {
-        void LookAt(Vector3 target);
+        Task LookAt(Vector3 target, CancellationToken token);
     }
 }
