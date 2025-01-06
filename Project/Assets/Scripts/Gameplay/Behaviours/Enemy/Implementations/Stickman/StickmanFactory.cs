@@ -28,20 +28,18 @@ namespace Factura.Gameplay.Enemy.Stickman
             var stickmanTransform = stickmanBehaviour.transform;
             var stickmanAnimator = stickmanBehaviour.SourceAnimator;
 
-            var patrolLookAt = new ImmediateLookAtComponent(stickmanTransform);
-            var chaseLookAt = patrolLookAt;
+            var lookAt = new ImmediateLookAtComponent(stickmanTransform);
             var selfTarget = new StaticTargetComponent(stickmanTransform.position);
             var animator = new StickmanAnimatorComponent(stickmanAnimator);
             var health = new HealthComponent(_configuration.HealthAmount);
             var stateMachine = new StateMachine<BaseStickmanState>();
-            var patrolMovement =
-                new MoveToTargetComponent(stickmanTransform, _configuration.PatrolMovementConfiguration);
+            var patrolMovement = new MoveToTargetComponent(stickmanTransform, _configuration.PatrolMovementConfiguration);
             var chaseMovement = new MoveToTargetComponent(stickmanTransform, _configuration.ChaseMovementConfiguration);
             var patrol = new RandomCirclePointPatrolComponent(_configuration.PatrolRadius, patrolMovement, selfTarget);
             var attack = new ImmediateAttackComponent(_configuration.Damage);
 
-            stickmanBehaviour.Initialize(chaseLookAt,
-                patrolLookAt,
+            stickmanBehaviour.Initialize(
+                lookAt,
                 health,
                 stateMachine,
                 chaseMovement,

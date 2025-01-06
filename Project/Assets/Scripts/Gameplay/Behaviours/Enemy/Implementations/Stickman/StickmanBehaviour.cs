@@ -31,8 +31,7 @@ namespace Factura.Gameplay.Enemy.Stickman
         private IAttack _attack;
         private IPatrol _patrol;
         private IStickmanAnimator _animator;
-        private ILookAt _chaseLookAt;
-        private ILookAt _patrolLookAt;
+        private ILookAt _lookAt;
 
         public IHealth Health { get; private set; }
         public Animator SourceAnimator => _sourceAnimator;
@@ -40,8 +39,7 @@ namespace Factura.Gameplay.Enemy.Stickman
         public IAttack Attack => _attack;
 
         public void Initialize(
-            ILookAt chaseLookAt,
-            ILookAt patrolLookAt,
+            ILookAt lookAt,
             IHealth health,
             IStateMachine<BaseStickmanState> stateMachine,
             IDynamicMovable chaseMovement,
@@ -50,8 +48,7 @@ namespace Factura.Gameplay.Enemy.Stickman
             IStickmanAnimator animator)
 
         {
-            _chaseLookAt = chaseLookAt;
-            _patrolLookAt = patrolLookAt;
+            _lookAt = lookAt;
             _animator = animator;
             _patrol = patrol;
             _attack = attack;
@@ -153,7 +150,7 @@ namespace Factura.Gameplay.Enemy.Stickman
                 return;
             }
 
-            var chaseState = new StickmanChaseState(_chaseLookAt, _animator, target, _chaseMovement);
+            var chaseState = new StickmanChaseState(_lookAt, _animator, target, _chaseMovement);
             _stateMachine.ChangeStateAsync(chaseState, destroyCancellationToken).Forget();
         }
 
@@ -175,13 +172,8 @@ namespace Factura.Gameplay.Enemy.Stickman
                 return;
             }
 
-            var patrolState = new StickmanPatrolState(_patrolLookAt, _animator, _patrol);
+            var patrolState = new StickmanPatrolState(_lookAt, _animator, _patrol);
             _stateMachine.ChangeStateAsync(patrolState, destroyCancellationToken).Forget();
-        }
-
-        public void Accept(IEnemyVisitor visitor)
-        {
-            visitor.Visit(this);
         }
 
         public void Visit(ProjectileBehaviour projectileBehaviour)
